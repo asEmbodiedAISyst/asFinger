@@ -22,7 +22,7 @@
 - `resolved.json` 里有本机的绝对路径（`base_dir`）。
 - 网格这一步有两份实现：`mesh.py` 和 `site/src/engine/csg.ts`。
 - 包里没有类型标注。
-- `send` 命令拿不到 Fusion 插件的执行结果，插件接收请求时也不做身份验证。见 [Fusion 插件](../user/fusion.md#限制)。
+- `send` 命令拿不到 Fusion 插件的执行结果，这台电脑上任何程序发来的请求插件都会接受。见 [Fusion 插件](../user/fusion.md#限制)。
 - 打印组的名字、MJCF 的 body 名和输出文件名还沿用旧项目名。
 - 推杆底座只支持 4 个螺钉孔。
 - 手机相机的最近对焦距离未知，所以对焦检查是关着的。

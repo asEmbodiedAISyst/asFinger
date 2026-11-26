@@ -138,11 +138,55 @@ def test_bridge_health_apply_and_unknown_path(addin):
         # the request is handed to Fusion's main thread through the custom event, unchanged
         (event_id, info), _ = addin.app.fireCustomEvent.call_args
         assert event_id == 'asfinger_apply_event' and json.loads(info) == body
-        for path, data, code in (('/other', b'{}', 404), ('/ipush/apply', b'not json', 400)):
+        for path, data, code in (('/other', b'', 404), ('/ipush/apply', b'not json', 400)):
             with pytest.raises(urllib.error.HTTPError) as e:
                 urllib.request.urlopen(urllib.request.Request(f'http://127.0.0.1:{port}{path}', data), timeout=5)
             assert e.value.code == code
         assert addin.app.fireCustomEvent.call_count == 1
+    finally:
+        srv.shutdown()
+        srv.server_close()
+
+
+def test_bridge_refuses_requests_from_web_pages(addin):
+    """A browser puts an Origin header on the requests of a web page: those get 403 and nothing is queued."""
+    import http.client
+
+    srv, port = _serve(addin)
+
+    def ask(method, path, body=None, headers=None):
+        c = http.client.HTTPConnection('127.0.0.1', port, timeout=5)
+        try:
+            c.request(method, path, body, headers or {})
+            r = c.getresponse()
+            return r.status, [k.lower() for k, _ in r.getheaders()], json.loads(r.read())
+        finally:
+            c.close()
+
+    try:
+        body = json.dumps({'config': CFG, 'params': {}, 'mode': 'update', 'save': False})
+        web = {'Origin': 'https://example.com', 'Content-Type': 'application/json'}
+        replies = [
+            ask('POST', '/ipush/apply', body, web),
+            ask('POST', '/ipush/apply', body, {'Origin': 'null'}),
+            ask('POST', '/ipush/apply', body, {'Origin': f'http://127.0.0.1:{port}'}),
+            ask('GET', '/', None, {'Origin': 'https://example.com'}),
+            ask('OPTIONS', '/ipush/apply', None, {**web, 'Access-Control-Request-Method': 'POST'}),
+            ask('OPTIONS', '/ipush/apply'),
+        ]
+        assert [r[0] for r in replies] == [403] * 6
+        assert all(r[2]['ok'] is False for r in replies)
+        addin.app.fireCustomEvent.assert_not_called()
+        # the replies to a program (no Origin header) are as before, and no reply gives a web page any permission
+        replies += [
+            ask('GET', '/'),
+            ask('POST', '/ipush/apply', body, {'Content-Type': 'application/json'}),
+            ask('POST', '/other'),
+            ask('POST', '/ipush/apply', 'not json'),
+        ]
+        assert [r[0] for r in replies[6:]] == [200, 202, 404, 400]
+        assert addin.app.fireCustomEvent.call_count == 1
+        assert not [h for r in replies for h in r[1] if h.startswith('access-control-')]
     finally:
         srv.shutdown()
         srv.server_close()
