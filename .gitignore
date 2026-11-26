@@ -1,0 +1,71 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+wheels/
+sdist/
+*.egg-info/
+*.egg
+.eggs/
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.coverage
+.coverage.*
+coverage.xml
+junit.xml
+htmlcov/
+.pypirc
+
+# Node
+node_modules/
+
+# Env / secrets
+.env
+.env.*
+
+# Logs
+*.log
+
+# Generated build output of the generator (asfinger build ... -o out/<name>)
+/out/
+
+# Website: build output and everything the sync scripts generate
+# (site/.gitignore lists the same paths for people who work inside site/)
+site/dist/
+site/.astro/
+site/public/py/
+site/public/configs/
+site/public/assets/
+site/public/pyodide/
+site/public/llms.txt
+site/public/llms-full.txt
+site/public/docs-md/
+site/src/content/docs/
+
+# Internal documentation. Do not publish it.
+docs/internal/
+
+# Parts of the project that are not in this repository yet, and large data
+/learning/
+/data/
+*.pt
+*.ckpt
+*.hdf5
+*.h5
+wandb/

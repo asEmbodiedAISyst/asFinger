@@ -1,0 +1,80 @@
+/* asFinger design tokens — the single place to tune the look.
+   See src/styles/DESIGN.md for what each token is for. */
+:root {
+  color-scheme: light;       /* native controls and scrollbars follow the theme */
+
+  /* palette */
+  --ink: #15171c;            /* primary text, logo, frame labels */
+  --ink-2: #4a505c;          /* secondary text */
+  --ink-3: #8a909c;          /* hints, disabled */
+  --paper: #f5f5f2;          /* app background */
+  --surface: #ffffff;        /* panels, cards */
+  --surface-2: #eeeeea;      /* insets, hover */
+  --line: #deded8;           /* borders, dividers */
+  --accent: #2f5bd3;         /* selection, primary buttons, focus */
+  --accent-ink: #ffffff;     /* text on accent */
+  --accent-soft: #e8eefc;    /* selected card background */
+  --warn: #b7791f;
+  --danger: #c0392b;
+  --ok: #2e7d4f;
+
+  /* 3D viewport */
+  --viewport-bg: #f0f0ec;
+  --grid: #d6d6cf;
+  --axis-x: #d64541;         /* frame axes follow the RGB = XYZ convention */
+  --axis-y: #3a9d4c;
+  --axis-z: #2f6fd6;
+  --part-printed: #9aa3b2;
+  --part-reference: #c9c9c2;
+  --part-robot: #d9d9d4;
+
+  /* type */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-md: 13px;
+  --fs-lg: 15px;
+  --fs-xl: 20px;
+  --fs-display: clamp(32px, 6vw, 56px);
+  --lh: 1.5;
+
+  /* shape and space */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 40px;
+  --shadow: 0 1px 2px rgba(20, 22, 28, .06), 0 2px 8px rgba(20, 22, 28, .05);
+  --shadow-float: 0 1px 2px rgba(20, 22, 28, .08), 0 8px 28px rgba(20, 22, 28, .12);   /* panels floating over the 3D view */
+
+  /* editor layout */
+  --float-gap: 12px;         /* margin around and between the floating pieces */
+  --header-h: 48px;          /* top strip: brand, selection bar, language */
+  --rail-w: 64px;            /* Config rail (always visible) */
+  --left-w: 288px;           /* Config panel (opens beside the rail) */
+  --right-w: 372px;          /* Inspect panel */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ink: #ecece8; --ink-2: #b4b8c0; --ink-3: #7b808a;
+    --paper: #121317; --surface: #1b1d22; --surface-2: #24272d; --line: #30333a;
+    --accent: #6d8ff0; --accent-ink: #0d1020; --accent-soft: #232c45;
+    --viewport-bg: #17191d; --grid: #2b2e35;
+    --part-printed: #8c95a5; --part-reference: #4b4d52; --part-robot: #3b3e44;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #ecece8; --ink-2: #b4b8c0; --ink-3: #7b808a;
+  --paper: #121317; --surface: #1b1d22; --surface-2: #24272d; --line: #30333a;
+  --accent: #6d8ff0; --accent-ink: #0d1020; --accent-soft: #232c45;
+  --viewport-bg: #17191d; --grid: #2b2e35;
+  --part-printed: #8c95a5; --part-reference: #4b4d52; --part-robot: #3b3e44;
+}

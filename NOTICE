@@ -1,0 +1,66 @@
+asFinger
+========
+
+asFinger is released under the MIT License (see LICENSE), except for the third-party material below,
+which keeps its own licence.
+
+Third-party material in this repository
+---------------------------------------
+
+site/public/arms/franka_fr3.glb
+    Baked from the Franka FR3 model of MuJoCo Menagerie (franka_fr3), which derives from Franka Robotics'
+    franka_description. Licensed under the Apache License 2.0; full text in
+    site/public/arms/licenses/franka_fr3.Apache-2.0.txt.
+    Modifications (site/scripts/bake-arms.py): the visual meshes are put in one fixed pose, merged by material,
+    converted to millimetres, written as GLB and compressed.
+
+site/public/arms/ur5e.glb
+    Baked from the UR5e model of MuJoCo Menagerie (universal_robots_ur5e), which derives from the Universal Robots
+    ROS description. Copyright 2018 ROS Industrial Consortium, licensed under the BSD 3-Clause License; full text
+    in site/public/arms/licenses/ur5e.BSD-3-Clause.txt.
+    Modifications: as for the Franka FR3.
+
+site/public/arms/rebot_rs.glb
+    Baked from the meshes of the reBot Arm B601-RS in Seeed-Projects/reBot-DevArm (Rebot_Arm_description/RS).
+    Copyright Seeed Studio, licensed under the CERN Open Hardware Licence Version 2 - Weakly Reciprocal
+    (CERN-OHL-W-2.0); full text in site/public/arms/licenses/rebot_rs.CERN-OHL-W-2.0.txt.
+    Modifications: as for the Franka FR3; in addition the gripper and the gripper connector are left out and the
+    meshes are reduced to about 320 000 triangles.
+
+site/scripts/rebot_no_tool.xml
+    A MuJoCo model of the reBot Arm B601-RS without gripper, gripper connector and tool, generated from the URDF of
+    the same repository (same copyright and licence). It is the input of site/scripts/bake-arms.py for that arm
+    and loads the meshes of that repository, which are not included here.
+
+Numbers taken from published documents
+--------------------------------------
+
+The iPhone dimensions and lens positions in hardware/configs/ are taken from Apple's dimensional drawings for
+accessory makers. The drawings themselves are not part of this repository.
+
+The flange hole patterns in site/src/data/ are taken from the manufacturers' datasheets and from ISO 9409-1.
+The sources are named beside the data.
+
+The simplified shapes of the reBot gripper connector (parts A and B) in hardware/configs/ follow the dimensions
+of the official STEP files in Seeed-Projects/reBot-DevArm (CERN-OHL-W-2.0); the files themselves are not
+included.
+
+Software bundled into the built website
+---------------------------------------
+
+`npm run build` in site/ copies or bundles these packages into the published site. They are not stored in this
+repository; each keeps its own licence, which is in its package under site/node_modules after `npm ci`.
+
+    Pyodide (with CPython)      Mozilla Public License 2.0 (CPython: PSF License)
+    manifold-3d                 Apache License 2.0
+    three.js                    MIT License
+    React                       MIT License
+    Astro, Starlight            MIT License
+
+The HTML preview that the generator writes (preview.html) loads three.js from a public CDN when it is opened.
+
+Trademarks
+----------
+
+asFinger is an independent project. It is not affiliated with, and not endorsed by, Apple, Seeed Studio,
+Franka Robotics or Universal Robots. iPhone and MagSafe are trademarks of Apple Inc.
