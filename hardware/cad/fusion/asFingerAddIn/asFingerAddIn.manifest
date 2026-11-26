@@ -1,0 +1,11 @@
+{
+  "autodeskProduct": "Fusion",
+  "type": "addin",
+  "id": "bbabb382-f839-487a-8e4b-9e64cf35831a",
+  "author": "asFinger",
+  "description": {"": "Edit asFinger parameters in a palette and update the design in place; accepts configs over HTTP on 127.0.0.1:47910"},
+  "version": "0.1.0",
+  "runOnStartup": true,
+  "supportedOS": "windows|mac",
+  "editEnabled": true
+}

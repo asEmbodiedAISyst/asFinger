@@ -1,0 +1,8 @@
+{
+  "autodeskProduct": "Fusion",
+  "type": "script",
+  "author": "asFinger",
+  "description": {"": "Build an asFinger CSG model (resolved.json) as a parametric Fusion design with joint origins"},
+  "supportedOS": "windows|mac",
+  "editEnabled": true
+}
