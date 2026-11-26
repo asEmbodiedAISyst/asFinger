@@ -1,0 +1,89 @@
+---
+// Landing page, shared by every language (pages/index.astro, pages/zh/index.astro).
+import Base from '../layouts/Base.astro';
+import logo from './logo.svg?raw';
+import { LANGS, LANG_LABEL, PRODUCT, langPath, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const home = new URL(langPath(lang), Astro.site).href;   // where the site is published (astro.config.mjs)
+const name = PRODUCT[lang];
+const T = {
+  en: {
+    description: `${name}: a push rod with a phone camera for a robot arm or a human hand. Parametric, printable and ready for simulation.`,
+    editor: 'Editor', docs: 'Docs',
+    lead: ['A push rod that mounts on a robot arm or in your hand, with a phone as the wrist camera.', 'Every dimension is a parameter, every frame is written down.'],
+    open: 'Open the editor', desktop: 'The editor needs a desktop browser',
+    features: [
+      ['Configure by component', 'Pick a carrier (reBot, Franka, UR5e, human hand), flange adapter, pusher, tip and camera. The hole pattern of the pusher base follows the adapter.'],
+      ['Frames are the interface', 'Flange, TCP, phone and camera are explicit frames. The camera is solved to look at the TCP, and where the TCP sits in the image is a parameter.'],
+      ['Printable and simulatable', 'Export STL ready to slice and the parameter config. The same Python also writes MuJoCo models and Fusion files.'],
+    ],
+  },
+  zh: {
+    description: `${name}：装在机械臂或手上的推杆 + 手机相机，参数化设计、可打印、可仿真。`,
+    editor: '编辑器', docs: '文档',
+    lead: ['一根装在机械臂或人手上的推杆，加一部手机当腕部相机。', '所有尺寸都是参数，所有坐标系都写明白。'],
+    open: '打开编辑器', desktop: '编辑器需要桌面浏览器',
+    features: [
+      ['按组件配置', '选载体（reBot、Franka、UR5e、人手）、法兰转接件、推杆、末端和相机，推杆底座孔位自动跟着转接件变。'],
+      ['坐标系是接口', '法兰、TCP、手机、相机都是明确的坐标系。相机自动求解成看向 TCP，位置在画面里可调。'],
+      ['可打印，可仿真', '导出可直接切片的 STL 和参数配置；同一套 Python 也能输出 MuJoCo 模型和 Fusion 文件。'],
+    ],
+  },
+}[lang];
+---
+<Base title={name} description={T.description} lang={lang} path="">
+  <div class="home">
+    <header class="home-top">
+      <a class="home-brand" href={langPath(lang)}><span class="home-logo" set:html={logo} />{name}</a>
+      <nav>
+        <a href={langPath(lang, 'editor')}>{T.editor}</a><a href={langPath(lang, 'docs/')}>{T.docs}</a>
+        <span class="langs">{LANGS.map((l) => l === lang
+          ? <span class="on" aria-current="true">{LANG_LABEL[l]}</span>
+          : <a href={langPath(l)} hreflang={l} lang={l}>{LANG_LABEL[l]}</a>)}</span>
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <span class="hero-logo" set:html={logo} />
+        <h1>{name}</h1>
+        <p class="lead">{T.lead[0]}<br />{T.lead[1]}</p>
+        <div class="cta">
+          <a class="btn-lg primary" href={langPath(lang, 'editor')}>{T.open}</a>
+          <span class="mute small">{T.desktop}</span>
+        </div>
+      </section>
+      <section class="features">
+        {T.features.map(([h, p]) => <article><h2>{h}</h2><p>{p}</p></article>)}
+      </section>
+    </main>
+    <footer class="mute small">{name} · <a href={home}>{home.replace(/^https?:\/\//, '').replace(/\/$/, '')}</a></footer>
+  </div>
+</Base>
+
+<style>
+  .home { max-width: 1040px; margin: 0 auto; padding: 0 16px; min-height: 100vh; display: flex; flex-direction: column; }
+  .home-top { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+  .home-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: var(--fs-lg); color: var(--ink); }
+  .home-brand:hover { text-decoration: none; }
+  .home-logo :global(svg) { width: 26px; height: 26px; display: block; }
+  nav { display: flex; gap: 16px; align-items: center; font-size: var(--fs-md); flex-wrap: wrap; justify-content: flex-end; }
+  .langs { display: flex; gap: 8px; padding-left: 16px; border-left: 1px solid var(--line); }
+  .langs .on { color: var(--ink); font-weight: 600; }
+  main { flex: 1; }
+  .hero { text-align: center; padding: 56px 0 40px; }
+  .hero-logo :global(svg) { width: 96px; height: 96px; color: var(--ink); }
+  h1 { font-size: var(--fs-display); margin: 8px 0 12px; letter-spacing: -.02em; }
+  .lead { font-size: clamp(15px, 2.4vw, 18px); color: var(--ink-2); margin: 0 auto 28px; max-width: 34em; }
+  .cta { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .btn-lg { display: inline-block; padding: 12px 24px; border-radius: var(--radius); font-weight: 600; font-size: var(--fs-lg); }
+  .btn-lg.primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-lg:hover { text-decoration: none; filter: brightness(1.05); }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; padding: 24px 0 48px; }
+  .features article { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+  .features h2 { font-size: var(--fs-lg); margin: 0 0 8px; }
+  .features p { margin: 0; color: var(--ink-2); }
+  footer { padding: 24px 0; border-top: 1px solid var(--line); }
+  .mute { color: var(--ink-3); }
+  .small { font-size: var(--fs-sm); }
+</style>

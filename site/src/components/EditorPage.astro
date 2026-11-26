@@ -1,0 +1,16 @@
+---
+// Editor page, shared by every language (pages/editor.astro, pages/zh/editor.astro).
+import Base from '../layouts/Base.astro';
+import Editor from '../editor/Editor';
+import { EDITOR_NAME, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const T = {
+  en: { title: EDITOR_NAME.en, description: 'Pick a carrier, pusher, tip and camera in the browser, tune the pusher and export the config and STL.', noscript: 'The editor needs JavaScript.' },
+  zh: { title: EDITOR_NAME.zh, description: '在浏览器里选择载体、推杆、末端和相机，调推杆参数并导出配置和 STL。', noscript: '编辑器需要启用 JavaScript。' },
+}[lang];
+---
+<Base title={T.title} description={T.description} lang={lang} path="editor">
+  <Editor client:only="react" lang={lang} />
+  <noscript>{T.noscript}</noscript>
+</Base>

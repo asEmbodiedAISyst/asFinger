@@ -1,0 +1,29 @@
+{
+  "name": "asfinger-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync-core": "node scripts/sync-core.mjs",
+    "sync-docs": "node scripts/sync-docs.mjs",
+    "sync": "npm run sync-core && npm run sync-docs",
+    "dev": "npm run sync && astro dev",
+    "build": "npm run sync && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/react": "7.1.5",
+    "@astrojs/starlight": "0.43.2",
+    "astro": "7.4.8",
+    "manifold-3d": "3.5.4",
+    "pyodide": "314.0.7",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.187.0",
+    "typescript": "7.0.2"
+  }
+}

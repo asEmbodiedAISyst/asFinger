@@ -1,0 +1,30 @@
+---
+import '../styles/global.css';
+import { LANGS, DEFAULT_LANG, langPath, type Lang } from '../i18n';
+import { THEME_STORE } from '../theme';
+interface Props { title: string; description?: string; bodyClass?: string; lang?: Lang; path?: string }
+const { title, description = '', bodyClass, lang = DEFAULT_LANG, path = '' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const abs = (p: string) => new URL(p, Astro.site ?? 'https://asembodiedaisyst.github.io').href;
+---
+<!doctype html>
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <!-- a stored light / dark choice goes on <html> before the first paint; without one the page follows the system (src/theme.ts) -->
+    <script is:inline define:vars={{ key: THEME_STORE }}>
+      try { const t = localStorage.getItem(key); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+    </script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <link rel="canonical" href={abs(langPath(lang, path))} />
+    {LANGS.map((l) => <link rel="alternate" hreflang={l === 'zh' ? 'zh-CN' : l} href={abs(langPath(l, path))} />)}
+    <link rel="alternate" hreflang="x-default" href={abs(langPath(DEFAULT_LANG, path))} />
+  </head>
+  <body class={bodyClass}>
+    <slot />
+  </body>
+</html>

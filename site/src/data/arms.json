@@ -1,0 +1,90 @@
+{
+ "franka_fr3": {
+  "file": "arms/franka_fr3.glb",
+  "flange": {
+   "pos": [
+    500.034,
+    0.0,
+    265.435
+   ],
+   "quat": [
+    0.0,
+    0.866025,
+    0.0,
+    0.500001
+   ]
+  },
+  "qpos": [
+   0.0,
+   0.3764,
+   0.0,
+   -2.5278,
+   0.0,
+   3.9514,
+   0.0
+  ],
+  "short": "MuJoCo Menagerie franka_fr3",
+  "pose": "push",
+  "source": "MuJoCo Menagerie franka_fr3 (from Franka Robotics franka_description)",
+  "url": "https://github.com/google-deepmind/mujoco_menagerie/tree/main/franka_fr3",
+  "license": "Apache-2.0"
+ },
+ "ur5e": {
+  "file": "arms/ur5e.glb",
+  "flange": {
+   "pos": [
+    474.802,
+    156.755,
+    265.425
+   ],
+   "quat": [
+    -0.397318,
+    0.688127,
+    -0.5258,
+    0.303568
+   ]
+  },
+  "qpos": [
+   -3.1416,
+   -1.2418,
+   2.2695,
+   -3.6301,
+   -1.3412,
+   -0.1353
+  ],
+  "short": "MuJoCo Menagerie universal_robots_ur5e",
+  "pose": "push",
+  "source": "MuJoCo Menagerie universal_robots_ur5e (from Universal Robots ROS description)",
+  "url": "https://github.com/google-deepmind/mujoco_menagerie/tree/main/universal_robots_ur5e",
+  "license": "BSD-3-Clause"
+ },
+ "rebot_rs": {
+  "file": "arms/rebot_rs.glb",
+  "flange": {
+   "pos": [
+    119.495,
+    0.0,
+    269.911
+   ],
+   "quat": [
+    3e-06,
+    0.866624,
+    3e-06,
+    0.498961
+   ]
+  },
+  "qpos": [
+   0.0,
+   0.349,
+   0.5,
+   -0.677,
+   0.0,
+   0.0
+  ],
+  "short": "Seeed reBot-DevArm B601-RS",
+  "pose": "HOME_QPOS",
+  "source": "Seeed reBot-DevArm, Rebot_Arm_description/RS meshes; kinematics from the Seeed URDF, pose HOME_QPOS",
+  "url": "https://github.com/Seeed-Projects/reBot-DevArm",
+  "license": "CERN-OHL-W-2.0"
+ }
+}
