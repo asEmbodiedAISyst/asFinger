@@ -83,7 +83,7 @@ export const GROUPS: Group[] = [
           { label: { en: 'Reach', zh: '臂展' }, value: { en: '650 mm (767 mm in later versions)', zh: '650 mm（后续版本 767 mm）' } },
           { label: { en: 'Repeatability', zh: '重复定位精度' }, value: '< 0.2 mm' },
           { label: { en: 'Motors', zh: '电机' }, value: { en: 'RobStride brushless joint motors', zh: 'RobStride 无刷关节电机' } },
-          { label: { en: 'Model source', zh: '模型来源' }, value: { en: 'Seeed reBot B601-RS URDF meshes (CERN-OHL-W-2.0); design files CC BY-NC-SA 4.0', zh: 'Seeed reBot B601-RS URDF 网格（CERN-OHL-W-2.0）；设计文件 CC BY-NC-SA 4.0' } },
+          { label: { en: 'Model source', zh: '模型来源' }, value: { en: 'Seeed reBot B601-RS URDF meshes; meshes and design files are CERN-OHL-W-2.0', zh: 'Seeed reBot B601-RS URDF 网格；网格和设计文件均为 CERN-OHL-W-2.0' } },
         ],
         links: [
           { label: { en: 'reBot-DevArm (GitHub, design files)', zh: 'reBot-DevArm（GitHub，设计文件）' }, url: 'https://github.com/Seeed-Projects/reBot-DevArm' },

@@ -42,7 +42,8 @@ The flange hole patterns in site/src/data/ are taken from the manufacturers' dat
 The sources are named beside the data.
 
 The simplified shapes of the reBot gripper connector (parts A and B) in hardware/configs/ follow the dimensions
-of the official STEP files in Seeed-Projects/reBot-DevArm; the files themselves are not included.
+of the official STEP files in Seeed-Projects/reBot-DevArm (CERN-OHL-W-2.0); the files themselves are not
+included.
 
 Software bundled into the built website
 ---------------------------------------
