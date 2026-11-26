@@ -13,11 +13,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CFG = os.path.join(ROOT, 'hardware', 'configs', 'iphone17pro_default.json')
 
 
+origins = []  # the Origin header of each request: the add-in refuses a request that has one
+
+
 def serve(seen):
     class Fake(BaseHTTPRequestHandler):
         def do_POST(self):
             n = int(self.headers.get('Content-Length', 0))
             seen.append((self.path, self.headers.get('Content-Type'), json.loads(self.rfile.read(n))))
+            origins.append(self.headers.get('Origin'))
             body = json.dumps({'ok': True, 'queued': True}).encode()
             self.send_response(202)
             self.send_header('Content-Type', 'application/json')
@@ -51,6 +55,7 @@ def test_send_posts_the_config_path_and_the_edits(monkeypatch, capsys):
     out = capsys.readouterr().out.strip().splitlines()
     assert [json.loads(line) for line in out] == [{'ok': True, 'queued': True}] * 2
     assert [(p, t) for p, t, _ in seen] == [('/ipush/apply', 'application/json')] * 2
+    assert origins[-2:] == [None, None]
     # the path is absolute (Fusion has another working directory); values of --set are sent as text
     assert seen[0][2] == {'config': CFG, 'params': {}, 'mode': 'update', 'save': False}
     assert seen[1][2] == {
