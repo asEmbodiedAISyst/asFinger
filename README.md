@@ -16,7 +16,7 @@ cd asFinger
 python3 -m pip install .
 ```
 
-The package needs Python 3.10 or later. The import name is `asfinger`.
+The package needs Python 3.11 or later. The import name is `asfinger`.
 
 ## Quick start
 

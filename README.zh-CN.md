@@ -15,7 +15,7 @@ cd asFinger
 python3 -m pip install .
 ```
 
-需要 Python 3.10 或更高版本。导入名是 `asfinger`。
+需要 Python 3.11 或更高版本。导入名是 `asfinger`。
 
 ## 快速上手
 

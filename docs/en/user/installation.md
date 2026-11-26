@@ -4,7 +4,7 @@ Install the package from a clone of the repository. The clone also gives you the
 
 ## Requirements
 
-- Python 3.10 or later.
+- Python 3.11 or later.
 - The package installs `numpy` and `manifold3d`. `manifold3d` does the solid modelling.
 - MuJoCo is optional. You need it only to load the generated model.
 
