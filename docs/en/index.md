@@ -17,6 +17,7 @@ The project has three parts:
 | Print a pusher for your arm | [Use the web editor](user/editor.md) |
 | Build STL and MJCF on your computer | [Installation](user/installation.md), then [Quick start](user/quickstart.md) |
 | Write or change a config | [The config file](user/config-file.md) and [Frames](user/frames.md) |
+| Edit the tool as a CAD design | [The Fusion add-in](user/fusion.md) |
 | Understand how the project works | [Developer guide](developer/index.md) |
 | Use the project through an AI agent | [Agent guides](agents/index.md) |
 

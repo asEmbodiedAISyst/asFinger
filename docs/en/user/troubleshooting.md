@@ -42,7 +42,7 @@ The frame tree has a loop, or a frame names a parent or a target that does not e
 
 **`Fusion add-in not reachable on port 47910`**
 
-The command `asfinger send` sends a config to an add-in in Autodesk Fusion. The add-in is not in this repository yet. Use `asfinger build`.
+The command `asfinger send` sends a config to the add-in in Autodesk Fusion, and nothing listens on that port. Start Fusion and run the add-in. If the add-in runs, another program held the port when it started: the palette of the add-in says so. See [The Fusion add-in](fusion.md#limits).
 
 ## Output
 

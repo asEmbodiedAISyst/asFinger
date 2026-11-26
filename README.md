@@ -35,6 +35,9 @@ print(m.root_to('T_tcp').p)  # TCP position in the robot flange frame, mm
 
 To design a pusher without an installation, open the [editor](https://asembodiedaisyst.github.io/asFinger/editor/).
 
+To edit the tool as a parametric design in Autodesk Fusion, use the add-in in `hardware/cad/fusion/`
+([guide](https://asembodiedaisyst.github.io/asFinger/docs/user/fusion/)).
+
 ## Documentation
 
 Website: <https://asembodiedaisyst.github.io/asFinger/docs/>

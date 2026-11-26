@@ -58,6 +58,9 @@ site/public/llms-full.txt
 site/public/docs-md/
 site/src/content/docs/
 
+# Fusion add-in: the path of the last config, written at run time
+hardware/cad/fusion/asFingerAddIn/settings.json
+
 # Internal documentation. Do not publish it.
 docs/internal/
 

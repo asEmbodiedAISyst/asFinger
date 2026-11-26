@@ -26,3 +26,5 @@
 | interference rule | 干涉规则 | 一对不允许重叠的实体。 |
 | MJCF | MJCF | MuJoCo 的 XML 模型格式。 |
 | mesh | 网格 | 三角面片表面，例如 STL 文件。 |
+| add-in | 插件 | `hardware/cad/fusion/` 里那个在 Autodesk Fusion 中运行的程序。 |
+| palette | 面板 | 插件在 Fusion 里的窗口，列出全部参数。 |

@@ -74,6 +74,12 @@ site/src/data/                  载体、转接件、相机的目录，以及参
 
 `site/scripts/sync-docs.mjs` 把 `docs/en` 和 `docs/zh` 复制到 Starlight 的内容目录，改写页面之间的链接，并生成 `llms.txt` 和 `llms-full.txt`。首页和编辑器是 `site/src/pages` 里的普通 Astro 页面。见[构建、测试与贡献](contributing.md#文档)。
 
+## Fusion 插件
+
+`hardware/cad/fusion/` 里是第三个后端。`asFingerAddIn` 在 Autodesk Fusion 里用 Fusion 自带的 Python 运行，把仓库的 `src/` 加进导入路径，只用到管线里纯 Python 的那一半：`Model.resolve`、`Model.check` 和 `Model.resolved_json`。`asfinger_fusion.py` 把解算后的形状树变成 Fusion 的特征，并给每个特征打上属性标记，下一次运行就能在原地改同一批特征。脚本 `asFingerFromJSON` 把一份 `resolved.json` 交给同一个模块，不导入 `asfinger` 包。
+
+`asfinger send` 命令和插件之间走 127.0.0.1:47910 上的 HTTP。Fusion 的 API 只能在一个线程里调用，所以请求通过自定义事件转交给 Fusion 的主线程。`tests/test_fusion_addin.py` 用替身代替 `adsk` 模块来导入插件。见 [Fusion 插件](../user/fusion.md)。
+
 ## 沿用旧项目名的名称
 
-项目在改名为 asFinger 之前叫 iPush。下面这些名称属于文件格式或已存储的数据，所以没有改：输出文件 `ipush_tool.xml` 和 `ipush_print.stl`，打印组的名字 `ipush_print`，MJCF 里的 body `ipush` 和 class `ipush_col`、`ipush_vis`，local storage 的键 `ipush.editor.v3` 和 `ipush.theme`，导出的配置文件名，以及 `send` 命令用的路径 `/ipush/apply`。给人看的名字只定义两处：Python 包里的 `PRODUCT_NAME`，网站里的 `PRODUCT` 和 `EDITOR_NAME`（`site/src/i18n/index.ts`）。
+项目在改名为 asFinger 之前叫 iPush。下面这些名称属于文件格式或已存储的数据，所以没有改：输出文件 `ipush_tool.xml` 和 `ipush_print.stl`，打印组的名字 `ipush_print`，MJCF 里的 body `ipush` 和 class `ipush_col`、`ipush_vis`，local storage 的键 `ipush.editor.v3` 和 `ipush.theme`，导出的配置文件名，`send` 命令用的路径 `/ipush/apply` 和端口 47910，Fusion 插件健康检查回复里的名字 `ipush-fusion`，以及 Fusion 设计里的属性组 `ipush` 和它的键（插件靠它们找到已有设计里的特征）。给人看的名字只定义两处：Python 包里的 `PRODUCT_NAME`，网站里的 `PRODUCT` 和 `EDITOR_NAME`（`site/src/i18n/index.ts`）。

@@ -26,3 +26,5 @@ The English and the Chinese pages use the same terms. This table is the referenc
 | interference rule | 干涉规则 | A pair of solids that must not overlap. |
 | MJCF | MJCF | The XML model format of MuJoCo. |
 | mesh | 网格 | A triangle surface, for example an STL file. |
+| add-in | 插件 | The program in `hardware/cad/fusion/` that runs inside Autodesk Fusion. |
+| palette | 面板 | The window of the add-in in Fusion that lists the parameters. |

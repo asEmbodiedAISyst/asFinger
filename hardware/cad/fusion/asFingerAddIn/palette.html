@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>asFinger</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#1d2330; --mute:#6b7385; --line:#dfe3ea; --acc:#2f6fdd; --ok:#1f8a4c; --bad:#c23b3b; }
+  * { box-sizing: border-box; }
+  body { margin:0; font: 12px/1.45 -apple-system, "PingFang SC", "Segoe UI", sans-serif; color:var(--ink); background:var(--bg); }
+  header { padding:10px 12px 8px; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:2; }
+  h1 { font-size:14px; margin:0 0 4px; }
+  .path { color:var(--mute); word-break:break-all; font-size:11px; }
+  .bar { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+  button { font:inherit; border:1px solid var(--line); background:#fff; border-radius:6px; padding:5px 10px; cursor:pointer; }
+  button.primary { background:var(--acc); color:#fff; border-color:var(--acc); }
+  button:disabled { opacity:.5; cursor:default; }
+  main { padding:8px 12px 80px; }
+  details { background:var(--card); border:1px solid var(--line); border-radius:8px; margin:8px 0; }
+  summary { padding:7px 10px; cursor:pointer; font-weight:600; }
+  .row { display:grid; grid-template-columns: 1fr 110px; gap:6px; align-items:center; padding:3px 10px; }
+  .row label { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .row input { width:100%; font:inherit; padding:3px 6px; border:1px solid var(--line); border-radius:4px; text-align:right; }
+  .row input.changed { border-color:var(--acc); background:#eef4ff; }
+  .row input.expr { text-align:left; color:#5b4bb3; }
+  .val { grid-column: 1 / 3; color:var(--mute); font-size:11px; text-align:right; margin-top:-3px; }
+  #status { position:fixed; left:0; right:0; bottom:0; background:var(--card); border-top:1px solid var(--line); padding:8px 12px; max-height:40%; overflow:auto; white-space:pre-wrap; font-size:11px; }
+  .ok { color:var(--ok); } .bad { color:var(--bad); }
+  label.chk { display:flex; gap:4px; align-items:center; color:var(--mute); }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">asFinger</h1>
+  <div class="path" id="path">…</div>
+  <div class="bar">
+    <button class="primary" id="apply" data-t="apply"></button>
+    <button id="rebuild" data-t="rebuild" data-title="rebuildTitle"></button>
+    <button id="reset" data-t="reset"></button>
+    <button id="pick" data-t="pick"></button>
+  </div>
+  <div class="bar"><label class="chk"><input type="checkbox" id="save"> <span data-t="save"></span></label></div>
+</header>
+<main id="groups"></main>
+<div id="status"></div>
+<script>
+// Text of the palette: English by default, Chinese when the language of the system starts with "zh".
+const TEXT = {
+  en: {
+    apply: 'Apply (update in place)', rebuild: 'Rebuild', reset: 'Undo edits', pick: 'Change config…',
+    rebuildTitle: 'Needed only when the structure changed; features you added in Fusion are lost',
+    save: 'Write the parameters back into the config file on Apply',
+    opening: 'Opening…', other: 'Other',
+    groups: ['Rod and tip', 'Solver: the camera looks at the TCP', 'Connector', 'Phone and camera',
+             'Mounting and flange adapter', 'Gripper connector B (cup)'],
+    notInFusion: 'Not running inside Fusion', failed: 'Failed', changed: n => `${n} changes`,
+    saved: 'Written back to ', missing: 'Not found: ', updating: 'Updating…', rebuilding: 'Rebuilding…',
+    confirmRebuild: 'A rebuild deletes the features you added in Fusion afterwards. Continue?',
+    remote: '(request from another program or the command line)',
+    ready: port => `Ready. A script or the command line can also send to http://127.0.0.1:${port}/ipush/apply`,
+    portTaken: port => `Ready, but port ${port} is in use: configs from the command line or other programs are not received. If the earlier iPush add-in is running, stop it, then stop and run this add-in again.`,
+    noFusion: 'No connection to Fusion (open this page in the asFinger palette)',
+    actions: {},
+  },
+  zh: {
+    apply: '应用（原地更新）', rebuild: '完全重建', reset: '撤销修改', pick: '换配置…',
+    rebuildTitle: '结构变了才需要；你在 Fusion 里加的特征会丢',
+    save: '应用时把参数写回配置文件',
+    opening: '打开中…', other: '其它',
+    groups: ['推杆与球头', '求解：相机看 TCP', '连接件', '手机与相机', '安装与法兰转接', '夹爪连接件 B（杯形）'],
+    notInFusion: '不在 Fusion 里运行', failed: '失败', changed: n => `改动 ${n} 处`,
+    saved: '已写回 ', missing: '找不到: ', updating: '正在更新…', rebuilding: '正在重建…',
+    confirmRebuild: '完全重建会删掉你在 Fusion 里后加的特征，继续？',
+    remote: '（来自其他程序或命令行的请求）',
+    ready: port => `就绪。脚本或命令行也可以发送到 http://127.0.0.1:${port}/ipush/apply`,
+    portTaken: port => `就绪，但端口 ${port} 已被占用：收不到命令行或其他程序发来的配置。如果旧的 iPush 插件还在运行，先把它停掉，再停止并重新运行本插件。`,
+    noFusion: '没有连上 Fusion（这个页面要在 asFinger 面板里打开）',
+    actions: {
+      'a check failed: the design was not changed': '参数检查没通过，没有改动模型',
+      'built in a new document': '已在新文档里生成',
+      'rebuilt in place': '已原地重建',
+      'updated in place': '已原地更新',
+      'structure changed: press "Rebuild" (features you added will be lost)': '结构变了：请按“完全重建”（你后加的特征会丢）',
+    },
+  },
+};
+const LANG = (navigator.language || '').toLowerCase().startsWith('zh') ? 'zh' : 'en';
+const T = TEXT[LANG];
+document.documentElement.lang = LANG;
+document.querySelectorAll('[data-t]').forEach(e => { e.textContent = T[e.dataset.t]; });
+document.querySelectorAll('[data-title]').forEach(e => { e.title = T[e.dataset.title]; });
+const GROUPS = [
+  /^(rod|tip)_/,
+  /^(phone_flange_angle|v_n|distance)$/,
+  /^(beam|spine|plate)_/,
+  /^(phone_[WLt]|lens|bump|ring|feq|back_to_mount)/,
+  /^(mount|adapter|base|hole|cbore|relief|screw|key|driver)_/,
+  /^cup_/,
+].map((re, i) => [T.groups[i], re]);
+let cfg = null, orig = {};
+const $ = id => document.getElementById(id);
+const status = (msg, cls) => { $('status').innerHTML = cls ? `<span class="${cls}">${msg}</span>` : msg; };
+
+function send(action, data) {
+  if (!window.adsk) return Promise.reject(new Error(T.notInFusion));
+  return Promise.resolve(adsk.fusionSendData(action, JSON.stringify(data || {}))).then(r => JSON.parse(r || '{}'));
+}
+
+function render(p) {
+  cfg = p; orig = {};
+  $('title').textContent = 'asFinger · ' + (p.name || '');
+  $('path').textContent = p.config;
+  const root = $('groups'); root.innerHTML = '';
+  const used = new Set();
+  const groups = GROUPS.map(([title, re]) => [title, p.params.filter(r => re.test(r.name))]);
+  groups.forEach(([, rows]) => rows.forEach(r => used.add(r.name)));
+  groups.push([T.other, p.params.filter(r => !used.has(r.name))]);
+  for (const [title, rows] of groups) {
+    if (!rows.length) continue;
+    const d = document.createElement('details'); d.open = true;
+    d.innerHTML = `<summary>${title}</summary>`;
+    for (const r of rows) {
+      orig[r.name] = String(r.src);
+      const isExpr = typeof r.src === 'string';
+      const row = document.createElement('div'); row.className = 'row';
+      row.innerHTML = `<label title="${r.name}">${r.name}</label><input data-k="${r.name}" class="${isExpr ? 'expr' : ''}" value="${r.src}">` +
+        (isExpr ? `<div class="val">= ${(+r.value).toFixed(3)}</div>` : '');
+      d.appendChild(row);
+    }
+    root.appendChild(d);
+  }
+  root.querySelectorAll('input').forEach(i => i.addEventListener('input', () => i.classList.toggle('changed', i.value !== orig[i.dataset.k])));
+}
+
+function edits() {
+  const out = {};
+  document.querySelectorAll('#groups input').forEach(i => { if (i.value !== orig[i.dataset.k]) out[i.dataset.k] = i.value; });
+  return out;
+}
+
+function report(res) {
+  if (!res.ok) return status(T.failed + '\n' + (res.error || ''), 'bad');
+  const r = res.result || res;
+  const lines = [`${r.ok === false ? '✗' : '✓'} ${T.actions[r.action] || r.action}`];
+  if (r.changed !== undefined) lines.push(T.changed(r.changed));
+  if (r.frames) for (const [k, v] of Object.entries(r.frames)) lines.push(`${k}: ${v.join(', ')}`);
+  if (r.saved) lines.push(T.saved + r.saved);
+  if (r.missing && r.missing.length) lines.push(T.missing + r.missing.join(', '));
+  if (r.log && r.log.length) lines.push(...r.log);
+  status(lines.join('\n'), r.ok === false ? 'bad' : 'ok');
+}
+
+async function run(mode) {
+  const e = edits();
+  $('apply').disabled = $('rebuild').disabled = true;
+  status(mode === 'rebuild' ? T.rebuilding : T.updating);
+  try {
+    const res = await send('apply', { config: cfg.config, params: e, mode, save: $('save').checked });
+    report(res);
+    if (res.ok && $('save').checked) render((await send('load', { config: cfg.config })));
+    else if (res.ok) document.querySelectorAll('#groups input').forEach(i => { orig[i.dataset.k] = i.value; i.classList.remove('changed'); });
+  } catch (err) { status(String(err), 'bad'); }
+  $('apply').disabled = $('rebuild').disabled = false;
+}
+
+$('apply').onclick = () => run('update');
+$('rebuild').onclick = () => { if (confirm(T.confirmRebuild)) run('rebuild'); };
+$('reset').onclick = () => document.querySelectorAll('#groups input').forEach(i => { i.value = orig[i.dataset.k]; i.classList.remove('changed'); });
+$('pick').onclick = async () => { const r = await send('pick'); if (r.ok) render(r); };
+
+window.fusionJavaScriptHandler = {
+  handle(action, data) {
+    if (action === 'remote') {
+      const r = JSON.parse(data);
+      report(r);
+      status($('status').innerHTML + '\n' + T.remote);
+    }
+    return 'OK';
+  }
+};
+
+status(T.opening);
+function boot(n) {
+  if (window.adsk && adsk.fusionSendData) {
+    send('load').then(p => { render(p); if (p.server === false) status(T.portTaken(p.port), 'bad'); else status(T.ready(p.port)); })
+      .catch(e => status(String(e), 'bad'));
+  } else if (n < 50) setTimeout(() => boot(n + 1), 100);
+  else status(T.noFusion, 'bad');
+}
+boot(0);
+</script>
+</body>
+</html>

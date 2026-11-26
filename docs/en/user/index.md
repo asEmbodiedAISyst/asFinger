@@ -11,6 +11,7 @@ This guide shows how to build a tool from a config, how to write a config, and h
 | [Checks and interference rules](checks.md) | What the generator checks, and what it does not check. |
 | [MuJoCo export](mjcf.md) | What the MJCF file contains and how to attach it to a robot. |
 | [The web editor](editor.md) | Configure, inspect and export in the browser. |
+| [The Fusion add-in](fusion.md) | Build a config as a parametric design in Autodesk Fusion and update it in place. |
 | [Troubleshooting](troubleshooting.md) | Messages and their causes. |
 
 All lengths are in millimetres and all angles are in degrees, unless a page says otherwise. The MJCF file is the one exception: MuJoCo uses metres.

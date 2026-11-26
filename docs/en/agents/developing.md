@@ -7,7 +7,7 @@ This page is for an agent that changes the code, the site or the documentation i
 - Write all comments and docstrings in English.
 - Keep `geom.py`, `expr.py`, `frames.py`, `csg.py`, `options.py`, `interference.py`, `mjcf.py` and `__init__.py` free of imports outside the standard library at module level. The browser runs these files in Pyodide.
 - When you change how a solid is built in `src/asfinger/mesh.py`, make the same change in `site/src/engine/csg.ts`. Do the same in the other direction.
-- Do not rename these names. They are part of file formats or stored data: `ipush_tool.xml`, `ipush_print`, the MJCF body `ipush`, the classes `ipush_col` and `ipush_vis`, the local storage keys `ipush.editor.v3` and `ipush.theme`, the frame names, the config keys and the config file names.
+- Do not rename these names. They are part of file formats or stored data: `ipush_tool.xml`, `ipush_print`, the MJCF body `ipush`, the classes `ipush_col` and `ipush_vis`, the local storage keys `ipush.editor.v3` and `ipush.theme`, the frame names, the config keys and the config file names, the HTTP path `/ipush/apply`, the port 47910, the health reply `ipush-fusion`, and the attribute group `ipush` with its keys in a Fusion design.
 - Change the product name only in `PRODUCT_NAME` (`src/asfinger/__init__.py`) and in `PRODUCT` and `EDITOR_NAME` (`site/src/i18n/index.ts`).
 - If a change is not meant to change geometry, build the default config before and after it and confirm that every STL file and `ipush_tool.xml` are identical.
 - Do not edit a stored `result` of a solved frame by hand. Run `asfinger build CONFIG -o OUT --resolve`.
@@ -17,6 +17,7 @@ This page is for an agent that changes the code, the site or the documentation i
 - Every file in `hardware/configs/` is published with the site. Do not add a config there unless the user asks for it.
 - Add third-party material only with its licence, and record it in `NOTICE`.
 - Change the version only in `pyproject.toml`.
+- The code in `hardware/cad/fusion/` runs inside Autodesk Fusion. Do not start Fusion, do not load the add-in, and do not change a Fusion document to test it. Run the tests, and tell the user to try the change in Fusion.
 - Do not push tags and do not change the deployment settings. Tell the user what to do.
 
 ## Code map
@@ -34,7 +35,9 @@ This page is for an agent that changes the code, the site or the documentation i
 | `src/asfinger/mjcf.py`, `preview.py`, `build.py` | Writers of the output files. |
 | `tests/test_default.py` | Tests of the configs in `hardware/configs/`. |
 | `tests/test_docs.py` | Tests of the documentation: same pages in both languages, the example config builds. |
+| `tests/test_send.py`, `tests/test_fusion_addin.py` | Tests of `asfinger send`, and of the Fusion add-in with stand-ins for the `adsk` modules. |
 | `hardware/configs/`, `hardware/assets/` | Configs and the meshes they import. |
+| `hardware/cad/fusion/` | The Fusion add-in (`asFingerAddIn`), its script (`asFingerFromJSON`) and their shared module (`asfinger_fusion`). In each folder, the folder, the `.py` file and the `.manifest` file have the same name. |
 | `site/scripts/sync-core.mjs`, `sync-docs.mjs` | Copy the package, the configs and the docs into the site before a build. |
 | `site/src/engine/` | The web worker (Pyodide and Manifold). |
 | `site/src/editor/`, `site/src/data/`, `site/src/i18n/` | The editor, its catalog, its text. |

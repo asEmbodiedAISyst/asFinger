@@ -42,7 +42,7 @@
 
 **`Fusion add-in not reachable on port 47910`**
 
-`asfinger send` 是把配置发给 Autodesk Fusion 里的一个插件，这个插件还没有放进本仓库。请用 `asfinger build`。
+`asfinger send` 是把配置发给 Autodesk Fusion 里的插件，而这个端口上没有程序在监听。先启动 Fusion 并运行插件。如果插件已经在运行，那就是它启动时端口被别的程序占着，插件的面板上会有提示。见 [Fusion 插件](fusion.md#限制)。
 
 ## 输出
 

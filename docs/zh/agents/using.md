@@ -78,6 +78,6 @@ m.save('hardware/configs/my_variant.json')
 - 变体写到新文件里。不要覆盖 `iphone17pro_default.json` 和 `rebot_rs_flange.json`。
 - 配置要放在旁边有 `assets/` 的目录里。配置里的网格路径相对于配置所在目录的上一级。
 - 把 `resolved.json` 发给别人之前，删掉 `base_dir` 字段，里面是本机路径。
-- 不要用 `asfinger send`。它需要一个不在本仓库里的 CAD 插件。
+- 只有用户提出要求、并且正在运行 [Fusion 插件](../user/fusion.md)时，才用 `asfinger send`。这个命令会改动 Fusion 里打开的设计，加 `--save` 还会改写配置文件。它不返回执行结果，结果要请用户看面板。
 - 把和用户的请求有关的局限告诉用户，这些局限列在[检查与干涉规则](../user/checks.md#这些测试发现不了什么)和[坐标系](../user/frames.md#手机坐标系的已知局限)两页里。`back_to_mount` 必须和用户的手机壳相符。
 - 用户没有 Python 环境时，让他们用[网页编辑器](https://asembodiedaisyst.github.io/asFinger/zh/editor/)。

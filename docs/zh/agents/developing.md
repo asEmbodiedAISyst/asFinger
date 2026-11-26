@@ -7,7 +7,7 @@
 - 注释和 docstring 一律用英文。
 - `geom.py`、`expr.py`、`frames.py`、`csg.py`、`options.py`、`interference.py`、`mjcf.py` 和 `__init__.py` 在模块顶层只能导入标准库。浏览器要在 Pyodide 里运行这些文件。
 - 改了 `src/asfinger/mesh.py` 里生成实体的方式，就在 `site/src/engine/csg.ts` 里做同样的修改。反过来也一样。
-- 不要改这些名称，它们属于文件格式或已存储的数据：`ipush_tool.xml`、`ipush_print`、MJCF 的 body `ipush`、class `ipush_col` 和 `ipush_vis`、local storage 的键 `ipush.editor.v3` 和 `ipush.theme`、坐标系名称、配置的键和配置文件名。
+- 不要改这些名称，它们属于文件格式或已存储的数据：`ipush_tool.xml`、`ipush_print`、MJCF 的 body `ipush`、class `ipush_col` 和 `ipush_vis`、local storage 的键 `ipush.editor.v3` 和 `ipush.theme`、坐标系名称、配置的键和配置文件名、HTTP 路径 `/ipush/apply`、端口 47910、健康检查回复里的 `ipush-fusion`，以及 Fusion 设计里的属性组 `ipush` 和它的键。
 - 产品名只在两处改：`PRODUCT_NAME`（`src/asfinger/__init__.py`），以及 `PRODUCT` 和 `EDITOR_NAME`（`site/src/i18n/index.ts`）。
 - 如果一项修改不打算改变几何，就在修改前后各生成一次默认配置，确认每个 STL 文件和 `ipush_tool.xml` 完全相同。
 - 不要手工修改求解坐标系里存着的 `result`。运行 `asfinger build CONFIG -o OUT --resolve`。
@@ -17,6 +17,7 @@
 - `hardware/configs/` 里的每个文件都会随网站发布。除非用户要求，不要往里面加配置。
 - 引入第三方材料时必须带上它的许可证，并记入 `NOTICE`。
 - 版本号只在 `pyproject.toml` 里改。
+- `hardware/cad/fusion/` 里的代码在 Autodesk Fusion 里运行。不要为了测试去启动 Fusion、加载插件或改动 Fusion 文档。运行测试，然后请用户在 Fusion 里试。
 - 不要推送 tag，不要改部署设置。把该做的事告诉用户。
 
 ## 代码地图
@@ -34,7 +35,9 @@
 | `src/asfinger/mjcf.py`、`preview.py`、`build.py` | 写各种输出文件。 |
 | `tests/test_default.py` | 针对 `hardware/configs/` 里配置的测试。 |
 | `tests/test_docs.py` | 文档的测试：两种语言页面一致，例子配置能生成。 |
+| `tests/test_send.py`、`tests/test_fusion_addin.py` | `asfinger send` 的测试，以及用 `adsk` 模块的替身对 Fusion 插件做的测试。 |
 | `hardware/configs/`、`hardware/assets/` | 配置和它们引用的网格。 |
+| `hardware/cad/fusion/` | Fusion 插件（`asFingerAddIn`）、脚本（`asFingerFromJSON`）和两者共用的模块（`asfinger_fusion`）。每个目录里，目录名、`.py` 文件名和 `.manifest` 文件名必须相同。 |
 | `site/scripts/sync-core.mjs`、`sync-docs.mjs` | 构建前把包、配置和文档复制进网站。 |
 | `site/src/engine/` | web worker（Pyodide 和 Manifold）。 |
 | `site/src/editor/`、`site/src/data/`、`site/src/i18n/` | 编辑器、它的目录数据、它的文字。 |
