@@ -23,7 +23,7 @@ uv run ruff format --check
 uv run pytest
 ```
 
-`uv run ruff format` 用来整理格式。测试会生成 `hardware/configs/` 里的配置，并把结果加载到 MuJoCo 里；还会生成文档里的例子，并比较两种语言的页面清单。
+`uv run ruff format` 用来整理格式。测试会生成 `hardware/configs/` 里的配置，并把结果加载到 MuJoCo 里；还会生成文档里的例子，并比较两种语言的页面清单。`asfinger send` 和 Fusion 插件的测试用的是本机的 HTTP 服务和 `adsk` 模块的替身，不会启动 Fusion，所以改了 `hardware/cad/fusion/` 之后还要在 Fusion 里手工试一遍。
 
 修改生成器时，把修改前后的输出对比一下。不打算改变几何的修改，STL 文件和 `ipush_tool.xml` 必须逐字节相同：
 

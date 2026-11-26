@@ -11,6 +11,7 @@
 | [检查与干涉规则](checks.md) | 生成器检查什么，不检查什么。 |
 | [导出到 MuJoCo](mjcf.md) | MJCF 文件里有什么，怎样装到机械臂上。 |
 | [网页编辑器](editor.md) | 在浏览器里配置、查看和导出。 |
+| [Fusion 插件](fusion.md) | 把配置在 Autodesk Fusion 里生成为参数化设计，并原地更新。 |
 | [排错](troubleshooting.md) | 常见提示信息和原因。 |
 
 没有特别说明时，长度单位是毫米，角度单位是度。只有 MJCF 文件例外：MuJoCo 用米。

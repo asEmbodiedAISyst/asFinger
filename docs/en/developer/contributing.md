@@ -23,7 +23,7 @@ uv run ruff format --check
 uv run pytest
 ```
 
-`uv run ruff format` applies the format. The tests build the configs in `hardware/configs/` and load the result in MuJoCo. They also build the example of the documentation and compare the page lists of the two languages.
+`uv run ruff format` applies the format. The tests build the configs in `hardware/configs/` and load the result in MuJoCo. They also build the example of the documentation and compare the page lists of the two languages. The tests of `asfinger send` and of the Fusion add-in use a local HTTP server and stand-ins for the `adsk` modules. They do not start Fusion, so a change to `hardware/cad/fusion/` must also be tried in Fusion by hand.
 
 When you change the generator, compare the outputs before and after the change. A change that is not meant to change geometry must leave the STL files and `ipush_tool.xml` identical, byte for byte:
 

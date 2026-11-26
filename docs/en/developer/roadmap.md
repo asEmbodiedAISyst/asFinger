@@ -11,8 +11,9 @@ The version is 0.1.0.
 | Generator (`src/asfinger`) | In use. It builds the printed pusher, the MuJoCo model and the preview. |
 | Configs (`hardware/configs`) | Two configs: the pusher on the reBot gripper connector (default), and the same pusher bolted to the reBot flange. |
 | Web editor | In use for the reBot Arm RS. Franka FR3 and UR5e use flange data from datasheets and are not tested on a real arm. |
+| Fusion add-in (`hardware/cad/fusion`) | In the repository. It was used with the layout of the earlier project and is not run in Fusion from this location yet. |
 | Documentation | English and Chinese, for users, developers and agents. |
-| Tests | The default configs, the options, the checks and the interference rules. The STL export of the browser is not tested automatically. |
+| Tests | The default configs, the options, the checks and the interference rules, `asfinger send`, and the parts of the Fusion add-in that run without Fusion. The STL export of the browser and the features that the add-in makes in Fusion are not tested automatically. |
 
 ## Known weak points
 
@@ -21,7 +22,7 @@ The version is 0.1.0.
 - `resolved.json` contains an absolute local path (`base_dir`).
 - The mesh step exists twice, in `mesh.py` and in `site/src/engine/csg.ts`.
 - The package has no type hints.
-- The command `send` talks to a CAD add-in that is not in this repository.
+- The command `send` gets no result from the Fusion add-in, and the add-in accepts requests without authentication. See [The Fusion add-in](../user/fusion.md#limits).
 - A print set name, the MJCF body name and the output file names still use the earlier project name.
 - The pusher base supports four screw holes only.
 - The minimum focus distance of the phone cameras is unknown, so the focus check is off.
