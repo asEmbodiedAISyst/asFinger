@@ -32,6 +32,19 @@ site/scripts/rebot_no_tool.xml
     the same repository (same copyright and licence). It is the input of site/scripts/bake-arms.py for that arm
     and loads the meshes of that repository, which are not included here.
 
+Meshes designed for this project
+--------------------------------
+
+hardware/assets/fusion_ref/SlideLock_Connector_local.stl
+    The slide-lock MagSafe phone connector (the part `holder` of the configs).
+
+hardware/assets/fusion_ref/RobotTool_fusionworld.stl
+    A reference export of the real tool as it was modelled by hand (the entry `references` of the configs).
+
+Both files are original designs by the author of asFinger, exported from the author's own Autodesk Fusion
+designs. They contain no third-party content and are covered by the licence of this repository (MIT, see
+LICENSE).
+
 Numbers taken from published documents
 --------------------------------------
 
