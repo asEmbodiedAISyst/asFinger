@@ -10,8 +10,9 @@
 // Config always works on the full assembly: picking a group or a card moves the camera to that part.
 // A chip of the selection bar shows that part alone; the same chip or "Full assembly" goes back.
 // Who decides a pusher parameter, strongest first:
-//   fixed      the flange adapter (its height, screw direction, hole pattern on its tool side) and, when the pusher
-//              is bolted on directly (adapter "None"), the carrier's flange pattern; read-only in the panel
+//   fixed      the flange adapter (its height, screw direction, hole pattern on its tool side), the phone (its size and
+//              camera positions) and, when the pusher is bolted on directly (adapter "None"), the carrier's flange
+//              pattern; read-only in the panel
 //   edits      what the user typed
 //   defaults   per carrier: the mounting angle mount_rot (and what a direct mount needs), so every arm looks alike
 //   config     the values in the pusher config file
@@ -118,6 +119,7 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
   const carrier = item('carrier', selection.carrier);
   const adapter = item('adapter', selection.adapter);
   const pusher = item('pusher', selection.pusher);
+  const camera = item('camera', selection.camera);
   const direct = adapter?.option === false;          // no adapter: the pusher base sits on the robot flange
   const custom = !!carrier?.customFlange;
 
@@ -148,8 +150,9 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
     };
     if (direct && !custom) put(0, carrier);
     put(1, adapter);
+    put(GROUPS.findIndex((g) => g.id === 'camera'), camera);
     return out;
-  }, [carrier, adapter, direct, custom, lang]);
+  }, [carrier, adapter, camera, direct, custom, lang]);
 
   const defaults = useMemo(() => {
     const d: Record<string, number> = {};
@@ -165,7 +168,7 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
     return p;
   }, [edits, fixed, defaults, custom]);
 
-  const options = useMemo(() => ({ adapter: !direct }), [direct]);
+  const options = useMemo(() => ({ ...camera?.options, adapter: !direct }), [camera, direct]);
 
   useEffect(() => {
     if (engineState !== 'ready' || !config || !engine.current) return;
@@ -221,7 +224,9 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
 
   const onExport = useCallback(async (e: Exporter) => {
     if (!result || !engine.current) return;
-    const tag = `${carrier?.id ?? 'custom'}_${adapter?.id ?? 'none'}`;
+    // the phone joins the name only when it is not the default one, so the usual downloads keep their names
+    const phoneTag = camera && camera.id !== DEFAULT_SELECTION.camera ? `_${camera.id}` : '';
+    const tag = `${carrier?.id ?? 'custom'}_${adapter?.id ?? 'none'}${phoneTag}`;
     if (e.kind === 'config') {
       const c = { ...result.config, name: `${result.config.name ?? 'ipush'}_${tag}` };
       download(`ipush_${tag}.json`, JSON.stringify(c, null, 1), 'application/json');
@@ -233,7 +238,7 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
       download(`${s.file.replace(/\.stl$/, '')}_${tag}.stl`, s.bytes, 'model/stl');
     } catch (err: any) { setError(t('exportFailed') + (err?.message || err)); }
     setExporting(null);
-  }, [result, carrier, adapter, t]);
+  }, [result, carrier, adapter, camera, t]);
 
   const sel = GROUPS.map((g) => ({ group: g, item: item(g.id, selection[g.id]) }));
   const group = active === 'overall' ? null : GROUPS.find((g) => g.id === active) ?? null;

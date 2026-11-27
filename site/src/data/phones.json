@@ -1,0 +1,279 @@
+{
+ "source": "iMuninn protocol/frames/iphone-frames.json (Apple Accessory Design Guidelines dimensional drawings); written by scripts/phones-from-imuninn.mjs",
+ "imuninn_commit": "e1b420b",
+ "phones": [
+  {
+   "id": "iphone18pro",
+   "slug": "iphone-18-pro",
+   "name": "iPhone 18 Pro",
+   "identifiers": [],
+   "sets": {
+    "phone_W": 71.85,
+    "phone_L": 150.01,
+    "phone_t": 8.75,
+    "lens_x": 21.555,
+    "lens_y": 41.395,
+    "bump_h": 4.89,
+    "ring_D": 16.58,
+    "uw_x": 21.555,
+    "uw_y": 60.635,
+    "tele_x": 3.435,
+    "tele_y": 51.015,
+    "front_x": 4.905,
+    "front_y": 67.015,
+    "lidar_x": -22.105,
+    "lidar_y": 40.845,
+    "flash_x": -22.105,
+    "flash_y": 61.185
+   },
+   "options": {
+    "telephoto": true,
+    "lidar": true
+   },
+   "display_offset": [
+    0,
+    0
+   ],
+   "camera_plateau": 2.78,
+   "front_estimated": true,
+   "cones_deg": {
+    "ultra_wide": 125,
+    "main": 90,
+    "telephoto": 34
+   },
+   "drawing": {
+    "url": "https://developer.apple.com/download/files/accessories/dimensional-drawings/iphone-18-pro.pdf",
+    "date": "2026-09-09"
+   },
+   "review": "auto"
+  },
+  {
+   "id": "iphone17pro",
+   "slug": "iphone-17-pro",
+   "name": "iPhone 17 Pro",
+   "identifiers": [
+    "iPhone18,1"
+   ],
+   "sets": {
+    "phone_W": 71.85,
+    "phone_L": 150.01,
+    "phone_t": 8.75,
+    "lens_x": 21.555,
+    "lens_y": 41.395,
+    "bump_h": 4.43,
+    "ring_D": 16.2,
+    "uw_x": 21.555,
+    "uw_y": 60.635,
+    "tele_x": 3.565,
+    "tele_y": 51.015,
+    "front_x": 7.335,
+    "front_y": 67.015,
+    "lidar_x": -22.105,
+    "lidar_y": 40.845,
+    "flash_x": -22.105,
+    "flash_y": 61.185
+   },
+   "options": {
+    "telephoto": true,
+    "lidar": true
+   },
+   "display_offset": [
+    0,
+    0
+   ],
+   "camera_plateau": 2.55,
+   "front_estimated": true,
+   "cones_deg": {
+    "ultra_wide": 125,
+    "main": 90,
+    "telephoto": 34
+   },
+   "drawing": {
+    "url": "https://developer.apple.com/download/files/accessories/dimensional-drawings/iphone-17-pro.pdf",
+    "date": "2025-09-09"
+   },
+   "review": "auto"
+  },
+  {
+   "id": "iphone17",
+   "slug": "iphone-17",
+   "name": "iPhone 17",
+   "identifiers": [
+    "iPhone18,3"
+   ],
+   "sets": {
+    "phone_W": 71.45,
+    "phone_L": 149.61,
+    "phone_t": 7.95,
+    "lens_x": 22.105,
+    "lens_y": 43.465,
+    "bump_h": 3.45,
+    "ring_D": 16,
+    "uw_x": 22.105,
+    "uw_y": 61.185,
+    "front_x": 7.825,
+    "front_y": 67.015,
+    "flash_x": 5.315,
+    "flash_y": 52.325
+   },
+   "options": {
+    "telephoto": false,
+    "lidar": false
+   },
+   "display_offset": [
+    0,
+    0
+   ],
+   "camera_plateau": 1.78,
+   "front_estimated": true,
+   "cones_deg": {
+    "ultra_wide": 123,
+    "main": 84
+   },
+   "drawing": {
+    "url": "https://developer.apple.com/download/files/accessories/dimensional-drawings/iphone-17.pdf",
+    "date": "2025-09-09"
+   },
+   "review": "auto"
+  },
+  {
+   "id": "iphone16pro",
+   "slug": "iphone-16-pro",
+   "name": "iPhone 16 Pro",
+   "identifiers": [
+    "iPhone17,1"
+   ],
+   "sets": {
+    "phone_W": 71.45,
+    "phone_L": 149.61,
+    "phone_t": 8.25,
+    "lens_x": 21.555,
+    "lens_y": 41.395,
+    "bump_h": 4.28,
+    "ring_D": 16.2,
+    "uw_x": 21.555,
+    "uw_y": 60.635,
+    "tele_x": 3.545,
+    "tele_y": 51.015,
+    "front_x": 7.315,
+    "front_y": 67.015,
+    "flash_x": 3.545,
+    "flash_y": 64.585
+   },
+   "options": {
+    "telephoto": true,
+    "lidar": false
+   },
+   "display_offset": [
+    0,
+    0
+   ],
+   "camera_plateau": 2.05,
+   "front_estimated": true,
+   "cones_deg": {
+    "ultra_wide": 124,
+    "main": 86,
+    "telephoto": 25
+   },
+   "drawing": {
+    "url": "https://developer.apple.com/download/files/accessories/dimensional-drawings/iphone-16-pro.pdf",
+    "date": "2024-09-19"
+   },
+   "review": "auto"
+  },
+  {
+   "id": "iphone15pro",
+   "slug": "iphone-15-pro",
+   "name": "iPhone 15 Pro",
+   "identifiers": [
+    "iPhone16,1"
+   ],
+   "sets": {
+    "phone_W": 70.6,
+    "phone_L": 146.61,
+    "phone_t": 8.25,
+    "lens_x": 21.13,
+    "lens_y": 39.895,
+    "bump_h": 3.78,
+    "ring_D": 16.2,
+    "uw_x": 21.13,
+    "uw_y": 59.135,
+    "tele_x": 3.14,
+    "tele_y": 49.515,
+    "front_x": 7.31,
+    "front_y": 65.625,
+    "lidar_x": 3.14,
+    "lidar_y": 34.485,
+    "flash_x": 3.14,
+    "flash_y": 63.085
+   },
+   "options": {
+    "telephoto": true,
+    "lidar": true
+   },
+   "display_offset": [
+    0,
+    0
+   ],
+   "camera_plateau": 2.05,
+   "front_estimated": true,
+   "cones_deg": {
+    "ultra_wide": 123,
+    "main": 86,
+    "telephoto": 33.2
+   },
+   "drawing": {
+    "url": "https://developer.apple.com/download/files/accessories/dimensional-drawings/iphone-15-pro.pdf",
+    "date": "2023-10-10"
+   },
+   "review": "auto"
+  },
+  {
+   "id": "iphone14pro",
+   "slug": "iphone-14-pro",
+   "name": "iPhone 14 Pro",
+   "identifiers": [
+    "iPhone15,2"
+   ],
+   "sets": {
+    "phone_W": 71.45,
+    "phone_L": 147.46,
+    "phone_t": 7.85,
+    "lens_x": 21.445,
+    "lens_y": 40.21,
+    "bump_h": 4.18,
+    "ring_D": 15.61,
+    "uw_x": 3.605,
+    "uw_y": 49.83,
+    "tele_x": 21.445,
+    "tele_y": 59.45,
+    "front_x": 7.315,
+    "front_y": 65.63,
+    "lidar_x": 3.605,
+    "lidar_y": 36.23,
+    "flash_x": 3.605,
+    "flash_y": 63.41
+   },
+   "options": {
+    "telephoto": true,
+    "lidar": true
+   },
+   "display_offset": [
+    0.005,
+    -0.005
+   ],
+   "camera_plateau": 1.85,
+   "front_estimated": true,
+   "cones_deg": {
+    "telephoto": 38.23,
+    "main": 88.9,
+    "ultra_wide": 127.74
+   },
+   "drawing": {
+    "url": "https://developer.apple.com/download/files/accessories/dimensional-drawings/iphone-14-pro.pdf",
+    "date": "2022-09-21"
+   },
+   "review": "auto"
+  }
+ ]
+}
