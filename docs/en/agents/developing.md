@@ -20,6 +20,7 @@ This page is for an agent that changes the code, the site or the documentation i
 - The code in `hardware/cad/fusion/` runs inside Autodesk Fusion. Do not start Fusion, do not load the add-in, and do not change a Fusion document to test it. Run the tests, and tell the user to try the change in Fusion.
 - The code in `robot/` moves a real arm. Never run a command that connects to the real arm or to a phone from an agent session unless the operator is at the arm and asked for that command. Everything with `--sim` is free to run.
 - Do not refactor `robot/`. A change that can alter a motion needs a run on the real arm by the owner of the setup. Say in your report what was run in the simulator and that nothing was run on the arm.
+- Do not commit the arm meshes in `sim/assets/meshes/b601_rs_official/`. They are downloaded by `sim/fetch_arm_meshes.py`; only `SOURCE.md` and `SHA256SUMS` are in git.
 - Do not write an address, a device id or a host name of the setup into a tracked file. They belong in `robot/cameras.local.yaml`. Do not commit files from `calibration/data/` or `data/`, and do not add photos of the setup.
 - `robot/arm_sign_check.py` and `robot/arm_listen_ab.py` connect to the arm at once, also with `--help`. Do not start them to read their usage; read the docstring.
 - Do not push tags and do not change the deployment settings. Tell the user what to do.
@@ -43,7 +44,7 @@ This page is for an agent that changes the code, the site or the documentation i
 | `hardware/configs/`, `hardware/assets/` | Configs and the meshes they import. |
 | `robot/` | Scripts for the real arm. `arm` is the rebot-control wrapper; `arm_*.py` are arm tools and calibration; `teleop*.py` teleoperation; `episode.py`, `record.py`, `to_lerobot.py` data; `snapshot.py`, `tags.py`, `make_tags.py`, `calibrate_color.py` cameras and markers. |
 | `calibration/` | The calibration files that the tools read. `calibration/data/` is local and ignored. |
-| `sim/` | The MuJoCo scene (`scene.py`, `scene.yaml`) and its registration (`register.py`, `registration.yaml`). |
+| `sim/` | The first MuJoCo scene (`scene.py`, `scene.yaml`) with its registration (`register.py`, `registration.yaml`), and the twin scene (`twin.py`, `twin.yaml`, `twin_registration.yaml`, `twin_view.py`, `twin_filament.py`, `fetch_arm_meshes.py`). |
 | `tests/robot/` | Tests of the robot side in the simulator. They need `uv sync --group robot`. |
 | `hardware/cad/fusion/` | The Fusion add-in (`asFingerAddIn`), its script (`asFingerFromJSON`) and their shared module (`asfinger_fusion`). In each folder, the folder, the `.py` file and the `.manifest` file have the same name. |
 | `site/scripts/sync-core.mjs`, `sync-docs.mjs` | Copy the package, the configs and the docs into the site before a build. |

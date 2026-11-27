@@ -91,12 +91,14 @@ robot/*.py            scripts, run from the root of the repository; they import 
    ▼
 calibration/*.yaml    the gains and models of one arm and one tool; the tools read them and some tools write them
 sim/scene.py          the MuJoCo scene; `--sim` in a tool makes the same code run on rebot-control's simulated motors
+sim/twin.py           the twin scene: the same arm on the simulator, with meshes, the closed box, lights and camera tone
 data/episodes/        what the recording tools write (not in git)
 ```
 
 - `robot/teleop.py` holds the arm side of teleoperation. `teleop_iphone.py` and `teleop_star.py` give it a source of commands.
 - `robot/episode.py` records and reads episodes. `record.py` adds the keys. `to_lerobot.py` converts.
 - `robot/snapshot.py` has `camera()`, the one function that knows where the phones are. It reads `robot/cameras.local.yaml`, which is not in git.
+- `sim/twin.py` builds the twin scene from `sim/twin.yaml`, the `sim:` block of the tool file and `sim/twin_registration.yaml`. The arm meshes come from `sim/fetch_arm_meshes.py` and are not in git. `sim/twin_filament.py` is the optional second renderer.
 - The scripts depend on the group `robot` in `pyproject.toml`. The other jobs of the continuous integration do not install it.
 
 This code moves a real arm. It was imported without changes to its control flow, and `ruff` rules that would need an edit are switched off for `robot/`. See [Arm tools and safety rules](../user/robot-arm-tools.md).
