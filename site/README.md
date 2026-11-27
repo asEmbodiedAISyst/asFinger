@@ -45,6 +45,12 @@ sidebar sections are in `astro.config.mjs`. The colours of the documentation pag
   gives the default mounting angle `mountRot` (config parameter `mount_rot`), chosen so that every arm carries
   the phone on top, and `direct.defaults` for what changes when the pusher is bolted on directly. Adapters list
   the carriers they fit in `fits`; picking a carrier picks its `defaultAdapter`.
+- The camera group's phones are in `src/data/phones.ts`: camera specifications from Apple's tech-spec pages, and the
+  geometry (phone size, camera and sensor positions, camera glass height) from `src/data/phones.json`. That file is
+  written from iMuninn's phone data (`protocol/frames/iphone-frames.json` in the iMuninn repository, read from
+  Apple's dimensional drawings) by `node scripts/phones-from-imuninn.mjs path/to/iphone-frames.json <imuninn-commit>`.
+  A phone's `sets` fix the phone parameters of the pusher config and its `options` switch the config options
+  `telephoto` and `lidar`. The iPhone 17 Pro has no `sets`: it keeps the config values, the pusher as printed.
 - `src/data/pusherParams.ts` gives each pusher parameter a label, unit, range, section and owner.
 - The user's selection and edits are kept in the browser's localStorage only.
 

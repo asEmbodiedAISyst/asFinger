@@ -33,11 +33,14 @@ def test_frames_match_fusion():
     a = G.mul(G.col(w['C_main'].R, 2), -1)
     assert abs(a[1]) < 1e-9 and abs(w['C_main'].p[1]) < 1e-9
     assert abs(math.degrees(math.acos(a[2])) - 55.14) < 1e-6
-    # MagSafe centre: lateral offset vs measured -42.0; in-plane residual is reported, not asserted tightly
+    # The holder sits on the phone's MagSafe centre: lateral offset = -(lens_y - magsafe_y), so the main camera stays
+    # on the centre line. The printed connector (measured in Fusion at -42.0) predates the iMuninn phone data of
+    # 2026-11-27 (camera glass 4.43 mm, MagSafe 2.735 mm below the display centre); its residual is only reported.
+    P = Model.load(CFG).params()
     s = w['S_mount'].p
-    assert abs(s[1] - (-42.0)) < 1.0, s
+    assert abs(s[1] + (P['lens_y'] - P['magsafe_y'])) < 1e-6, s
     print(
-        'S_mount offset vs the current physical connector (mm):',
+        'S_mount offset vs the printed connector (mm):',
         [round(x - y, 2) for x, y in zip(s, [-27.27, -42.0, 56.98])],
     )
     assert not info['P_phone']['stale']
@@ -108,7 +111,8 @@ def test_adapter_modes():
     assert [p['name'] for p in Rd['parts']] == ['tool_body', 'holder', 'phone']
     assert 'F_adapter' not in Rd['world'] and close(Rd['world']['F_mount'].p, [0, 0, 0], 1e-12)
     assert d.interference(Rd) == [], d.interference(Rd)  # all four rotor screws reachable
-    assert len(d.interference(Rd, level='warn')) == 1  # one of them only with a short key
+    # since the phone data of 2026-11-27 the support sits 2.7 mm further out and all four take a straight driver
+    assert d.interference(Rd, level='warn') == []
     bad = Model.load(DIRECT).set(mount_rot=180, beam_x=0)  # the default layout straight on the rotor
     ids = [x.split('(')[-1].split(':')[0] for x in bad.interference(bad.resolve(resolve=True))]
     assert 'screw_access' in ids, ids
@@ -204,7 +208,7 @@ def test_phone_option_off_leaves_rod_only():
     full = Model.load(CFG).resolve()
     assert close(R['world']['T_tcp'].p, full['world']['T_tcp'].p, 1e-9)  # the rod itself does not move
     rj = m.resolved_json(R)
-    assert rj['cameras'] == {} and rj['options'] == {'adapter': True, 'phone': False}
+    assert rj['cameras'] == {} and rj['options'] == {'adapter': True, 'phone': False, 'telephoto': True, 'lidar': True}
     out = tempfile.mkdtemp()
     _, rep = m.build(out)
     assert (
@@ -213,6 +217,43 @@ def test_phone_option_off_leaves_rod_only():
     _, rep_full = Model.load(CFG).build(tempfile.mkdtemp(), mjcf=False, preview=False)
     assert rep['parts']['tool_body']['volume_cm3'] < rep_full['parts']['tool_body']['volume_cm3']  # no beam/spine
     assert m.cfg['frames']['P_phone'] and 'holder' in [p['name'] for p in m.cfg['parts']]  # full config kept
+
+
+def test_telephoto_and_lidar_options():
+    # A phone without a telephoto or LiDAR (e.g. iPhone 17) drops those frames and the telephoto MJCF camera only.
+    m = Model.load(CFG).set_options(telephoto=False, lidar=False)
+    R = m.resolve()
+    for f in ('C_tele', 'C_tele_cv', 'S_lidar'):
+        assert f not in R['world'], f
+    full = Model.load(CFG).resolve()
+    for f in ('P_phone', 'C_main', 'C_ultrawide', 'L_flash', 'T_tcp'):
+        assert close(R['world'][f].p, full['world'][f].p, 1e-9), f
+    assert set(m.resolved_json(R)['cameras']) == {'C_main', 'C_ultrawide'}
+
+
+def test_editor_phones_solve_clean():
+    # Every phone of the editor's camera group (site/src/data/phones.json, from iMuninn's phone data) solves with
+    # no failed check and no overlap; the main camera ends up where it is for the default phone.
+    import json
+
+    phones = json.load(
+        open(os.path.join(os.path.dirname(ROOT), 'site', 'src', 'data', 'phones.json'), encoding='utf-8')
+    )['phones']
+    assert {p['id'] for p in phones} >= {
+        'iphone17pro',
+        'iphone17',
+        'iphone18pro',
+        'iphone16pro',
+        'iphone15pro',
+        'iphone14pro',
+    }
+    ref = Model.load(CFG).resolve()['world']['C_main'].p
+    for p in phones:
+        m = Model.load(CFG).set_options(**p['options'])
+        m.set(**p['sets'])
+        R = m.resolve(resolve=True)
+        assert m.check(R) == [] and m.interference(R) == [], p['id']
+        assert close(R['world']['C_main'].p, ref, 1e-6), p['id']
 
 
 def test_interference_rules():

@@ -60,7 +60,7 @@ def build_all(model, out_dir, resolve=False, stl=True, mjcf=True, preview=True):
             report.setdefault('print_sets', {})[name] = {
                 'members': members,
                 'volume_cm3': round(u.volume() / 1000, 3),
-                'bodies': len(u.decompose()),
+                'bodies': len([c for c in u.decompose() if abs(c.volume()) > 1e-3]),  # as MS.clean: no slivers
                 'triangles': int(len(F)),
             }
     if mjcf:

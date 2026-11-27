@@ -3,6 +3,7 @@
 // Values marked `verify: true` are not from an official drawing yet and are shown as "to verify".
 import type { Txt } from '../i18n';
 import { FLANGES, type FlangeSpec } from './flanges';
+import { PHONE_ITEMS } from './phones';
 export type { FlangeSpec } from './flanges';
 
 export type View = 'carrier' | 'adapter' | 'pusher' | 'tip' | 'camera';
@@ -28,7 +29,8 @@ export interface CatalogItem {
   customFlange?: boolean;
   /** pusher parameters this choice fixes.
    *  carrier: the hole pattern of the pusher base when it is bolted on directly (adapter "None").
-   *  adapter: what the adapter decides (its height, which way the screws go, the hole pattern on its tool side). */
+   *  adapter: what the adapter decides (its height, which way the screws go, the hole pattern on its tool side).
+   *  camera: the phone size and where its cameras are (see phones.ts). */
   sets?: Record<string, number>;
   /** carrier: default mount_rot (deg), the angle of the pusher about the flange axis, measured from +X of the robot
    *  flange frame to +X of the pusher (the side the rod leans to). Chosen per arm so that every arm in its display
@@ -42,6 +44,8 @@ export interface CatalogItem {
   defaultAdapter?: string;
   /** adapter: value of the config option `adapter` (false = no adapter parts, pusher base on the robot flange) */
   option?: boolean;
+  /** camera: config options this choice switches (e.g. `telephoto: false` for a phone without one) */
+  options?: Record<string, boolean>;
   /** adapter: carriers it fits (ids); missing = all */
   fits?: string[];
   /** carrier: drawing data for the fallback model (used when no baked GLB exists, see src/data/arms.json) */
@@ -230,23 +234,7 @@ export const GROUPS: Group[] = [
     id: 'camera', title: { en: 'Camera', zh: '相机' }, view: 'camera',
     hint: { en: 'The phone or camera on the pusher. Sets the view.', zh: '装在推杆上的手机或相机，决定视野。' },
     items: [
-      {
-        id: 'iphone17pro', name: 'iPhone 17 Pro', subtitle: { en: 'Apple · landscape', zh: 'Apple · 横屏' }, icon: 'phone',
-        info: [
-          { label: { en: 'Brand', zh: '品牌' }, value: 'Apple' },
-          { label: { en: 'Main', zh: '主摄' }, value: { en: '48 MP Fusion, 24 mm, ƒ/1.78, 2nd-gen sensor-shift OIS', zh: '48 MP Fusion，24 mm，ƒ/1.78，第二代传感器位移防抖' } },
-          { label: { en: 'Ultra Wide', zh: '超广角' }, value: { en: '48 MP, 13 mm, ƒ/2.2, 120° FOV', zh: '48 MP，13 mm，ƒ/2.2，120° 视场' } },
-          { label: { en: 'Telephoto', zh: '长焦' }, value: '48 MP, 100 mm (4×), ƒ/2.8' },
-          { label: { en: 'Max frame rate', zh: '最高帧率' }, value: { en: '4K 120 fps (main), 1080p slo-mo 240 fps', zh: '4K 120 fps（主摄），1080p 慢动作 240 fps' } },
-          { label: { en: 'Sensor size', zh: '传感器尺寸' }, value: { en: 'not published by Apple', zh: '官方未公布' }, verify: true },
-          { label: { en: 'Min focus distance', zh: '最近对焦距离' }, value: { en: 'not published, to measure', zh: '官方未公布，需实测' }, verify: true },
-          { label: { en: 'Body', zh: '机身' }, value: '150 × 71.9 × 8.75 mm, 206 g' },
-        ],
-        links: [
-          { label: { en: 'Apple tech specs', zh: 'Apple 官方技术规格' }, url: 'https://support.apple.com/125090' },
-          { label: { en: 'Apple dimensional drawings (for accessory makers)', zh: 'Apple 尺寸图（配件厂商用）' }, url: 'https://developer.apple.com/accessories/dimensional-drawings/' },
-        ],
-      },
+      ...PHONE_ITEMS,
       { id: 'realsense', name: 'Intel RealSense', icon: 'depthcam', disabled: true },
       { id: 'other_phone', name: { en: 'Other phones', zh: '其他手机' }, icon: 'phone', disabled: true },
     ],
