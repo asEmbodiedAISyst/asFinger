@@ -62,7 +62,7 @@
 | `phone_vs_holder` | error | 手机和支架重叠（`back_to_mount` 太小）。 |
 | `holder_vs_rod` | error | 杆穿过了支架。 |
 | `sight_to_tip` | error | 主摄到末端的视线被实体挡住。 |
-| `adapter_vs_body` | error | 推杆和法兰转接件重叠。 |
+| `adapter_vs_body` | error | 推杆和安装转接件重叠。 |
 | `screw_heads` | error | 底座上的螺钉头碰到推杆（只在 `mount_screws = 2` 时检查）。 |
 | `screw_access` | error | 螺钉上方放不下内六角扳手（只在 `mount_screws = 2` 时检查）。 |
 | `screw_driver` | warn | 直螺丝刀够不到某个螺钉（只在 `mount_screws = 2` 时检查）。 |

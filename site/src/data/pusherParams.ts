@@ -30,6 +30,7 @@ export const PARAMS: Record<string, ParamMeta> = {
 
   rod_L: { label: { en: 'Rod length', zh: '杆长' }, unit: 'mm', min: 80, max: 260, step: 0.5, section: 'rod', slider: true },
   rod_D: { label: { en: 'Rod diameter', zh: '杆径' }, unit: 'mm', min: 8, max: 25, step: 0.5, section: 'rod', slider: true, advanced: true, hint: { en: 'The ball tip radius follows (= diameter / 2)', zh: '球头半径跟着变（= 杆径 / 2）' } },
+  rod_w: { label: { en: 'Rod width', zh: '杆宽' }, unit: 'mm', min: 6, max: 25, step: 0.5, section: 'rod', slider: true, advanced: true, hint: { en: 'Side of the square rod', zh: '方杆的边长' } },
   rod_tilt: { label: { en: 'Rod tilt', zh: '杆倾角' }, unit: '°', min: 0, max: 60, step: 0.5, section: 'rod', slider: true, hint: { en: 'Relative to the flange axis', zh: '相对法兰轴线' } },
   rod_x: { label: { en: 'Rod root offset', zh: '杆根偏移' }, unit: 'mm', min: -15, max: 20, step: 0.1, section: 'rod', advanced: true, hint: { en: 'Distance along X from the base centre to the rod root centre', zh: '杆根中心到底座中心沿 X 的距离' } },
 

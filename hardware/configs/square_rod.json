@@ -1,0 +1,2032 @@
+{
+  "name": "square_rod",
+  "version": 0,
+  "description": "The earlier pusher with a square rod (Fusion: iPhone17_DataTool, body RobotTool): a 10 x 10 mm square rod with a flat end, at the same place, angle and length as the round rod of iphone17pro_default (rod_x, rod_tilt, rod_L), so the TCP is the centre of the end face. The phone holder and the flange side are those of iphone17pro_default, without the spine_back reinforcement, which that tool did not have. Units: mm, deg.",
+  "root": "F_robot",
+  "options": {
+    "adapter": {
+      "value": true,
+      "modules": [
+        "adapter"
+      ],
+      "desc": "Flange adapter between the robot flange and the pusher (here the reBot gripper connector, parts A and B). Off = the pusher base sits directly on the robot flange; set adapter_h = 0 and the hole_* / mount_screws parameters to the robot's own pattern (see configs/rebot_rs_flange.json).",
+      "desc_zh": "机械臂法兰和推杆之间的法兰转接件（这里是 reBot 夹爪连接件 A + B）。关掉 = 推杆底座直接装在机械臂法兰上；同时要把 adapter_h 设为 0，并把 hole_* / mount_screws 改成机械臂自己的孔位（见 configs/rebot_rs_flange.json）。"
+    },
+    "phone": {
+      "value": true,
+      "modules": [
+        "phone",
+        "holder",
+        "connector"
+      ],
+      "desc": "Phone camera with its holder and connector. Off = the rod alone: holder, beam and spine are left out and the camera solve is skipped.",
+      "desc_zh": "手机相机及其支架和连接件。关掉 = 只要推杆：去掉支架、横梁和支撑条，并跳过相机看向 TCP 的求解。"
+    },
+    "telephoto": {
+      "value": true,
+      "modules": [
+        "tele"
+      ],
+      "desc": "Telephoto camera frames (C_tele, C_tele_cv) and its MJCF camera. Off for a phone without a telephoto (e.g. iPhone 17). Needs the option phone.",
+      "desc_zh": "长焦相机的坐标系（C_tele、C_tele_cv）和它在 MJCF 里的相机。没有长焦的手机（例如 iPhone 17）关掉。依赖 phone 选项。"
+    },
+    "lidar": {
+      "value": true,
+      "modules": [
+        "lidar"
+      ],
+      "desc": "LiDAR scanner frame (S_lidar). Off for a phone without LiDAR, or when its position is not known. Needs the option phone.",
+      "desc_zh": "LiDAR 扫描仪的坐标系（S_lidar）。没有 LiDAR 的手机，或位置未知时关掉。依赖 phone 选项。"
+    }
+  },
+  "params": {
+    "mount_rot": 180,
+    "adapter_h": "cup_h - cup_skirt",
+    "mount_screws": 0,
+    "base_R": 28.4,
+    "base_t": 10,
+    "hole_pcd": 38.0,
+    "hole_rot": 45,
+    "hole_ang2": 90,
+    "hole_d": 2.6,
+    "hole_depth": 8,
+    "hole_len": "(base_t + 2) if mount_screws == 2 else (hole_depth + 1)",
+    "cbore_d": 6.5,
+    "cbore_depth": 3.5,
+    "relief_h": 0,
+    "relief_c_d": 14.5,
+    "relief_p_d": 4.6,
+    "relief_p_r": 12.15,
+    "relief_p_rot": 0,
+    "screw_head_d": 5.5,
+    "screw_head_h": 3,
+    "key_d": 6,
+    "key_L": 25,
+    "driver_L": 120,
+    "cup_h": 9.5,
+    "cup_skirt": 0.5,
+    "cup_floor": 3,
+    "cup_bore_d": 36,
+    "cup_centre_d": 26.2,
+    "cup_screw_d": 3.5,
+    "cup_screw_cbore_d": 5.8,
+    "cup_screw_seat_r": 21.9,
+    "cup_screw_z": 3,
+    "cup_screw_rot": 60,
+    "rod_w": 10,
+    "rod_x": 7.89,
+    "rod_tilt": 30,
+    "rod_L": 176.9,
+    "rod_embed": "rod_w/2*tand(rod_tilt) + 1",
+    "tip_R": 0,
+    "beam_w": 10,
+    "beam_y_in": 0,
+    "spine_w": 30,
+    "plate_t": 10,
+    "spine_top": -33.5,
+    "spine_overlap": 0.5,
+    "spine_back": 0,
+    "spine_back_to": 2.25,
+    "spine_back_ang": 42.6,
+    "spine_back_w": "spine_w",
+    "holder_back_z": -4,
+    "phone_W": 71.85,
+    "phone_L": 150.01,
+    "phone_t": 8.75,
+    "outline_x": 0,
+    "outline_y": 0,
+    "lens_x": 21.555,
+    "lens_y": 41.395,
+    "bump_h": 4.43,
+    "ring_D": 16.2,
+    "corner_r": 10.777,
+    "uw_x": 21.555,
+    "uw_y": 60.635,
+    "tele_x": 3.565,
+    "tele_y": 51.015,
+    "front_x": 7.335,
+    "front_y": 67.015,
+    "lidar_x": -22.105,
+    "lidar_y": 40.845,
+    "flash_x": -22.105,
+    "flash_y": 61.185,
+    "magsafe_x": 0.005,
+    "magsafe_y": -2.735,
+    "back_to_mount": 3.25,
+    "feq": 24,
+    "feq_tele": 100,
+    "phone_flange_angle": 55.14,
+    "v_n": "1 - 2*0.618",
+    "distance": 163.3,
+    "beam_x": 0
+  },
+  "cameras": {
+    "C_main": {
+      "fovy_deg": "2*atand(sqrt(36**2 + 24**2)*0.6/2/feq)",
+      "aspect": "4/3",
+      "resolution": [
+        640,
+        480
+      ],
+      "min_focus_mm": null,
+      "desc": "iPhone 17 Pro main camera, 24 mm equivalent, 4:3, landscape. min_focus_mm unknown: fill in to enable the check."
+    },
+    "C_ultrawide": {
+      "fovy_deg": 88.4,
+      "aspect": "4/3",
+      "resolution": [
+        640,
+        480
+      ],
+      "min_focus_mm": null,
+      "desc": "iPhone 17 Pro Ultra Wide, 13 mm equivalent, 4:3 landscape. fovy 88.4 = measured short-side FOV at 1920x1440 with focus at infinity (intrinsics yaml 2026-11-08, fx 740.38); about 18 % focus breathing."
+    },
+    "C_tele": {
+      "fovy_deg": "2*atand(sqrt(36**2 + 24**2)*0.6/2/feq_tele)",
+      "aspect": "4/3",
+      "resolution": [
+        640,
+        480
+      ],
+      "min_focus_mm": null,
+      "desc": "iPhone 17 Pro 4x Telephoto, 100 mm equivalent, 4:3 landscape (nominal fovy from the equivalent focal length, not measured)."
+    }
+  },
+  "frames": {
+    "F_robot": {
+      "parent": null,
+      "module": "robot",
+      "desc": "Robot flange frame as the robot defines it: origin on the flange face, +Z out of the flange. reBot B601-RS: the link6 frame of the Seeed URDF (joint-6 rotor face)."
+    },
+    "F_adapter": {
+      "parent": "F_robot",
+      "module": "adapter",
+      "desc": "Flange adapter frame = F_robot: the gripper connector sits on the rotor as in the official assembly (rotor screws at +-30 deg from +-X, radial screws at 60/180/300 deg)."
+    },
+    "F_mount": {
+      "parent": "F_robot",
+      "pos": [
+        0,
+        0,
+        "adapter_h"
+      ],
+      "rot": {
+        "axis": [
+          0,
+          0,
+          1
+        ],
+        "deg": "mount_rot"
+      },
+      "module": "base",
+      "desc": "Face the pusher base sits on (the adapter's tool face, or the robot flange without an adapter). +Z from robot to tool, +X toward the rod tilt; turned by mount_rot about the flange axis."
+    },
+    "F_tool": {
+      "parent": "F_mount",
+      "pos": [
+        0,
+        0,
+        "base_t"
+      ],
+      "module": "base",
+      "desc": "Tool-side face of the pusher base plate."
+    },
+    "R_rod": {
+      "parent": "F_tool",
+      "pos": [
+        "rod_x",
+        0,
+        0
+      ],
+      "rot": {
+        "axis": [
+          0,
+          1,
+          0
+        ],
+        "deg": "rod_tilt"
+      },
+      "module": "rod",
+      "desc": "Rod axis at the adapter face; +Z along the rod toward the tip."
+    },
+    "T_tip": {
+      "parent": "R_rod",
+      "pos": [
+        0,
+        0,
+        "rod_L"
+      ],
+      "module": "rod",
+      "desc": "Centre of the rod end face."
+    },
+    "T_tcp": {
+      "parent": "T_tip",
+      "pos": [
+        0,
+        0,
+        "tip_R"
+      ],
+      "module": "tip",
+      "desc": "Contact reference point = centre of the flat rod end (tip_R = 0, so it is T_tip). +Z = rod direction."
+    },
+    "P_phone": {
+      "parent": "F_tool",
+      "module": "phone",
+      "desc": "Phone frame = iMuninn `device`: centre of the display active area on the outer surface of the front glass, +X to the right edge, +Y to the top (camera end), +Z out of the screen (Core Motion axes).",
+      "solve": {
+        "type": "coplanar_look_at",
+        "target": "T_tcp",
+        "axis_frame": "R_rod",
+        "camera": "C_main",
+        "plane_angle_deg": "phone_flange_angle",
+        "v_n": "v_n",
+        "distance_mm": "distance",
+        "image_up": "away_from_flange"
+      },
+      "result": {
+        "pos": [
+          -46.889741,
+          -41.395,
+          52.357956
+        ],
+        "quat": [
+          0.46283196,
+          -0.0,
+          -0.88644604,
+          -0.0
+        ],
+        "solve_hash": "e6d1c81ac90a"
+      }
+    },
+    "B_back": {
+      "parent": "P_phone",
+      "pos": [
+        0,
+        0,
+        "-phone_t"
+      ],
+      "module": "phone",
+      "desc": "Back glass centre."
+    },
+    "C_main": {
+      "parent": "P_phone",
+      "pos": [
+        "lens_x",
+        "lens_y",
+        "-(phone_t + bump_h)"
+      ],
+      "rot": {
+        "xyaxes": [
+          0,
+          -1,
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "module": "phone",
+      "desc": "Main camera, MuJoCo convention: looks along -Z, +X image right, +Y image up. Landscape, phone top to image LEFT, so the rod enters from the bottom of the image."
+    },
+    "C_cv": {
+      "parent": "C_main",
+      "rot": {
+        "axis": [
+          1,
+          0,
+          0
+        ],
+        "deg": 180
+      },
+      "module": "phone",
+      "desc": "Same camera, OpenCV convention (+Z forward, +Y image down)."
+    },
+    "C_ultrawide": {
+      "parent": "P_phone",
+      "pos": [
+        "uw_x",
+        "uw_y",
+        "-(phone_t + bump_h)"
+      ],
+      "rot": {
+        "xyaxes": [
+          0,
+          -1,
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "module": "phone",
+      "desc": "Ultra Wide camera (Rear Camera 1, 125 deg keepout cone), centre of the lens window on the outer cover glass. Position (uw_x, uw_y) from iMuninn's phone data (Apple iPhone 17 Pro dimensional drawing 2025-09-09). Axis parallel to C_main, same landscape convention."
+    },
+    "C_ultrawide_cv": {
+      "parent": "C_ultrawide",
+      "rot": {
+        "axis": [
+          1,
+          0,
+          0
+        ],
+        "deg": 180
+      },
+      "module": "phone",
+      "desc": "C_ultrawide in OpenCV convention (+Z forward, +Y image down)."
+    },
+    "C_tele": {
+      "parent": "P_phone",
+      "pos": [
+        "tele_x",
+        "tele_y",
+        "-(phone_t + bump_h)"
+      ],
+      "rot": {
+        "xyaxes": [
+          0,
+          -1,
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "module": "tele",
+      "desc": "Telephoto camera (Rear Camera 3, 34 deg keepout cone), centre of the lens window on the outer cover glass. Position (tele_x, tele_y) from iMuninn's phone data. Axis parallel to C_main."
+    },
+    "C_tele_cv": {
+      "parent": "C_tele",
+      "rot": {
+        "axis": [
+          1,
+          0,
+          0
+        ],
+        "deg": 180
+      },
+      "module": "tele",
+      "desc": "C_tele in OpenCV convention (+Z forward, +Y image down)."
+    },
+    "S_lidar": {
+      "parent": "P_phone",
+      "pos": [
+        "lidar_x",
+        "lidar_y",
+        "-(phone_t + bump_h)"
+      ],
+      "rot": {
+        "xyaxes": [
+          0,
+          -1,
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "module": "lidar",
+      "desc": "LiDAR scanner (REAR SENSOR, d6.65, 84 deg keepout cone; back view (58.03, -34.16)). Position from iMuninn's phone data; height assumed equal to the lens glass (not dimensioned). Axes as C_main."
+    },
+    "L_flash": {
+      "parent": "P_phone",
+      "pos": [
+        "flash_x",
+        "flash_y",
+        "-(phone_t + bump_h)"
+      ],
+      "rot": {
+        "xyaxes": [
+          0,
+          -1,
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "module": "phone",
+      "desc": "True Tone flash (d6.80; back view (58.03, -13.82)). Position from iMuninn's phone data; height assumed equal to the lens glass (not dimensioned). Axes as C_main."
+    },
+    "C_front": {
+      "parent": "P_phone",
+      "pos": [
+        "front_x",
+        "front_y",
+        0
+      ],
+      "rot": {
+        "xyaxes": [
+          0,
+          -1,
+          0,
+          -1,
+          0,
+          0
+        ]
+      },
+      "module": "phone",
+      "desc": "Front (selfie) camera, ESTIMATED position (iMuninn: centre of the right end cap of the front-camera keep-out on Apple's drawing; the drawing does not mark the lens). MuJoCo convention, looks along +Z_P (out of the screen). Axes from iMuninn (device_rot_front_optical = [[0,1,0],[-1,0,0],[0,0,1]] for C_front_cv; native image rotation 90 deg measured on iPhone 17 Pro)."
+    },
+    "C_front_cv": {
+      "parent": "C_front",
+      "rot": {
+        "axis": [
+          1,
+          0,
+          0
+        ],
+        "deg": 180
+      },
+      "module": "phone",
+      "desc": "C_front in OpenCV convention (+Z forward, +Y image down)."
+    },
+    "S_mount": {
+      "parent": "P_phone",
+      "pos": [
+        "magsafe_x",
+        "magsafe_y",
+        "-(phone_t + back_to_mount)"
+      ],
+      "module": "holder",
+      "desc": "MagSafe centre on the support plate surface; +Z toward the phone. The phone locks onto the holder by MagSafe, so this is the phone's MagSafe circle centre (magsafe_x, magsafe_y in P_phone) moved back by the case gap."
+    },
+    "J_foot": {
+      "parent": "F_tool",
+      "module": "connector",
+      "pos_from": {
+        "frame": "S_mount",
+        "pos": [
+          0,
+          0,
+          "-plate_t/2"
+        ],
+        "dir": [
+          -1,
+          0,
+          0
+        ],
+        "until": {
+          "frame": "F_tool",
+          "axis": "x",
+          "value": "beam_x"
+        }
+      },
+      "desc": "Where the spine (running down the support plane from S_mount) reaches the beam's vertical mid-plane x = beam_x; axes parallel to F_tool."
+    },
+    "J_bend": {
+      "parent": "F_tool",
+      "module": "connector",
+      "pos_from": {
+        "frame": "J_foot"
+      },
+      "z_from": [
+        {
+          "frame": "F_tool",
+          "dir": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "frame": "S_mount",
+          "dir": [
+            1,
+            0,
+            0
+          ]
+        }
+      ],
+      "x_hint": {
+        "frame": "F_tool",
+        "dir": [
+          0,
+          1,
+          0
+        ]
+      },
+      "desc": "Mitre between the beam (rising along +Z) and the support strip (rising along +X of S_mount): origin on both centre lines, +Z normal to the mitre plane."
+    }
+  },
+  "parts": [
+    {
+      "name": "tool_body",
+      "frame": "F_mount",
+      "role": "printed",
+      "material": "PLA",
+      "density": 1.24,
+      "color": "#8a94a6",
+      "csg": {
+        "union": [
+          {
+            "name": "body",
+            "difference": [
+              {
+                "union": [
+                  {
+                    "name": "base",
+                    "cylinder": {
+                      "r": "base_R",
+                      "h": "base_t"
+                    },
+                    "pos": [
+                      0,
+                      0,
+                      "base_t/2"
+                    ],
+                    "desc": "Pusher base plate on the mount face (F_mount)."
+                  },
+                  {
+                    "name": "rod",
+                    "frame": "R_rod",
+                    "pos": [
+                      0,
+                      0,
+                      "(rod_L - rod_embed)/2"
+                    ],
+                    "desc": "Square rod (side rod_w) along R_rod +Z, its faces parallel to the R_rod axes, embedded rod_embed into the adapter; flat end.",
+                    "box": {
+                      "size": [
+                        "rod_w",
+                        "rod_w",
+                        "rod_L + rod_embed"
+                      ]
+                    }
+                  },
+                  {
+                    "name": "beam_mitred",
+                    "difference": [
+                      {
+                        "name": "beam",
+                        "frame": "F_tool",
+                        "box": {
+                          "corners": [
+                            {
+                              "frame": "F_tool",
+                              "pos": [
+                                "beam_x - beam_w/2",
+                                "beam_y_in",
+                                0
+                              ]
+                            },
+                            {
+                              "frame": "J_foot",
+                              "pos": [
+                                "beam_w/2",
+                                "-spine_w/2",
+                                "2*plate_t"
+                              ]
+                            }
+                          ]
+                        },
+                        "desc": "Straight beam along -Y on the flange centre line, standing on the adapter face; its top meets the spine."
+                      },
+                      {
+                        "name": "beam_mitre_cut",
+                        "sim": "none",
+                        "frame": "J_bend",
+                        "box": {
+                          "size": [
+                            300,
+                            300,
+                            100
+                          ]
+                        },
+                        "pos": [
+                          0,
+                          0,
+                          50
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "spine_mitred",
+                    "difference": [
+                      {
+                        "name": "spine",
+                        "box": {
+                          "size": [
+                            "spine_w",
+                            "plate_t"
+                          ],
+                          "from": {
+                            "frame": "S_mount",
+                            "pos": [
+                              "spine_top + spine_overlap",
+                              0,
+                              "-plate_t/2"
+                            ]
+                          },
+                          "to": {
+                            "frame": "J_foot"
+                          },
+                          "up": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "extend_to": "2*plate_t"
+                        },
+                        "frame": "S_mount",
+                        "desc": "Strip in the support plane from the holder's lower edge (overlapping it by spine_overlap so the print fuses) down to the beam."
+                      },
+                      {
+                        "name": "spine_mitre_cut",
+                        "sim": "none",
+                        "frame": "J_bend",
+                        "box": {
+                          "size": [
+                            300,
+                            300,
+                            100
+                          ]
+                        },
+                        "pos": [
+                          0,
+                          0,
+                          -50
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "spine_back",
+                    "enabled": "spine_back > 0",
+                    "desc": "Spine continued up the back of the holder plate in the rib layer (z from -plate_t to holder_back_z), ending in a V along the centre lines of the two lower arms of the holder's X ribs (crossing at spine_back_to, arms at spine_back_ang to the spine axis). The load then goes into the ribs instead of through the thin plate at the joint.",
+                    "difference": [
+                      {
+                        "name": "spine_back_box",
+                        "frame": "S_mount",
+                        "box": {
+                          "corners": [
+                            {
+                              "frame": "S_mount",
+                              "pos": [
+                                "spine_top + spine_overlap",
+                                "-spine_back_w/2",
+                                "-plate_t"
+                              ]
+                            },
+                            {
+                              "frame": "S_mount",
+                              "pos": [
+                                "spine_back_to",
+                                "spine_back_w/2",
+                                "holder_back_z + spine_overlap"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "spine_back_cut_l",
+                        "sim": "none",
+                        "frame": "S_mount",
+                        "box": {
+                          "size": [
+                            200,
+                            200,
+                            "2*plate_t + 10"
+                          ]
+                        },
+                        "rot": {
+                          "axis": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "deg": "(90 - spine_back_ang)"
+                        },
+                        "pos": [
+                          "spine_back_to + 100*sind(spine_back_ang)",
+                          "100*cosd(spine_back_ang)",
+                          "-plate_t/2"
+                        ]
+                      },
+                      {
+                        "name": "spine_back_cut_r",
+                        "sim": "none",
+                        "frame": "S_mount",
+                        "box": {
+                          "size": [
+                            200,
+                            200,
+                            "2*plate_t + 10"
+                          ]
+                        },
+                        "rot": {
+                          "axis": [
+                            0,
+                            0,
+                            1
+                          ],
+                          "deg": "-(90 - spine_back_ang)"
+                        },
+                        "pos": [
+                          "spine_back_to + 100*sind(spine_back_ang)",
+                          "-100*cosd(spine_back_ang)",
+                          "-plate_t/2"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "hole1",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "mount_screws > 0",
+                "cylinder": {
+                  "r": "hole_d/2",
+                  "h": "hole_len"
+                },
+                "pos": [
+                  "hole_pcd/2*cosd(hole_rot)",
+                  "hole_pcd/2*sind(hole_rot)",
+                  "adapter_h - 1 + hole_len/2"
+                ]
+              },
+              {
+                "name": "hole2",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "mount_screws > 0",
+                "cylinder": {
+                  "r": "hole_d/2",
+                  "h": "hole_len"
+                },
+                "pos": [
+                  "hole_pcd/2*cosd(hole_rot + hole_ang2)",
+                  "hole_pcd/2*sind(hole_rot + hole_ang2)",
+                  "adapter_h - 1 + hole_len/2"
+                ]
+              },
+              {
+                "name": "hole3",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "mount_screws > 0",
+                "cylinder": {
+                  "r": "hole_d/2",
+                  "h": "hole_len"
+                },
+                "pos": [
+                  "hole_pcd/2*cosd(hole_rot + 180)",
+                  "hole_pcd/2*sind(hole_rot + 180)",
+                  "adapter_h - 1 + hole_len/2"
+                ]
+              },
+              {
+                "name": "hole4",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "mount_screws > 0",
+                "cylinder": {
+                  "r": "hole_d/2",
+                  "h": "hole_len"
+                },
+                "pos": [
+                  "hole_pcd/2*cosd(hole_rot + 180 + hole_ang2)",
+                  "hole_pcd/2*sind(hole_rot + 180 + hole_ang2)",
+                  "adapter_h - 1 + hole_len/2"
+                ]
+              },
+              {
+                "name": "cbore1",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "mount_screws == 2",
+                "cylinder": {
+                  "r": "cbore_d/2",
+                  "h": "cbore_depth + 1"
+                },
+                "pos": [
+                  "hole_pcd/2*cosd(hole_rot)",
+                  "hole_pcd/2*sind(hole_rot)",
+                  "adapter_h + base_t - cbore_depth/2 + 0.5"
+                ]
+              },
+              {
+                "name": "cbore2",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "mount_screws == 2",
+                "cylinder": {
+                  "r": "cbore_d/2",
+                  "h": "cbore_depth + 1"
+                },
+                "pos": [
+                  "hole_pcd/2*cosd(hole_rot + hole_ang2)",
+                  "hole_pcd/2*sind(hole_rot + hole_ang2)",
+                  "adapter_h + base_t - cbore_depth/2 + 0.5"
+                ]
+              },
+              {
+                "name": "cbore3",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "mount_screws == 2",
+                "cylinder": {
+                  "r": "cbore_d/2",
+                  "h": "cbore_depth + 1"
+                },
+                "pos": [
+                  "hole_pcd/2*cosd(hole_rot + 180)",
+                  "hole_pcd/2*sind(hole_rot + 180)",
+                  "adapter_h + base_t - cbore_depth/2 + 0.5"
+                ]
+              },
+              {
+                "name": "cbore4",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "mount_screws == 2",
+                "cylinder": {
+                  "r": "cbore_d/2",
+                  "h": "cbore_depth + 1"
+                },
+                "pos": [
+                  "hole_pcd/2*cosd(hole_rot + 180 + hole_ang2)",
+                  "hole_pcd/2*sind(hole_rot + 180 + hole_ang2)",
+                  "adapter_h + base_t - cbore_depth/2 + 0.5"
+                ]
+              },
+              {
+                "name": "relief_centre",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "relief_h > 0",
+                "cylinder": {
+                  "r": "relief_c_d/2",
+                  "h": "relief_h + 1"
+                },
+                "pos": [
+                  0,
+                  0,
+                  "adapter_h + (relief_h - 1)/2"
+                ],
+                "desc": "Clearance for a feature at the centre of the robot flange."
+              },
+              {
+                "name": "relief_p1",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "relief_h > 0",
+                "cylinder": {
+                  "r": "relief_p_d/2",
+                  "h": "relief_h + 1"
+                },
+                "pos": [
+                  "relief_p_r*cosd(relief_p_rot + 0)",
+                  "relief_p_r*sind(relief_p_rot + 0)",
+                  "adapter_h + (relief_h - 1)/2"
+                ]
+              },
+              {
+                "name": "relief_p2",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "relief_h > 0",
+                "cylinder": {
+                  "r": "relief_p_d/2",
+                  "h": "relief_h + 1"
+                },
+                "pos": [
+                  "relief_p_r*cosd(relief_p_rot + 120)",
+                  "relief_p_r*sind(relief_p_rot + 120)",
+                  "adapter_h + (relief_h - 1)/2"
+                ]
+              },
+              {
+                "name": "relief_p3",
+                "sim": "none",
+                "frame": "F_robot",
+                "enabled": "relief_h > 0",
+                "cylinder": {
+                  "r": "relief_p_d/2",
+                  "h": "relief_h + 1"
+                },
+                "pos": [
+                  "relief_p_r*cosd(relief_p_rot + 240)",
+                  "relief_p_r*sind(relief_p_rot + 240)",
+                  "adapter_h + (relief_h - 1)/2"
+                ]
+              },
+              {
+                "name": "below_mount_face",
+                "sim": "none",
+                "box": {
+                  "size": [
+                    400,
+                    400,
+                    100
+                  ]
+                },
+                "pos": [
+                  0,
+                  0,
+                  -50
+                ]
+              }
+            ]
+          },
+          {
+            "name": "cup",
+            "use": "connector_b",
+            "frame": "F_adapter",
+            "enabled": "mount_screws == 0",
+            "desc": "Adapter part B printed in one piece with the pusher (the current physical tool)."
+          },
+          {
+            "name": "cup_weld",
+            "sim": "none",
+            "frame": "F_adapter",
+            "enabled": "mount_screws == 0",
+            "cylinder": {
+              "r": "base_R",
+              "h": 1
+            },
+            "pos": [
+              0,
+              0,
+              "adapter_h"
+            ],
+            "desc": "Overlap between the cup and the base plate, so the two fuse into one solid."
+          }
+        ]
+      },
+      "desc": "The printed pusher: base plate, rod, tip, beam and spine; with mount_screws = 0 also the cup of adapter part B."
+    },
+    {
+      "name": "holder",
+      "frame": "S_mount",
+      "role": "printed",
+      "material": "PLA",
+      "density": 1.24,
+      "color": "#5b6b8c",
+      "desc": "Slide-lock MagSafe connector, imported unchanged from Fusion (ip17case_connector).",
+      "csg": {
+        "mesh": {
+          "file": "assets/fusion_ref/SlideLock_Connector_local.stl"
+        },
+        "rot": {
+          "xyaxes": [
+            0,
+            0,
+            -1,
+            0,
+            1,
+            0
+          ]
+        }
+      },
+      "collision": [
+        {
+          "box": {
+            "size": [
+              67,
+              58,
+              12.8
+            ]
+          },
+          "pos": [
+            0,
+            0,
+            -3.6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "phone",
+      "frame": "P_phone",
+      "role": "reference",
+      "density": 2.142,
+      "color": "#2b2f36",
+      "desc": "Phone shape, as in iMuninn's glb: body outline with rounded corners (corner_r, estimated) and one cylinder per rear lens window (ring_D) up to the camera glass (bump_h); the telephoto lens goes with the telephoto option. Sized by the phone parameters; the editor's camera group sets them per phone. Frames are unaffected. Density set so the iPhone 17 Pro shape weighs 206 g (Apple).",
+      "csg": {
+        "union": [
+          {
+            "name": "phone_body",
+            "union": [
+              {
+                "name": "body_long",
+                "box": {
+                  "size": [
+                    "phone_W - 2*corner_r",
+                    "phone_L",
+                    "phone_t"
+                  ]
+                },
+                "pos": [
+                  "outline_x",
+                  "outline_y",
+                  "-phone_t/2"
+                ]
+              },
+              {
+                "name": "body_wide",
+                "box": {
+                  "size": [
+                    "phone_W",
+                    "phone_L - 2*corner_r",
+                    "phone_t"
+                  ]
+                },
+                "pos": [
+                  "outline_x",
+                  "outline_y",
+                  "-phone_t/2"
+                ]
+              },
+              {
+                "name": "corner1",
+                "cylinder": {
+                  "r": "corner_r",
+                  "h": "phone_t"
+                },
+                "pos": [
+                  "outline_x + (phone_W/2 - corner_r)",
+                  "outline_y + (phone_L/2 - corner_r)",
+                  "-phone_t/2"
+                ]
+              },
+              {
+                "name": "corner2",
+                "cylinder": {
+                  "r": "corner_r",
+                  "h": "phone_t"
+                },
+                "pos": [
+                  "outline_x - (phone_W/2 - corner_r)",
+                  "outline_y + (phone_L/2 - corner_r)",
+                  "-phone_t/2"
+                ]
+              },
+              {
+                "name": "corner3",
+                "cylinder": {
+                  "r": "corner_r",
+                  "h": "phone_t"
+                },
+                "pos": [
+                  "outline_x - (phone_W/2 - corner_r)",
+                  "outline_y - (phone_L/2 - corner_r)",
+                  "-phone_t/2"
+                ]
+              },
+              {
+                "name": "corner4",
+                "cylinder": {
+                  "r": "corner_r",
+                  "h": "phone_t"
+                },
+                "pos": [
+                  "outline_x + (phone_W/2 - corner_r)",
+                  "outline_y - (phone_L/2 - corner_r)",
+                  "-phone_t/2"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "lens_ring",
+            "cylinder": {
+              "r": "ring_D/2",
+              "h": "bump_h"
+            },
+            "pos": [
+              "lens_x",
+              "lens_y",
+              "-(phone_t + bump_h/2)"
+            ]
+          },
+          {
+            "name": "lens_uw",
+            "cylinder": {
+              "r": "ring_D/2",
+              "h": "bump_h"
+            },
+            "pos": [
+              "uw_x",
+              "uw_y",
+              "-(phone_t + bump_h/2)"
+            ]
+          },
+          {
+            "name": "lens_tele",
+            "frame": "C_tele",
+            "cylinder": {
+              "r": "ring_D/2",
+              "h": "bump_h"
+            },
+            "pos": [
+              0,
+              0,
+              "bump_h/2"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "adapter_a",
+      "frame": "F_adapter",
+      "role": "hardware",
+      "material": "Al 5052",
+      "density": 2.68,
+      "color": "#b9bec8",
+      "mjcf": false,
+      "desc": "reBot gripper connector part A (official 2-M6-ROTOR.step, CNC aluminium): screwed onto the joint-6 rotor with 4 x M3 (PCD 27, at +-30 deg from +-X), 3 radial M3 threads for part B. Simplified to primitives; bought with the arm, not printed.",
+      "csg": {
+        "difference": [
+          {
+            "name": "a_disc",
+            "cylinder": {
+              "r": 17.8,
+              "h": 6
+            },
+            "pos": [
+              0,
+              0,
+              3
+            ]
+          },
+          {
+            "name": "a_flat",
+            "sim": "none",
+            "box": {
+              "size": [
+                4,
+                40,
+                8
+              ]
+            },
+            "pos": [
+              -18.5,
+              0,
+              3
+            ]
+          },
+          {
+            "name": "a_centre",
+            "sim": "none",
+            "cylinder": {
+              "r": 7,
+              "h": 8
+            },
+            "pos": [
+              0,
+              0,
+              3
+            ]
+          },
+          {
+            "name": "a_hole1",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.6,
+              "h": 8
+            },
+            "pos": [
+              "13.5*cosd(30)",
+              "13.5*sind(30)",
+              3
+            ]
+          },
+          {
+            "name": "a_cbore1",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.0,
+              "h": 5
+            },
+            "pos": [
+              "13.5*cosd(30)",
+              "13.5*sind(30)",
+              4.5
+            ]
+          },
+          {
+            "name": "a_hole2",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.6,
+              "h": 8
+            },
+            "pos": [
+              "13.5*cosd(150)",
+              "13.5*sind(150)",
+              3
+            ]
+          },
+          {
+            "name": "a_cbore2",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.0,
+              "h": 5
+            },
+            "pos": [
+              "13.5*cosd(150)",
+              "13.5*sind(150)",
+              4.5
+            ]
+          },
+          {
+            "name": "a_hole3",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.6,
+              "h": 8
+            },
+            "pos": [
+              "13.5*cosd(210)",
+              "13.5*sind(210)",
+              3
+            ]
+          },
+          {
+            "name": "a_cbore3",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.0,
+              "h": 5
+            },
+            "pos": [
+              "13.5*cosd(210)",
+              "13.5*sind(210)",
+              4.5
+            ]
+          },
+          {
+            "name": "a_hole4",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.6,
+              "h": 8
+            },
+            "pos": [
+              "13.5*cosd(330)",
+              "13.5*sind(330)",
+              3
+            ]
+          },
+          {
+            "name": "a_cbore4",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.0,
+              "h": 5
+            },
+            "pos": [
+              "13.5*cosd(330)",
+              "13.5*sind(330)",
+              4.5
+            ]
+          },
+          {
+            "name": "a_pin1",
+            "sim": "none",
+            "cylinder": {
+              "r": 2.0,
+              "h": 8
+            },
+            "pos": [
+              "12.15*cosd(0)",
+              "12.15*sind(0)",
+              3
+            ]
+          },
+          {
+            "name": "a_pin2",
+            "sim": "none",
+            "cylinder": {
+              "r": 2.0,
+              "h": 8
+            },
+            "pos": [
+              "12.15*cosd(120)",
+              "12.15*sind(120)",
+              3
+            ]
+          },
+          {
+            "name": "a_pin3",
+            "sim": "none",
+            "cylinder": {
+              "r": 2.0,
+              "h": 8
+            },
+            "pos": [
+              "12.15*cosd(240)",
+              "12.15*sind(240)",
+              3
+            ]
+          },
+          {
+            "name": "a_scallop1",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.53,
+              "h": 8
+            },
+            "pos": [
+              "19*cosd(45)",
+              "19*sind(45)",
+              3
+            ]
+          },
+          {
+            "name": "a_scallop2",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.53,
+              "h": 8
+            },
+            "pos": [
+              "19*cosd(135)",
+              "19*sind(135)",
+              3
+            ]
+          },
+          {
+            "name": "a_scallop3",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.53,
+              "h": 8
+            },
+            "pos": [
+              "19*cosd(225)",
+              "19*sind(225)",
+              3
+            ]
+          },
+          {
+            "name": "a_scallop4",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.53,
+              "h": 8
+            },
+            "pos": [
+              "19*cosd(315)",
+              "19*sind(315)",
+              3
+            ]
+          },
+          {
+            "name": "a_thread1",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.25,
+              "from": [
+                "10*cosd(60)",
+                "10*sind(60)",
+                3
+              ],
+              "to": [
+                "19*cosd(60)",
+                "19*sind(60)",
+                3
+              ]
+            }
+          },
+          {
+            "name": "a_thread2",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.25,
+              "from": [
+                "10*cosd(180)",
+                "10*sind(180)",
+                3
+              ],
+              "to": [
+                "19*cosd(180)",
+                "19*sind(180)",
+                3
+              ]
+            }
+          },
+          {
+            "name": "a_thread3",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.25,
+              "from": [
+                "10*cosd(300)",
+                "10*sind(300)",
+                3
+              ],
+              "to": [
+                "19*cosd(300)",
+                "19*sind(300)",
+                3
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "adapter_b",
+      "frame": "F_adapter",
+      "role": "hardware",
+      "material": "Al 5052",
+      "density": 2.68,
+      "color": "#aab0bb",
+      "mjcf": false,
+      "enabled": "mount_screws != 0",
+      "desc": "reBot gripper connector part B (official 2-M7-STATOR.step) as a separate part: 4 x M3 from the robot side (PCD 38, 45 deg) into the pusher base. With mount_screws = 0 it is the cup printed with the pusher instead.",
+      "csg": {
+        "difference": [
+          {
+            "use": "connector_b"
+          },
+          {
+            "name": "b_hole1",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.6,
+              "h": "cup_floor + 2"
+            },
+            "pos": [
+              "38.0/2*cosd(45)",
+              "38.0/2*sind(45)",
+              "adapter_h - cup_floor/2"
+            ]
+          },
+          {
+            "name": "b_cbore1",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.1,
+              "h": "cup_h - cup_floor + 1"
+            },
+            "pos": [
+              "38.0/2*cosd(45)",
+              "38.0/2*sind(45)",
+              "(cup_h - cup_floor - 1)/2 - cup_skirt"
+            ]
+          },
+          {
+            "name": "b_hole2",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.6,
+              "h": "cup_floor + 2"
+            },
+            "pos": [
+              "38.0/2*cosd(135)",
+              "38.0/2*sind(135)",
+              "adapter_h - cup_floor/2"
+            ]
+          },
+          {
+            "name": "b_cbore2",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.1,
+              "h": "cup_h - cup_floor + 1"
+            },
+            "pos": [
+              "38.0/2*cosd(135)",
+              "38.0/2*sind(135)",
+              "(cup_h - cup_floor - 1)/2 - cup_skirt"
+            ]
+          },
+          {
+            "name": "b_hole3",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.6,
+              "h": "cup_floor + 2"
+            },
+            "pos": [
+              "38.0/2*cosd(225)",
+              "38.0/2*sind(225)",
+              "adapter_h - cup_floor/2"
+            ]
+          },
+          {
+            "name": "b_cbore3",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.1,
+              "h": "cup_h - cup_floor + 1"
+            },
+            "pos": [
+              "38.0/2*cosd(225)",
+              "38.0/2*sind(225)",
+              "(cup_h - cup_floor - 1)/2 - cup_skirt"
+            ]
+          },
+          {
+            "name": "b_hole4",
+            "sim": "none",
+            "cylinder": {
+              "r": 1.6,
+              "h": "cup_floor + 2"
+            },
+            "pos": [
+              "38.0/2*cosd(315)",
+              "38.0/2*sind(315)",
+              "adapter_h - cup_floor/2"
+            ]
+          },
+          {
+            "name": "b_cbore4",
+            "sim": "none",
+            "cylinder": {
+              "r": 3.1,
+              "h": "cup_h - cup_floor + 1"
+            },
+            "pos": [
+              "38.0/2*cosd(315)",
+              "38.0/2*sind(315)",
+              "(cup_h - cup_floor - 1)/2 - cup_skirt"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "print_sets": {
+    "ipush_print": [
+      "tool_body",
+      "holder"
+    ]
+  },
+  "checks": [
+    {
+      "frame": "J_foot",
+      "axis": "z",
+      "min": "plate_t",
+      "msg": "手机太低，支撑条会穿到法兰面以下：调大 phone_flange_angle 或 distance，或缩短 rod_L 时一起调",
+      "msg_en": "Phone too low: the spine would pass below the flange face. Increase phone_flange_angle or distance (adjust them together when shortening rod_L)."
+    }
+  ],
+  "interference": [
+    {
+      "id": "phone_vs_body",
+      "a": "phone",
+      "b": "tool_body",
+      "msg": "推杆本体穿过了手机：减小 rod_tilt，或调大 phone_flange_angle / distance",
+      "msg_en": "The pusher body passes through the phone: reduce rod_tilt, or increase phone_flange_angle / distance"
+    },
+    {
+      "id": "phone_vs_holder",
+      "a": "phone",
+      "b": "holder",
+      "msg": "手机和卡扣重叠：调大 back_to_mount（手机壳厚度 + 间隙）",
+      "msg_en": "The phone overlaps its holder: increase back_to_mount (case thickness + clearance)"
+    },
+    {
+      "id": "holder_vs_rod",
+      "a": "holder",
+      "b": {
+        "part": "tool_body",
+        "only": [
+          "rod"
+        ]
+      },
+      "msg": "杆穿过了手机卡扣：减小 rod_tilt，或调大 phone_flange_angle / distance",
+      "msg_en": "The rod passes through the phone holder: reduce rod_tilt, or increase phone_flange_angle / distance"
+    },
+    {
+      "id": "sight_to_tip",
+      "a": {
+        "sight": {
+          "from": "C_main",
+          "to": "T_tip",
+          "stop_before": "rod_w/2 + 1",
+          "r": 0.5
+        }
+      },
+      "b": [
+        {
+          "part": "tool_body",
+          "only": [
+            "adapter",
+            "beam_mitred",
+            "spine_mitred"
+          ]
+        },
+        "holder",
+        "phone"
+      ],
+      "tol_mm3": 0.3,
+      "desc": "Line from the main camera to the ball centre, stopping 1 mm outside the ball. The rod itself is left out: the camera always sees the rod from the side.",
+      "msg": "相机看向杆尖的视线被挡住了",
+      "msg_en": "Something blocks the camera's line of sight to the tip"
+    },
+    {
+      "id": "adapter_vs_body",
+      "a": [
+        "adapter_a",
+        "adapter_b"
+      ],
+      "b": "tool_body",
+      "msg": "推杆和法兰转接件重叠",
+      "msg_en": "The pusher overlaps the flange adapter"
+    },
+    {
+      "id": "screw_heads",
+      "enabled": "mount_screws == 2",
+      "a": {
+        "csg": {
+          "union": [
+            {
+              "name": "head1",
+              "cylinder": {
+                "r": "screw_head_d/2",
+                "h": "screw_head_h"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot)",
+                "hole_pcd/2*sind(hole_rot)",
+                "adapter_h + base_t - cbore_depth + screw_head_h/2"
+              ]
+            },
+            {
+              "name": "head2",
+              "cylinder": {
+                "r": "screw_head_d/2",
+                "h": "screw_head_h"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot + hole_ang2)",
+                "hole_pcd/2*sind(hole_rot + hole_ang2)",
+                "adapter_h + base_t - cbore_depth + screw_head_h/2"
+              ]
+            },
+            {
+              "name": "head3",
+              "cylinder": {
+                "r": "screw_head_d/2",
+                "h": "screw_head_h"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot + 180)",
+                "hole_pcd/2*sind(hole_rot + 180)",
+                "adapter_h + base_t - cbore_depth + screw_head_h/2"
+              ]
+            },
+            {
+              "name": "head4",
+              "cylinder": {
+                "r": "screw_head_d/2",
+                "h": "screw_head_h"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot + 180 + hole_ang2)",
+                "hole_pcd/2*sind(hole_rot + 180 + hole_ang2)",
+                "adapter_h + base_t - cbore_depth + screw_head_h/2"
+              ]
+            }
+          ]
+        },
+        "frame": "F_robot"
+      },
+      "b": "tool_body",
+      "tol_mm3": 0.5,
+      "desc": "Socket heads seated in the counterbores must not touch the printed body.",
+      "msg": "法兰螺钉头和推杆本体干涉：加大 cbore_d / cbore_depth，或改 mount_rot",
+      "msg_en": "A flange screw head hits the pusher body: enlarge cbore_d / cbore_depth, or change mount_rot"
+    },
+    {
+      "id": "screw_access",
+      "enabled": "mount_screws == 2",
+      "a": {
+        "csg": {
+          "union": [
+            {
+              "name": "key1",
+              "cylinder": {
+                "r": "key_d/2",
+                "h": "key_L"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot)",
+                "hole_pcd/2*sind(hole_rot)",
+                "adapter_h + base_t - cbore_depth + screw_head_h + (key_L)/2"
+              ]
+            },
+            {
+              "name": "key2",
+              "cylinder": {
+                "r": "key_d/2",
+                "h": "key_L"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot + hole_ang2)",
+                "hole_pcd/2*sind(hole_rot + hole_ang2)",
+                "adapter_h + base_t - cbore_depth + screw_head_h + (key_L)/2"
+              ]
+            },
+            {
+              "name": "key3",
+              "cylinder": {
+                "r": "key_d/2",
+                "h": "key_L"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot + 180)",
+                "hole_pcd/2*sind(hole_rot + 180)",
+                "adapter_h + base_t - cbore_depth + screw_head_h + (key_L)/2"
+              ]
+            },
+            {
+              "name": "key4",
+              "cylinder": {
+                "r": "key_d/2",
+                "h": "key_L"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot + 180 + hole_ang2)",
+                "hole_pcd/2*sind(hole_rot + 180 + hole_ang2)",
+                "adapter_h + base_t - cbore_depth + screw_head_h + (key_L)/2"
+              ]
+            }
+          ]
+        },
+        "frame": "F_robot"
+      },
+      "b": [
+        "tool_body",
+        "holder"
+      ],
+      "tol_mm3": 0.5,
+      "desc": "key_L of free height (diameter key_d) above every screw head: the least an L-shaped hex key needs.",
+      "msg": "法兰螺钉上方被推杆挡住，拧不了：改 mount_rot，或挪开横梁 / 杆根",
+      "msg_en": "A flange screw is covered by the pusher and cannot be reached: change mount_rot, or move the beam / rod root"
+    },
+    {
+      "id": "screw_driver",
+      "level": "warn",
+      "enabled": "mount_screws == 2",
+      "a": {
+        "csg": {
+          "union": [
+            {
+              "name": "key1",
+              "cylinder": {
+                "r": "key_d/2",
+                "h": "driver_L"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot)",
+                "hole_pcd/2*sind(hole_rot)",
+                "adapter_h + base_t - cbore_depth + screw_head_h + (driver_L)/2"
+              ]
+            },
+            {
+              "name": "key2",
+              "cylinder": {
+                "r": "key_d/2",
+                "h": "driver_L"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot + hole_ang2)",
+                "hole_pcd/2*sind(hole_rot + hole_ang2)",
+                "adapter_h + base_t - cbore_depth + screw_head_h + (driver_L)/2"
+              ]
+            },
+            {
+              "name": "key3",
+              "cylinder": {
+                "r": "key_d/2",
+                "h": "driver_L"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot + 180)",
+                "hole_pcd/2*sind(hole_rot + 180)",
+                "adapter_h + base_t - cbore_depth + screw_head_h + (driver_L)/2"
+              ]
+            },
+            {
+              "name": "key4",
+              "cylinder": {
+                "r": "key_d/2",
+                "h": "driver_L"
+              },
+              "pos": [
+                "hole_pcd/2*cosd(hole_rot + 180 + hole_ang2)",
+                "hole_pcd/2*sind(hole_rot + 180 + hole_ang2)",
+                "adapter_h + base_t - cbore_depth + screw_head_h + (driver_L)/2"
+              ]
+            }
+          ]
+        },
+        "frame": "F_robot"
+      },
+      "b": [
+        "tool_body",
+        "holder"
+      ],
+      "tol_mm3": 0.5,
+      "desc": "A straight driver (driver_L long) from above; the phone is taken off for mounting, so it is not an obstacle.",
+      "msg": "有法兰螺钉上方不能用直螺丝刀（标出的位置被挡），要用短的 L 型内六角扳手",
+      "msg_en": "Some flange screws cannot take a straight driver (blocked at the marked spot); use a short L-shaped hex key"
+    }
+  ],
+  "references": [
+    {
+      "name": "RobotTool (Fusion, real part)",
+      "file": "assets/fusion_ref/RobotTool_fusionworld.stl",
+      "frame": "F_mount",
+      "rot": {
+        "xyaxes": [
+          0,
+          0,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      "desc": "Exported from iPhone17_DataTool in Fusion world coordinates; Fusion +X = flange axis, so p_mount = (-z, y, x)."
+    }
+  ],
+  "param_notes": {
+    "mount_rot": "Angle of the pusher about the flange axis: F_mount +X (the rod tilt direction) measured from F_robot +X. The base holes stay on the robot/adapter pattern, so any angle can be printed.",
+    "adapter_h": "Height of the adapter: from the robot flange face (F_robot) to the face the pusher base sits on (F_mount). 0 without an adapter.",
+    "mount_screws": "How the pusher base is fixed: 0 = printed in one piece with adapter part B (no screws), 1 = screws from the adapter side into blind holes, 2 = screws from the tool side through counterbored holes.",
+    "hole_rot": "Angle of the first hole in F_robot; the others are at +hole_ang2, +180, +180+hole_ang2 (hole_ang2 = 90 for a square pattern).",
+    "back_to_mount": "Phone back to support plate = case back thickness. 3.25 = measured on an iPhone 17 Pro case (3.2-3.3 mm, 2026-11-16); was 3.0.",
+    "spine_back": "1 = continue the spine up the back of the holder, in the rib layer, until it meets the X ribs (stops the thin plate at the joint from bending and cracking); 0 = old butt joint.",
+    "spine_back_to": "S_mount x of the V tip of the back reinforcement = crossing point of the holder's X ribs (2.25 for SlideLock_Connector_local.stl).",
+    "spine_back_ang": "Angle between each lower arm of the holder's X ribs and the spine axis (deg); the reinforcement ends in a V cut along the two arm centre lines (42.6 for SlideLock_Connector_local.stl).",
+    "spine_back_w": "Width of the back reinforcement (defaults to the spine width).",
+    "holder_back_z": "S_mount z of the back face of the holder plate (where the ribs start); the reinforcement fills from -plate_t up to here (+ spine_overlap). -4 for SlideLock_Connector_local.stl.",
+    "uw_x": "Ultra Wide lens window centre in P_phone (uw_x, uw_y; mm). The iPhone 17 Pro values are from Apple's dimensional drawing (Rear Camera 1); the editor's camera group sets them per phone from the iMuninn phone data.",
+    "tele_x": "Telephoto lens window centre in P_phone (tele_x, tele_y; mm); see uw_x.",
+    "feq_tele": "Telephoto equivalent focal length (mm); sets the nominal fovy of C_tele.",
+    "front_x": "Front camera in P_phone (front_x, front_y; mm). Estimated: Apple does not dimension the front camera itself.",
+    "lidar_x": "LiDAR scanner centre in P_phone (lidar_x, lidar_y; mm).",
+    "flash_x": "Flash centre in P_phone (flash_x, flash_y; mm).",
+    "phone_W": "Phone outline (phone_W x phone_L x phone_t, mm) from Apple's dimensional drawing via iMuninn's phone data.",
+    "outline_x": "Centre of the phone outline in P_phone (mm). P_phone is the display-area centre (iMuninn device frame); 0 for the iPhone 17 Pro, at most 0.005 for the phones in the editor.",
+    "lens_x": "Main camera lens window centre in P_phone (lens_x, lens_y; mm), from iMuninn's phone data.",
+    "bump_h": "Height of the rear camera cover glass above the back glass (mm): camera plateau + lens glass. 4.43 for the iPhone 17 Pro (iMuninn, from Apple's drawing; confirmed by measurement 2026-11-27). Was 1.88, the glass above the plateau only.",
+    "magsafe_x": "MagSafe circle centre in P_phone (magsafe_x, magsafe_y; mm), from iMuninn's phone data. The holder (S_mount) sits on it because the phone locks on by MagSafe.",
+    "corner_r": "Corner radius of the phone body outline seen from the back (mm). Apple's drawings do not dimension it; 0.15 x the short side is iMuninn's estimate (its glb uses the same). Only the look and the phone's volume depend on it.",
+    "rod_w": "Side of the square rod. Measured on the RobotTool body of iPhone17_DataTool: 10 mm."
+  },
+  "shapes": {
+    "connector_b": {
+      "desc": "reBot gripper connector part B (2-M7-STATOR.step), in F_robot: a cup over part A, 3 radial M3 screws into A. Without the 4 tool-side holes.",
+      "difference": [
+        {
+          "name": "cup",
+          "cylinder": {
+            "r": "base_R",
+            "h": "cup_h"
+          },
+          "pos": [
+            0,
+            0,
+            "cup_h/2 - cup_skirt"
+          ]
+        },
+        {
+          "name": "cup_bore",
+          "sim": "none",
+          "cylinder": {
+            "r": "cup_bore_d/2",
+            "h": "cup_h - cup_floor + 1"
+          },
+          "pos": [
+            0,
+            0,
+            "(cup_h - cup_floor - 1)/2 - cup_skirt"
+          ]
+        },
+        {
+          "name": "cup_centre",
+          "sim": "none",
+          "cylinder": {
+            "r": "cup_centre_d/2",
+            "h": "cup_floor + 2"
+          },
+          "pos": [
+            0,
+            0,
+            "adapter_h - cup_floor/2"
+          ],
+          "desc": "Centre opening in the cup floor (D26.2 in the official part; the printed tool has it as a pocket)."
+        },
+        {
+          "name": "cup_screw1",
+          "sim": "none",
+          "cylinder": {
+            "r": "cup_screw_d/2",
+            "from": [
+              "(cup_bore_d/2 - 2)*cosd(cup_screw_rot + 0)",
+              "(cup_bore_d/2 - 2)*sind(cup_screw_rot + 0)",
+              "cup_screw_z"
+            ],
+            "to": [
+              "(cup_screw_seat_r + 1)*cosd(cup_screw_rot + 0)",
+              "(cup_screw_seat_r + 1)*sind(cup_screw_rot + 0)",
+              "cup_screw_z"
+            ]
+          }
+        },
+        {
+          "name": "cup_screw2",
+          "sim": "none",
+          "cylinder": {
+            "r": "cup_screw_d/2",
+            "from": [
+              "(cup_bore_d/2 - 2)*cosd(cup_screw_rot + 120)",
+              "(cup_bore_d/2 - 2)*sind(cup_screw_rot + 120)",
+              "cup_screw_z"
+            ],
+            "to": [
+              "(cup_screw_seat_r + 1)*cosd(cup_screw_rot + 120)",
+              "(cup_screw_seat_r + 1)*sind(cup_screw_rot + 120)",
+              "cup_screw_z"
+            ]
+          }
+        },
+        {
+          "name": "cup_screw3",
+          "sim": "none",
+          "cylinder": {
+            "r": "cup_screw_d/2",
+            "from": [
+              "(cup_bore_d/2 - 2)*cosd(cup_screw_rot + 240)",
+              "(cup_bore_d/2 - 2)*sind(cup_screw_rot + 240)",
+              "cup_screw_z"
+            ],
+            "to": [
+              "(cup_screw_seat_r + 1)*cosd(cup_screw_rot + 240)",
+              "(cup_screw_seat_r + 1)*sind(cup_screw_rot + 240)",
+              "cup_screw_z"
+            ]
+          }
+        },
+        {
+          "name": "cup_screw_seat1",
+          "sim": "none",
+          "cylinder": {
+            "r": "cup_screw_cbore_d/2",
+            "from": [
+              "(cup_screw_seat_r)*cosd(cup_screw_rot + 0)",
+              "(cup_screw_seat_r)*sind(cup_screw_rot + 0)",
+              "cup_screw_z"
+            ],
+            "to": [
+              "(base_R + 1)*cosd(cup_screw_rot + 0)",
+              "(base_R + 1)*sind(cup_screw_rot + 0)",
+              "cup_screw_z"
+            ]
+          }
+        },
+        {
+          "name": "cup_screw_seat2",
+          "sim": "none",
+          "cylinder": {
+            "r": "cup_screw_cbore_d/2",
+            "from": [
+              "(cup_screw_seat_r)*cosd(cup_screw_rot + 120)",
+              "(cup_screw_seat_r)*sind(cup_screw_rot + 120)",
+              "cup_screw_z"
+            ],
+            "to": [
+              "(base_R + 1)*cosd(cup_screw_rot + 120)",
+              "(base_R + 1)*sind(cup_screw_rot + 120)",
+              "cup_screw_z"
+            ]
+          }
+        },
+        {
+          "name": "cup_screw_seat3",
+          "sim": "none",
+          "cylinder": {
+            "r": "cup_screw_cbore_d/2",
+            "from": [
+              "(cup_screw_seat_r)*cosd(cup_screw_rot + 240)",
+              "(cup_screw_seat_r)*sind(cup_screw_rot + 240)",
+              "cup_screw_z"
+            ],
+            "to": [
+              "(base_R + 1)*cosd(cup_screw_rot + 240)",
+              "(base_R + 1)*sind(cup_screw_rot + 240)",
+              "cup_screw_z"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "mjcf": {
+    "frame": "F_mount",
+    "desc": "The reBot URDF/MJCF already has the gripper connector as link6, and a simulation mounts the tool on its tool face. So the MJCF is written relative to F_mount and leaves the adapter parts out."
+  }
+}

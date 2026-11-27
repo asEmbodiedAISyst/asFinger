@@ -62,7 +62,7 @@ A rule is skipped when one of its parts or frames is switched off by an option.
 | `phone_vs_holder` | error | The phone overlaps its holder (`back_to_mount` too small). |
 | `holder_vs_rod` | error | The rod passes through the holder. |
 | `sight_to_tip` | error | A solid blocks the line from the main camera to the tip. |
-| `adapter_vs_body` | error | The pusher overlaps the flange adapter. |
+| `adapter_vs_body` | error | The pusher overlaps the mount adapter. |
 | `screw_heads` | error | A screw head of the base overlaps the pusher (only with `mount_screws = 2`). |
 | `screw_access` | error | No room for a hex key above a screw (only with `mount_screws = 2`). |
 | `screw_driver` | warn | A straight driver cannot reach a screw (only with `mount_screws = 2`). |

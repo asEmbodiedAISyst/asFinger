@@ -84,7 +84,7 @@ The default config `iphone17pro_default.json` has this tree:
 
 ```text
 F_robot                 the robot flange, as the robot defines it (root)
-├── F_adapter           the flange adapter (same pose as F_robot)
+├── F_adapter           the mount adapter (same pose as F_robot)
 └── F_mount             the face that the pusher base sits on
     └── F_tool          the tool side of the base plate
         ├── R_rod       the rod axis, +Z to the tip

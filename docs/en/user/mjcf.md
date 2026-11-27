@@ -26,7 +26,7 @@ By default the body frame is the root frame of the config. A config can select a
 {"name": "adapter_a", "mjcf": false, ...}
 ```
 
-Use both when the robot model already contains the flange adapter. The default config does this. The URDF of the reBot Arm B601-RS includes the gripper connector as `link6`, so the default config writes the pusher alone, relative to the mounting face `F_mount`. `report.json` names the body frame and the parts that are included (`total.frame`, `total.parts`).
+Use both when the robot model already contains the mount adapter. The default config does this. The URDF of the reBot Arm B601-RS includes the gripper connector as `link6`, so the default config writes the pusher alone, relative to the mounting face `F_mount`. `report.json` names the body frame and the parts that are included (`total.frame`, `total.parts`).
 
 ## Attach the tool to a robot
 

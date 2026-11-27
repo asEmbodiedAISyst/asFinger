@@ -7,7 +7,7 @@ The tool is parametric. The JSON file holds the parameters, a tree of coordinate
 The project has three parts:
 
 - **The generator.** The Python package `asfinger` reads a config and writes STL files, a MuJoCo model (MJCF), an HTML preview and a report.
-- **The web editor.** The [asFinger editor](https://asembodiedaisyst.github.io/asFinger/editor/) runs the same Python in the browser. You pick the robot arm, the flange adapter and the phone, change the parameters, and export the config and the STL.
+- **The web editor.** The [asFinger editor](https://asembodiedaisyst.github.io/asFinger/editor/) runs the same Python in the browser. You pick the robot arm, the mount adapter and the phone, change the parameters, and export the config and the STL.
 - **The hardware inputs.** The folder `hardware/` holds the configs of the real tool and the meshes that they import.
 
 ## Where to start

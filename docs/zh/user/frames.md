@@ -84,7 +84,7 @@
 
 ```text
 F_robot                 机械臂法兰，按机械臂自己的定义（根）
-├── F_adapter           法兰转接件（位姿和 F_robot 相同）
+├── F_adapter           安装转接件（位姿和 F_robot 相同）
 └── F_mount             推杆底座的安装面
     └── F_tool          底座板朝工具一侧的面
         ├── R_rod       杆的轴线，+Z 指向末端

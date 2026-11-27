@@ -451,10 +451,17 @@ export class SceneView {
       addFrames(['T_tcp'], 18, tg);
       focus = boxOf(tg);
       this.grid.visible = false;
-      // look at the frustum from the side (camera +X) and a little from behind, so the optical axis runs across the screen
-      const Mc = Mt.clone().multiply(F('C_main')!);
-      const ex = new THREE.Vector3().setFromMatrixColumn(Mc, 0), ey = new THREE.Vector3().setFromMatrixColumn(Mc, 1), ez = new THREE.Vector3().setFromMatrixColumn(Mc, 2);
-      fitDir = ex.multiplyScalar(1).add(ey.multiplyScalar(0.45)).add(ez.multiplyScalar(0.35));
+      const Cm = F('C_main');
+      if (!Cm) {
+        // no camera chosen: the pusher alone, translucent, so the empty place reads as "nothing here"
+        const body = byName('tool_body'); if (body) tg.add(this.partMesh(body, { opacity: 0.3 }));
+        focus = boxOf(tg);
+      } else {
+        // look at the frustum from the side (camera +X) and a little from behind, so the optical axis runs across the screen
+        const Mc = Mt.clone().multiply(Cm);
+        const ex = new THREE.Vector3().setFromMatrixColumn(Mc, 0), ey = new THREE.Vector3().setFromMatrixColumn(Mc, 1), ez = new THREE.Vector3().setFromMatrixColumn(Mc, 2);
+        fitDir = ex.multiplyScalar(1).add(ey.multiplyScalar(0.45)).add(ez.multiplyScalar(0.35));
+      }
     }
 
     if (c.view === 'overall' && c.carrier) {
@@ -502,7 +509,7 @@ export class SceneView {
         if (c.focus === 'adapter') mark(meshes.filter((m) => m.role === 'hardware').map((m) => m.name));
         if (c.focus === 'tip' && R.frames.T_tip) {
           // the tip is one body with the rod: an unseen ball just around it gives the outline its shape
-          const r = (R.params.rod_D ?? 15) / 2 + 0.8;
+          const r = (R.params.rod_D ?? R.params.rod_w ?? 15) / 2 + 0.8;
           const ball = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 20), new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false }));
           ball.applyMatrix4(poseMatrix(R.frames.T_tip.world));
           tool.add(ball); marked.push(ball);
