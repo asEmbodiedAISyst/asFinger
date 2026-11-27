@@ -64,9 +64,17 @@ hardware/cad/fusion/asFingerAddIn/settings.json
 # Internal documentation. Do not publish it.
 docs/internal/
 
+# Recorded episodes and the datasets made from them: large, kept outside git (data/README.md)
+/data/*
+!/data/README.md
+
+# Robot side: the addresses and identities of the phones, and the raw measurements behind the calibration files
+# (the tools write them to calibration/data and refit from there with --from-data)
+robot/cameras.local.yaml
+calibration/data/
+
 # Parts of the project that are not in this repository yet, and large data
 /learning/
-/data/
 *.pt
 *.ckpt
 *.hdf5
