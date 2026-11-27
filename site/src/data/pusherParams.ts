@@ -31,6 +31,8 @@ export const PARAMS: Record<string, ParamMeta> = {
   rod_L: { label: { en: 'Rod length', zh: '杆长' }, unit: 'mm', min: 80, max: 260, step: 0.5, section: 'rod', slider: true },
   rod_D: { label: { en: 'Rod diameter', zh: '杆径' }, unit: 'mm', min: 8, max: 25, step: 0.5, section: 'rod', slider: true, advanced: true, hint: { en: 'The ball tip radius follows (= diameter / 2)', zh: '球头半径跟着变（= 杆径 / 2）' } },
   rod_w: { label: { en: 'Rod width', zh: '杆宽' }, unit: 'mm', min: 6, max: 25, step: 0.5, section: 'rod', slider: true, advanced: true, hint: { en: 'Side of the square rod', zh: '方杆的边长' } },
+  bar_w: { label: { en: 'Bar width', zh: '杆宽' }, unit: 'mm', min: 14, max: 30, step: 0.5, section: 'rod', slider: true, advanced: true, hint: { en: 'Across the Pad bar (the width of the finger pad; the e-skin is 20 wide)', zh: '指腹推杆横向的宽度（也是指腹的宽度；电子皮肤宽 20）' } },
+  bar_t: { label: { en: 'Bar thickness', zh: '杆厚' }, unit: 'mm', min: 14, max: 30, step: 0.5, section: 'rod', slider: true, advanced: true, hint: { en: 'Pad bar, in the plane of the tilt', zh: '指腹推杆在倾斜平面内的厚度' } },
   rod_tilt: { label: { en: 'Rod tilt', zh: '杆倾角' }, unit: '°', min: 0, max: 60, step: 0.5, section: 'rod', slider: true, hint: { en: 'Relative to the flange axis', zh: '相对法兰轴线' } },
   rod_x: { label: { en: 'Rod root offset', zh: '杆根偏移' }, unit: 'mm', min: -15, max: 20, step: 0.1, section: 'rod', advanced: true, hint: { en: 'Distance along X from the base centre to the rod root centre', zh: '杆根中心到底座中心沿 X 的距离' } },
 
@@ -96,7 +98,8 @@ export const PARAMS: Record<string, ParamMeta> = {
   magsafe_y: { label: { en: 'MagSafe centre Y', zh: 'MagSafe 圆心 Y' }, unit: 'mm', section: 'owned', owner: 'camera', advanced: true },
   feq_tele: { label: { en: 'Telephoto equivalent focal length', zh: '长焦等效焦距' }, unit: 'mm', section: 'owned', owner: 'camera', advanced: true },
   feq: { label: { en: 'Equivalent focal length', zh: '等效焦距' }, unit: 'mm', section: 'owned', owner: 'camera' },
-  tip_R: { label: { en: 'Ball tip radius', zh: '球头半径' }, unit: 'mm', section: 'owned', owner: 'tip' },
+  tip_R: { label: { en: 'Tip radius', zh: '末端半径' }, unit: 'mm', section: 'owned', owner: 'tip', hint: { en: 'Round: the ball tip. Pad: the finger pad arc.', zh: '圆杆：球头。指腹推杆：指腹圆弧。' } },
+  tip_split: { label: { en: 'Fingertip as a separate body', zh: '指尖单独成体' }, section: 'owned', owner: 'tip', hint: { en: '1 = the TPU tip (a second body for a second material), 0 = printed with the bar', zh: '1 = TPU 指尖（第二个实体，用第二种材料），0 = 和杆一起打印' } },
   rod_embed: { label: { en: 'Rod root embed depth', zh: '杆根埋入深度' }, unit: 'mm', section: 'other', advanced: true },
 };
 

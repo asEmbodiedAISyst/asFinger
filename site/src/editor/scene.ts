@@ -55,6 +55,10 @@ export interface SceneContent {
 /** Full assembly: where the pusher base frame (F_mount, at the carrier's usual mounting angle) sits in the scene.
  *  The pusher is what stays put when the carrier or the adapter changes; the carrier is moved under it. The pose is
  *  the one the reBot holds it in (connector A + B, mount_rot 180), so that arm stands on the grid origin. */
+// The parts that make up the pusher (the ones a config has are drawn): body, separate fingertip, PCB cover, the
+// readout PCB and the plug stand-in of the tactile finger, and the phone holder.
+const PUSHER_PARTS = ['tool_body', 'tip_tpu', 'pcb_cover', 'pcb', 'usb_plug', 'holder'];
+
 const TOOL_POSE = poseMatrix(ARM_MODELS.rebot_rs.flange)
   .multiply(new THREE.Matrix4().makeTranslation(0, 0, 9)).multiply(new THREE.Matrix4().makeRotationZ(Math.PI));
 
@@ -427,7 +431,7 @@ export class SceneView {
     if ((c.view === 'pusher' || c.view === 'tip') && R) {
       const tg = toolGroup();
       const g = new THREE.Group();
-      for (const n of ['tool_body', 'holder']) { const m = byName(n); if (m) g.add(this.partMesh(m)); }
+      for (const n of PUSHER_PARTS) { const m = byName(n); if (m) g.add(this.partMesh(m, m.role === 'reference' ? { color: '#3c4048' } : {})); }
       const ph = byName('phone'); if (ph) g.add(this.partMesh(ph, { opacity: 0.25 }));
       tg.add(g);
       tg.add(this.overlapMeshes(c));
@@ -498,18 +502,19 @@ export class SceneView {
         const cube = (p: number[], size: number) =>
           new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(...p).applyMatrix4(flange), new THREE.Vector3(size, size, size));
         // (the boxes are padded: the part with some of what it is mounted on, not a close-up)
-        if (c.focus === 'pusher') focus = around(['tool_body', 'holder'], 30);
+        if (c.focus === 'pusher') focus = around(PUSHER_PARTS, 30);
         if (c.focus === 'camera') focus = around(['phone'], 40);
         if (c.focus === 'tip' && R.frames.T_tcp) focus = cube(R.frames.T_tcp.world.pos, 130);
         if (c.focus === 'adapter') focus = around(meshes.filter((m) => m.role === 'hardware').map((m) => m.name), 45) ?? cube([0, 0, 0], 150);
         // ... and that part is outlined
         const mark = (names: string[]) => names.forEach((n) => { if (obj[n]) marked.push(obj[n]); });
-        if (c.focus === 'pusher') mark(['tool_body', 'holder']);
+        if (c.focus === 'pusher') mark(PUSHER_PARTS);
         if (c.focus === 'camera') mark(['phone']);
         if (c.focus === 'adapter') mark(meshes.filter((m) => m.role === 'hardware').map((m) => m.name));
-        if (c.focus === 'tip' && R.frames.T_tip) {
+        if (c.focus === 'tip' && obj.tip_tpu) mark(['tip_tpu']);
+        else if (c.focus === 'tip' && R.frames.T_tip) {
           // the tip is one body with the rod: an unseen ball just around it gives the outline its shape
-          const r = (R.params.rod_D ?? R.params.rod_w ?? 15) / 2 + 0.8;
+          const r = (R.params.rod_D ?? R.params.rod_w ?? R.params.bar_w ?? 15) / 2 + 0.8;
           const ball = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 20), new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false }));
           ball.applyMatrix4(poseMatrix(R.frames.T_tip.world));
           tool.add(ball); marked.push(ball);

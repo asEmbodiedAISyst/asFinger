@@ -32,8 +32,8 @@ The tool is made of five groups.
 | --- | --- | --- |
 | Carrier | Human hand, custom flange · reBot Arm RS, Franka FR3, UR5e · Unitree G1 | Sets the flange hole pattern and the default mounting angle. |
 | Mount adapter | None · Connector A + B, fused connector (reBot) · G1 wrist adapter | Sets the hole pattern, the height and the screw direction of the pusher base. |
-| Pusher | Pad, Round, Square | The rod and the phone holder. Pad: a square bar with an arc finger pad, printed in one piece. Round: the Ø15 rod with the reinforced holder, the one in use. Square: the earlier 10 × 10 rod with a flat end. |
-| Tip | Standard tip · Soft TPU tip | Standard: the pusher's own end (a hemisphere on Round, the flat end on Square). The TCP is defined here. |
+| Pusher | Pad, Round, Square | The rod and the phone holder. Pad: a 22 × 22 square bar whose end is an R15 finger pad (the tactile finger without its sensor), printed in one piece. Round: the Ø15 rod with the reinforced holder, the one in use. Square: the earlier 10 × 10 rod with a flat end. |
+| Tip | Standard tip · Soft TPU tip | Standard: the pusher's own end (a hemisphere on Round, the flat end on Square, the finger pad on Pad). Soft TPU tip (Pad only): the fingertip as a second body for TPU, with a switch under the card for the sensor: none or the 48 × 48 e-skin (pad recess, FPC groove, readout PCB pocket and cover). The TCP is defined here. |
 | Camera | None · iPhone 18 Pro, iPhone 17 Pro, iPhone 17, iPhone 16 Pro, iPhone 15 Pro, iPhone 14 Pro · RealSense D435i | Sets the phone dimensions and the lens positions. "None" builds the pusher without the phone, its holder and the camera solve. |
 
 In the cards, a bar separates the sections of a group (the "·" in the table). Items marked "Planned" are not available yet.
@@ -41,6 +41,7 @@ In the cards, a bar separates the sections of a group (the "·" in the table). I
 The groups depend on each other:
 
 - When you select a carrier, the editor also selects the default adapter of that carrier.
+- A tip can be made for one pusher: the Soft TPU tip fits the Pad only. When you change the pusher, a tip that does not fit goes back to the standard tip.
 - An adapter decides the hole pattern of the pusher base. With the adapter "None", the carrier decides it.
 - The carrier gives the default mounting angle, so that the phone is on top on every arm.
 - The Unitree G1 has no flange: its wrist holds the hand in a clamp ring. Only the "G1 wrist adapter" fits it. The adapter has the reBot hole pattern on its tool side, turned 90°, so the pusher sits on it as on a bare reBot flange and the rod leans down with the phone on top at wrist zero.
@@ -83,6 +84,7 @@ To build the exported config on your computer, put it in a folder `configs/` tha
 - **Values to verify.** Some data in the information panel is marked "to verify". It does not come from an official drawing, or a program read it from the drawing and nobody has checked it yet. Examine it before you depend on it.
 - **Other phones are not printed.** The holder and the case gap (`back_to_mount`) were made for an iPhone 17 Pro in its case. For another phone, check the case thickness before you print.
 - **The printed pusher is older than the phone data.** The pusher printed on 2026-11-08 was solved with a camera glass height of 1.88 mm and the holder under the display centre. With the phone data of 2026-11-27, the default config moves the holder by 3.7 mm so that the camera looks at the TCP as intended.
+- **The Pad pusher is the tactile finger, moved onto the current holder.** Its bar, fingertip, TPU tip and sensor parts are those of the tactile finger. The holder follows the phone data of 2026-11-27, as for the round rod, and the joint between the holder beam and the spine is shaped like the round rod's.
 - **The G1 wrist adapter is not printed yet.** The view draws its mesh. The G1 is shown standing, with the right arm raised so that the wrist faces the way the arm flanges do.
 - **The human hand carrier is a placeholder.** The grip model in the view is a sketch, and its dimensions are not final.
 - **Four screw holes only.** The pusher base supports four holes as two opposite pairs. A flange with six holes is not supported.

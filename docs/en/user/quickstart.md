@@ -108,4 +108,5 @@ A pose has the attributes `p` (position, a list of 3 numbers) and `R` (rotation 
 | --- | --- |
 | `iphone17pro_default.json` | The pusher for the iPhone 17 Pro on the reBot Arm B601-RS, mounted on the gripper connector of the arm. |
 | `rebot_rs_flange.json` | The same pusher without the mount adapter. The base is bolted to the joint-6 rotor of the reBot arm. |
+| `pad_finger.json` | The Pad pusher: a 22 × 22 square bar with an R15 finger pad, in one piece. `--set tip_split=1` makes the fingertip a separate body for TPU (`tip_tpu`); `--option tactile=1` adds the 48 × 48 e-skin recess, the FPC groove and the readout PCB with its cover. Otherwise like `iphone17pro_default.json`. |
 | `square_rod.json` | The earlier pusher with a 10 × 10 mm square rod and a flat end (the Square pusher of the editor); otherwise like `iphone17pro_default.json`, without the back reinforcement of the holder. |

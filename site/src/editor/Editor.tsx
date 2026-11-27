@@ -19,7 +19,7 @@
 // Every change of these re-solves the model in the worker; the newest request wins.
 import type React from 'react';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { GROUPS, DEFAULT_SELECTION, item, fits } from '../data/catalog';
+import { GROUPS, DEFAULT_SELECTION, item, fits, variantOf } from '../data/catalog';
 import { isLocked } from '../data/pusherParams';
 import { FLANGES } from '../data/flanges';
 import { Engine } from '../engine/client';
@@ -68,6 +68,7 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
     const s = { ...DEFAULT_SELECTION, ...saved.selection };
     for (const g of GROUPS) { const it = item(g.id, s[g.id]); if (!it || it.disabled) s[g.id] = DEFAULT_SELECTION[g.id]; }
     if (!fits(item('adapter', s.adapter), s.carrier)) s.adapter = item('carrier', s.carrier)?.defaultAdapter ?? 'none';
+    if (!fits(item('tip', s.tip), s.pusher)) s.tip = DEFAULT_SELECTION.tip;
     return s;
   });
   const [active, setActive] = useState<string>(saved.active && GROUPS.some((g) => g.id === saved.active) ? saved.active : 'overall');
@@ -120,6 +121,8 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
   const adapter = item('adapter', selection.adapter);
   const pusher = item('pusher', selection.pusher);
   const camera = item('camera', selection.camera);
+  const tip = item('tip', selection.tip);
+  const tipVariant = variantOf('tip', tip, selection);
   const direct = adapter?.option === false;          // no adapter: the pusher base sits on the robot flange
   const custom = !!carrier?.customFlange;
 
@@ -150,16 +153,20 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
     };
     if (direct && !custom) put(0, carrier);
     put(1, adapter);
+    put(GROUPS.findIndex((g) => g.id === 'tip'), tip);
+    if (tipVariant?.sets) put(GROUPS.findIndex((g) => g.id === 'tip'), { ...tip!, sets: tipVariant.sets });
     put(GROUPS.findIndex((g) => g.id === 'camera'), camera);
+    // a choice can fix a parameter that only some pushers have (tip_split): the others do not get it
+    if (config) for (const k of Object.keys(out)) if (!(k in config.params)) delete out[k];
     return out;
-  }, [carrier, adapter, camera, direct, custom, lang]);
+  }, [carrier, adapter, tip, tipVariant, camera, direct, custom, lang, config]);
 
   const defaults = useMemo(() => {
     const d: Record<string, number> = {};
     if (carrier?.mountRot !== undefined) d.mount_rot = carrier.mountRot;
-    if (direct) Object.assign(d, carrier?.direct?.defaults);
+    if (direct) Object.assign(d, carrier?.direct?.defaults, pusher?.direct?.defaults);
     return d;
-  }, [carrier, direct]);
+  }, [carrier, pusher, direct]);
 
   const params = useMemo(() => {
     const p: Record<string, ParamValue> = { ...defaults };
@@ -168,7 +175,8 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
     return p;
   }, [edits, fixed, defaults, custom]);
 
-  const options = useMemo(() => ({ ...camera?.options, g1_adapter: false, ...adapter?.options, adapter: !direct }), [camera, adapter, direct]);
+  const options = useMemo(() => ({ ...camera?.options, g1_adapter: false, tactile: false, ...adapter?.options, ...tip?.options, ...tipVariant?.options, adapter: !direct }),
+    [camera, adapter, tip, tipVariant, direct]);
 
   useEffect(() => {
     if (engineState !== 'ready' || !config || !engine.current) return;
@@ -190,9 +198,16 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
     setSelection((s) => {
       const n = { ...s, [g]: id };
       if (g === 'carrier' && id !== s.carrier) n.adapter = item('carrier', id)?.defaultAdapter ?? 'none';
+      if (g === 'pusher' && !fits(item('tip', n.tip), id)) n.tip = DEFAULT_SELECTION.tip;
       return n;
     });
-    if (g === 'carrier' || g === 'adapter') setEdits((e) => { const { mount_rot, beam_x, ...rest } = e; return rest; });
+    if (g === 'carrier' || g === 'adapter' || g === 'pusher') setEdits((e) => { const { mount_rot, beam_x, ...rest } = e; return rest; });
+    setActive(g); setSolo(false);
+  }, []);
+
+  // A switch under a selected card (e.g. the sensor of a tip): kept in the selection as `<group>.<key>`.
+  const onVariant = useCallback((g: string, key: string, id: string) => {
+    setSelection((s) => ({ ...s, [`${g}.${key}`]: id }));
     setActive(g); setSolo(false);
   }, []);
 
@@ -299,7 +314,7 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
           </nav>
         </div>
       </header>
-      <LeftPanel selection={selection} active={active} open={configOpen && !solo} onPick={onPick} onClose={() => setConfigOpen(false)} onSelect={onSelect} />
+      <LeftPanel selection={selection} active={active} open={configOpen && !solo} onPick={onPick} onClose={() => setConfigOpen(false)} onSelect={onSelect} onVariant={onVariant} />
       {!inspectOpen && (
         <button className="inspect-tab float" onClick={() => setInspectOpen(true)} aria-expanded={false}>
           <Ico name="sliders" size={18} />{t('inspect')}

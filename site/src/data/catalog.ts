@@ -7,7 +7,7 @@ import { PHONE_ITEMS } from './phones';
 export type { FlangeSpec } from './flanges';
 
 export type View = 'carrier' | 'adapter' | 'pusher' | 'tip' | 'camera';
-export type Icon = 'arm6' | 'arm7' | 'hand' | 'rod' | 'tip-ball' | 'tip-sensor' | 'tip-surface' | 'phone' | 'depthcam' | 'rod-arc' | 'flange' | 'adapter-none' | 'adapter-ab' | 'adapter-fused' | 'humanoid' | 'camera-none' | 'rod-square' | 'adapter-wrist';
+export type Icon = 'arm6' | 'arm7' | 'hand' | 'rod' | 'tip-ball' | 'tip-sensor' | 'tip-surface' | 'phone' | 'depthcam' | 'rod-arc' | 'flange' | 'adapter-none' | 'adapter-ab' | 'adapter-fused' | 'humanoid' | 'camera-none' | 'rod-square' | 'rod-pad' | 'adapter-wrist';
 
 /** A joint drawn away from the baked pose: `deg` on the joint turns the flange frame by `flangeDeg` about its Z. */
 export interface JointTurn { name: string; deg: number; flangeDeg: number }
@@ -40,21 +40,27 @@ export interface CatalogItem {
   mountRot?: number;
   /** carrier: defaults that differ when the pusher is bolted on directly (adapter "None"), e.g. another mount_rot
    *  because the screws must stay reachable. `joint` = the last joint is drawn turned by this much, so the
-   *  assembly still looks the same. */
+   *  assembly still looks the same. pusher: the same, applied after the carrier's (a pusher whose beam already
+   *  leaves the screws free keeps it where it is). */
   direct?: { defaults: Record<string, number>; joint?: JointTurn };
   /** carrier: the adapter picked when this carrier is selected */
   defaultAdapter?: string;
   /** adapter: value of the config option `adapter` (false = no adapter parts, pusher base on the robot flange) */
   option?: boolean;
-  /** camera, adapter: config options this choice switches (e.g. `telephoto: false` for a phone without one) */
+  /** camera, adapter, tip: config options this choice switches (e.g. `telephoto: false` for a phone without one) */
   options?: Record<string, boolean>;
-  /** adapter: carriers it fits (ids); missing = all */
+  /** adapter: carriers it fits (ids); tip: pushers it fits (ids); missing = all */
   fits?: string[];
+  /** a switch shown under the selected card, e.g. the sensor of a tip. Each choice adds its own options and sets;
+   *  the editor keeps the choice in the selection under `<group>.<key>`. */
+  variant?: { key: string; label: Txt; default: string; choices: Variant[] };
   /** carrier: drawing data for the fallback model (used when no baked GLB exists, see src/data/arms.json) */
   arm?: { reach: number; dof: number };
   /** pusher: the asfinger config it is built from (a path under hardware/, as the site serves it) */
   config?: string;
 }
+
+export interface Variant { id: string; name: Txt; options?: Record<string, boolean>; sets?: Record<string, number> }
 
 export interface Group {
   id: string;
@@ -234,7 +240,20 @@ export const GROUPS: Group[] = [
     id: 'pusher', title: { en: 'Pusher', zh: '推杆' }, view: 'pusher',
     hint: { en: 'The rod and the phone holder. Tune it on the right.', zh: '推杆本体和手机支架。参数在右侧调整。' },
     items: [
-      { id: 'pad', name: { en: 'Pad', zh: '指腹推杆' }, subtitle: { en: 'Square bar with an arc finger pad · one piece', zh: '方杆 + 弧面指腹 · 一体打印' }, icon: 'rod-arc', disabled: true },
+      {
+        id: 'pad', name: { en: 'Pad', zh: '指腹推杆' }, subtitle: { en: 'Square bar with an arc finger pad · one piece', zh: '方杆 + 弧面指腹 · 一体打印' }, icon: 'rod-pad',
+        config: 'configs/pad_finger.json',
+        // its holder beam is tied to the bar root by a web between the screws: bolted on directly it stays on the axis
+        direct: { defaults: { beam_x: 0 } },
+        info: [
+          { label: { en: 'Rod', zh: '杆' }, value: { en: '22 × 22 square bar, 30° to the flange axis, with a 16 mm neck at the base', zh: '22 × 22 方杆，与法兰轴线成 30°，根部有 16 mm 宽的颈部' } },
+          { label: { en: 'Fingertip', zh: '指尖' }, value: { en: 'Quarter cylinder R15 from the side face round to the flat end face: the finger pad. T_tcp is the middle of the arc (45°).', zh: '从侧面到平端面的 R15 四分之一圆柱，就是指腹。T_tcp 在圆弧中点（45°）。' } },
+          { label: { en: 'Print', zh: '打印' }, value: { en: 'One piece with the standard tip. With the TPU tip the fingertip is a second body for a second material.', zh: '配标准末端时一体打印。配 TPU 指尖时指尖是第二个实体，用第二种材料打印。' } },
+          { label: { en: 'Holder support', zh: '支架支撑' }, value: { en: 'Beam on the flange axis, 14 wide, tied to the bar root by a web that passes between two flange screws', zh: '横梁在法兰轴线上，宽 14，用一道腹板连到杆根，腹板从两颗法兰螺钉之间穿过' } },
+          { label: 'TCP', value: { en: 'Where the round rod has its TCP, so the phone pose is the same', zh: '和圆杆推杆的 TCP 在同一位置，所以手机位姿不变' } },
+          { label: { en: 'Origin', zh: '来源' }, value: { en: 'The tactile finger of 2026-11-24 without its sensor', zh: '2026-11-24 的触觉指尖去掉传感器' } },
+        ],
+      },
       {
         id: 'round', name: { en: 'Round', zh: '圆杆推杆' }, subtitle: { en: 'Ø15 round rod, reinforced support · printed and in use', zh: 'Ø15 圆杆，加强支撑 · 已打印、在用' }, icon: 'rod',
         config: 'configs/iphone17pro_default.json',
@@ -263,14 +282,32 @@ export const GROUPS: Group[] = [
       {
         section: 0, id: 'bare', name: { en: 'Standard tip', zh: '标准末端' }, subtitle: { en: 'The pusher\'s own end, unchanged', zh: '推杆自带的末端，不做调整' }, icon: 'tip-ball',
         info: [
-          { label: { en: 'Shape', zh: '形状' }, value: { en: 'Hemisphere, radius = rod diameter / 2', zh: '半球，半径 = 杆径 / 2' } },
-          { label: 'TCP', value: { en: 'Apex of the hemisphere (T_tcp)', zh: '半球顶点（T_tcp）' } },
+          { label: { en: 'Shape', zh: '形状' }, value: { en: 'Round: hemisphere, radius = rod diameter / 2. Square: the flat end face. Pad: the R15 finger pad.', zh: '圆杆：半球，半径 = 杆径 / 2。方杆：平端面。指腹：R15 的指腹圆弧。' } },
+          { label: 'TCP', value: { en: 'Apex of the hemisphere, centre of the end face, middle of the pad arc (T_tcp)', zh: '半球顶点、端面中心、指腹圆弧中点（T_tcp）' } },
           { label: { en: 'Material', zh: '材料' }, value: { en: 'Same as the rod (printed)', zh: '与推杆相同（打印件）' } },
           { label: { en: 'Friction coefficient', zh: '摩擦系数' }, value: '—' },
           { label: { en: 'Sensor', zh: '传感器' }, value: { en: 'none', zh: '无' } },
         ],
       },
-      { section: 1, id: 'soft_tpu', name: { en: 'Soft TPU tip', zh: 'TPU 软指尖' }, subtitle: { en: 'For the Pad pusher · optional 48 × 48 e-skin', zh: '配指腹推杆 · 可选 48 × 48 电子皮肤' }, icon: 'tip-sensor', disabled: true },
+      {
+        section: 1, id: 'soft_tpu', name: { en: 'Soft TPU tip', zh: 'TPU 软指尖' }, subtitle: { en: 'For the Pad pusher · optional 48 × 48 e-skin', zh: '配指腹推杆 · 可选 48 × 48 电子皮肤' }, icon: 'tip-sensor',
+        fits: ['pad'], sets: { tip_split: 1 },
+        variant: {
+          key: 'sensor', label: { en: 'Sensor', zh: '传感器' }, default: 'eskin',
+          choices: [
+            { id: 'none', name: { en: 'None', zh: '无' }, options: { tactile: false } },
+            { id: 'eskin', name: { en: '48 × 48 e-skin', zh: '48 × 48 电子皮肤' }, options: { tactile: true } },
+          ],
+        },
+        info: [
+          { label: { en: 'Shape', zh: '形状' }, value: { en: 'The last 29 mm of the Pad finger as its own body: the R15 pad and the flat end, meeting the bar on a flat face (14 mm straight part)', zh: '指腹推杆最末端 29 mm 单独成一个实体：R15 指腹和平端面，和杆在一个平面上相接（直段 14 mm）' } },
+          { label: { en: 'Material', zh: '材料' }, value: 'TPU 95A' },
+          { label: { en: 'Print', zh: '打印' }, value: { en: 'Load tool_body and tip_tpu as two parts of one object and give tip_tpu the TPU filament; the slicer joins them on the flat face', zh: '把 tool_body 和 tip_tpu 作为同一个对象的两个零件导入，tip_tpu 用 TPU 耗材；切片软件在平面上把两者接起来' } },
+          { label: { en: 'Sensor', zh: '传感器' }, value: { en: 'Switch under the card. 48 × 48 e-skin: the pad (20 wide, 23.5 along the arc) sits in a 0.3 mm recess on the arc, its FPC runs in a groove under the bar to the readout PCB (STM32G474), which sits in a pocket near the base under a clip-on cover', zh: '在卡片下方切换。48 × 48 电子皮肤：皮肤（宽 20，沿圆弧 23.5）放在圆弧上 0.3 mm 深的凹槽里，FPC 沿杆下方的槽走到读出板（STM32G474），读出板放在底座附近的槽里，用卡扣盖板盖住' } },
+          { label: 'TCP', value: { en: 'Middle of the pad arc, as with the standard tip', zh: '指腹圆弧中点，和标准末端相同' } },
+          { label: { en: 'Status', zh: '状态' }, value: { en: 'Printed in TPU on 2026-11-26', zh: '2026-11-26 用 TPU 打印成功' } },
+        ],
+      },
     ],
   },
   {
@@ -296,7 +333,14 @@ export function item(groupId: string, id: string): CatalogItem | undefined {
   return GROUPS.find((g) => g.id === groupId)?.items.find((i) => i.id === id);
 }
 
-/** Whether an adapter can be used with a carrier. */
-export function fits(adapter: CatalogItem | undefined, carrierId: string): boolean {
-  return !!adapter && !adapter.disabled && (!adapter.fits || adapter.fits.includes(carrierId));
+/** Whether an adapter can be used with a carrier, or a tip with a pusher. */
+export function fits(it: CatalogItem | undefined, otherId: string): boolean {
+  return !!it && !it.disabled && (!it.fits || it.fits.includes(otherId));
+}
+
+/** The variant choice of an item in a selection (its default when none is stored or the stored one is gone). */
+export function variantOf(groupId: string, it: CatalogItem | undefined, selection: Record<string, string>): Variant | undefined {
+  const v = it?.variant;
+  if (!v) return undefined;
+  return v.choices.find((c) => c.id === selection[`${groupId}.${v.key}`]) ?? v.choices.find((c) => c.id === v.default);
 }

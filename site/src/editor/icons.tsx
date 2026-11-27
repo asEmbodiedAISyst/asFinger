@@ -24,6 +24,11 @@ const P: Record<Icon | 'chevron' | 'panel' | 'overall' | 'reset' | 'download' | 
   'rod-arc': (<>
     <path d="M12 10h14v6H12z" /><path d="M19 16l-3 16" /><path d="M23 16l-3 16" /><path d="M10 34c3-3 9-3 12 0" />
   </>),
+  // the Pad pusher: a square bar whose end rounds off into the finger pad
+  'rod-pad': (<>
+    <path d="M12 10h14v6H12z" /><path d="M17 16l-4 18" /><path d="M25 16l-3.3 14.5" /><path d="M13 34h3.5" /><path d="M16.5 34a5.2 5.2 0 0 0 5.2-3.5" />
+    <path d="M26 13l8 4" /><path d="M31 15.5 36 34" /><path d="M33 14l6 22" /><path d="M36 34l3 2" />
+  </>),
   'rod-square': (<>
     <path d="M12 10h14v6H12z" /><path d="M17 16l-4 18" /><path d="M25 16l-4 18" /><path d="M13 34h8" />
     <path d="M26 13l8 4" /><path d="M31 15.5 36 34" /><path d="M33 14l6 22" /><path d="M36 34l3 2" />
