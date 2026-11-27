@@ -21,6 +21,22 @@
       ],
       "desc": "Phone camera with its holder and connector. Off = the rod alone: holder, beam and spine are left out and the camera solve is skipped.",
       "desc_zh": "手机相机及其支架和连接件。关掉 = 只要推杆：去掉支架、横梁和支撑条，并跳过相机看向 TCP 的求解。"
+    },
+    "telephoto": {
+      "value": true,
+      "modules": [
+        "tele"
+      ],
+      "desc": "Telephoto camera frames (C_tele, C_tele_cv) and its MJCF camera. Off for a phone without a telephoto (e.g. iPhone 17). Needs the option phone.",
+      "desc_zh": "长焦相机的坐标系（C_tele、C_tele_cv）和它在 MJCF 里的相机。没有长焦的手机（例如 iPhone 17）关掉。依赖 phone 选项。"
+    },
+    "lidar": {
+      "value": true,
+      "modules": [
+        "lidar"
+      ],
+      "desc": "LiDAR scanner frame (S_lidar). Off for a phone without LiDAR, or when its position is not known. Needs the option phone.",
+      "desc_zh": "LiDAR 扫描仪的坐标系（S_lidar）。没有 LiDAR 的手机，或位置未知时关掉。依赖 phone 选项。"
     }
   },
   "params": {
@@ -81,8 +97,19 @@
     "lens_y": 41.39,
     "bump_h": 1.88,
     "ring_D": 16.2,
+    "uw_x": "phone_W/2 - 14.37",
+    "uw_y": "phone_L/2 - 14.37",
+    "tele_x": "phone_W/2 - 32.36",
+    "tele_y": "phone_L/2 - 23.99",
+    "front_x": "-phone_W/2 + 43.25",
+    "front_y": "phone_L/2 - 7.99",
+    "lidar_x": "phone_W/2 - 58.03",
+    "lidar_y": "phone_L/2 - 34.16",
+    "flash_x": "phone_W/2 - 58.03",
+    "flash_y": "phone_L/2 - 13.82",
     "back_to_mount": 3.25,
     "feq": 24,
+    "feq_tele": 100,
     "phone_flange_angle": 55.14,
     "v_n": "1 - 2*0.618",
     "distance": 163.3,
@@ -110,7 +137,7 @@
       "desc": "iPhone 17 Pro Ultra Wide, 13 mm equivalent, 4:3 landscape. fovy 88.4 = measured short-side FOV at 1920x1440 with focus at infinity (intrinsics yaml 2026-11-08, fx 740.38); about 18 % focus breathing."
     },
     "C_tele": {
-      "fovy_deg": "2*atand(sqrt(36**2 + 24**2)*0.6/2/100)",
+      "fovy_deg": "2*atand(sqrt(36**2 + 24**2)*0.6/2/feq_tele)",
       "aspect": "4/3",
       "resolution": [
         640,
@@ -272,8 +299,8 @@
     "C_ultrawide": {
       "parent": "P_phone",
       "pos": [
-        "phone_W/2 - 14.37",
-        "phone_L/2 - 14.37",
+        "uw_x",
+        "uw_y",
         "-(phone_t + bump_h)"
       ],
       "rot": {
@@ -305,8 +332,8 @@
     "C_tele": {
       "parent": "P_phone",
       "pos": [
-        "phone_W/2 - 32.36",
-        "phone_L/2 - 23.99",
+        "tele_x",
+        "tele_y",
         "-(phone_t + bump_h)"
       ],
       "rot": {
@@ -319,7 +346,7 @@
           0
         ]
       },
-      "module": "phone",
+      "module": "tele",
       "desc": "4x Telephoto camera (Rear Camera 3, 34 deg keepout cone; back view (32.36, -23.99)), Apple iPhone 17 Pro Dimensional Drawings (2025-09-09), Detail D. Entrance window of the tetraprism; axis parallel to C_main."
     },
     "C_tele_cv": {
@@ -332,14 +359,14 @@
         ],
         "deg": 180
       },
-      "module": "phone",
+      "module": "tele",
       "desc": "C_tele in OpenCV convention (+Z forward, +Y image down)."
     },
     "S_lidar": {
       "parent": "P_phone",
       "pos": [
-        "phone_W/2 - 58.03",
-        "phone_L/2 - 34.16",
+        "lidar_x",
+        "lidar_y",
         "-(phone_t + bump_h)"
       ],
       "rot": {
@@ -352,14 +379,14 @@
           0
         ]
       },
-      "module": "phone",
+      "module": "lidar",
       "desc": "LiDAR scanner (REAR SENSOR, d6.65, 84 deg keepout cone; back view (58.03, -34.16)), Apple iPhone 17 Pro Dimensional Drawings (2025-09-09), Detail D. Height assumed equal to the lens glass (not dimensioned). Axes as C_main."
     },
     "L_flash": {
       "parent": "P_phone",
       "pos": [
-        "phone_W/2 - 58.03",
-        "phone_L/2 - 13.82",
+        "flash_x",
+        "flash_y",
         "-(phone_t + bump_h)"
       ],
       "rot": {
@@ -378,8 +405,8 @@
     "C_front": {
       "parent": "P_phone",
       "pos": [
-        "-phone_W/2 + 43.25",
-        "phone_L/2 - 7.99",
+        "front_x",
+        "front_y",
         0
       ],
       "rot": {
@@ -1762,7 +1789,13 @@
     "spine_back_to": "S_mount x of the V tip of the back reinforcement = crossing point of the holder's X ribs (2.25 for SlideLock_Connector_local.stl).",
     "spine_back_ang": "Angle between each lower arm of the holder's X ribs and the spine axis (deg); the reinforcement ends in a V cut along the two arm centre lines (42.6 for SlideLock_Connector_local.stl).",
     "spine_back_w": "Width of the back reinforcement (defaults to the spine width).",
-    "holder_back_z": "S_mount z of the back face of the holder plate (where the ribs start); the reinforcement fills from -plate_t up to here (+ spine_overlap). -4 for SlideLock_Connector_local.stl."
+    "holder_back_z": "S_mount z of the back face of the holder plate (where the ribs start); the reinforcement fills from -plate_t up to here (+ spine_overlap). -4 for SlideLock_Connector_local.stl.",
+    "uw_x": "Ultra Wide lens window centre in P_phone (uw_x, uw_y; mm). The iPhone 17 Pro values are from Apple's dimensional drawing (Rear Camera 1); the editor's camera group sets them per phone from the iMuninn phone data.",
+    "tele_x": "Telephoto lens window centre in P_phone (tele_x, tele_y; mm); see uw_x.",
+    "feq_tele": "Telephoto equivalent focal length (mm); sets the nominal fovy of C_tele.",
+    "front_x": "Front camera in P_phone (front_x, front_y; mm). Estimated: Apple does not dimension the front camera itself.",
+    "lidar_x": "LiDAR scanner centre in P_phone (lidar_x, lidar_y; mm).",
+    "flash_x": "Flash centre in P_phone (flash_x, flash_y; mm)."
   },
   "shapes": {
     "connector_b": {

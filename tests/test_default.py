@@ -204,7 +204,7 @@ def test_phone_option_off_leaves_rod_only():
     full = Model.load(CFG).resolve()
     assert close(R['world']['T_tcp'].p, full['world']['T_tcp'].p, 1e-9)  # the rod itself does not move
     rj = m.resolved_json(R)
-    assert rj['cameras'] == {} and rj['options'] == {'adapter': True, 'phone': False}
+    assert rj['cameras'] == {} and rj['options'] == {'adapter': True, 'phone': False, 'telephoto': True, 'lidar': True}
     out = tempfile.mkdtemp()
     _, rep = m.build(out)
     assert (
@@ -213,6 +213,43 @@ def test_phone_option_off_leaves_rod_only():
     _, rep_full = Model.load(CFG).build(tempfile.mkdtemp(), mjcf=False, preview=False)
     assert rep['parts']['tool_body']['volume_cm3'] < rep_full['parts']['tool_body']['volume_cm3']  # no beam/spine
     assert m.cfg['frames']['P_phone'] and 'holder' in [p['name'] for p in m.cfg['parts']]  # full config kept
+
+
+def test_telephoto_and_lidar_options():
+    # A phone without a telephoto or LiDAR (e.g. iPhone 17) drops those frames and the telephoto MJCF camera only.
+    m = Model.load(CFG).set_options(telephoto=False, lidar=False)
+    R = m.resolve()
+    for f in ('C_tele', 'C_tele_cv', 'S_lidar'):
+        assert f not in R['world'], f
+    full = Model.load(CFG).resolve()
+    for f in ('P_phone', 'C_main', 'C_ultrawide', 'L_flash', 'T_tcp'):
+        assert close(R['world'][f].p, full['world'][f].p, 1e-9), f
+    assert set(m.resolved_json(R)['cameras']) == {'C_main', 'C_ultrawide'}
+
+
+def test_editor_phones_solve_clean():
+    # Every phone of the editor's camera group (site/src/data/phones.json, from iMuninn's phone data) solves with
+    # no failed check and no overlap; the main camera ends up where it is for the default phone.
+    import json
+
+    phones = json.load(
+        open(os.path.join(os.path.dirname(ROOT), 'site', 'src', 'data', 'phones.json'), encoding='utf-8')
+    )['phones']
+    assert {p['id'] for p in phones} >= {
+        'iphone17pro',
+        'iphone17',
+        'iphone18pro',
+        'iphone16pro',
+        'iphone15pro',
+        'iphone14pro',
+    }
+    ref = Model.load(CFG).resolve()['world']['C_main'].p
+    for p in phones:
+        m = Model.load(CFG).set_options(**p['options'])
+        m.set(**p['sets'])
+        R = m.resolve(resolve=True)
+        assert m.check(R) == [] and m.interference(R) == [], p['id']
+        assert close(R['world']['C_main'].p, ref, 1e-6), p['id']
 
 
 def test_interference_rules():
