@@ -44,6 +44,10 @@ ignore = [
     "B905",  # zip() over vectors of the same fixed length
 ]
 
+[tool.ruff.lint.per-file-ignores]
+# robot/ moves a real arm and was imported without code changes: rules that would need an edit are off there
+"robot/*.py" = ["I001", "E401", "UP031"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = [
@@ -58,3 +62,21 @@ dev = [
     "pytest-cov>=6.2.1",
     "ruff>=0.12.0",
 ]
+# What the scripts in robot/ and sim/ import: `uv sync --group robot`. The package `asfinger` does not need it.
+robot = [
+    "rebot-control[sim]",                              # arm control and its simulator (pinocchio, mujoco)
+    "motorbridge>=0.5.6; sys_platform == 'linux'",     # the real arm: RobStride motors over SocketCAN
+    "motorbridge-smart-servo>=0.0.4",                  # the leader arm of robot/teleop_star.py
+    "imuninn[video]>=0.3.0",                           # the phones (video decoding through av)
+    "sharklog>=0.2.0",
+    "numpy>=1.26",
+    "pyyaml>=6.0",
+    "opencv-python-headless>=4.8",                     # AprilTag 36h11 through cv2.aruco
+    "pillow>=10",
+    "av>=12",
+    "pyarrow>=15",                                     # robot/to_lerobot.py
+]
+
+[tool.uv.sources]
+# rebot-control is not on PyPI. This commit has the same code as the version the scripts were written against.
+rebot-control = { git = "https://github.com/asEmbodiedAISyst/rebot-control", rev = "69c7182616807f5a34e9483f2c9950675ea771b9" }
