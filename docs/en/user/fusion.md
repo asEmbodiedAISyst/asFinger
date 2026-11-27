@@ -106,7 +106,7 @@ The script finds the meshes through the key `base_dir` of the file. If the key i
 
 ## Limits
 
-- **Not run in Fusion from this location yet.** The add-in was used with the layout of the earlier project. In this repository it is tested without Fusion only: the paths, the list of parameters, the HTTP server and the agreement with `asfinger send`. The steps that make or change a design are not tested automatically.
+- **Tried in Fusion by hand, not tested automatically.** From this repository the add-in was run in Fusion for these cases: a build in a new document, an update in place from `asfinger send`, and the refusal of a request from a web page. Rebuild, the script asFingerFromJSON and an update of a design that the earlier add-in made were not tried. The automatic tests run without Fusion: the paths, the list of parameters, the HTTP server and the agreement with `asfinger send`.
 - **One port.** The port 47910 is fixed. If another program holds it when the add-in starts, the palette still works, but the add-in receives no requests. The palette and the Text Commands window of Fusion show a message. Stop the other program, then stop and run the add-in again.
 - **Any local program can send a request.** The server listens on 127.0.0.1 only and refuses requests from web pages. It has no other authentication: a request from any program on the computer is accepted. A request can make Fusion load a config file and, with `save`, write that file again.
 - **No result for the sender.** A request gets the answer "queued". If the palette is closed, the result is not shown.

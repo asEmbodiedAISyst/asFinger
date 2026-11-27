@@ -18,5 +18,9 @@
 | `hardware/configs/` | 实物工具的配置。 |
 | `hardware/assets/` | 配置引用的网格。 |
 | `hardware/cad/fusion/` | Autodesk Fusion 的插件和脚本。 |
+| `robot/` | 真机用的脚本：机械臂工具、标定、遥操作、录制。 |
+| `calibration/` | 机械臂和工具在用的标定文件。 |
+| `sim/` | 这套设备的 MuJoCo 场景。 |
+| `data/` | 录下来的 episode。只有它的 README 在 git 里。 |
 | `site/` | 网站：首页、编辑器和文档站。 |
 | `docs/en/`、`docs/zh/` | 文档源文件，英文和中文各一套。 |

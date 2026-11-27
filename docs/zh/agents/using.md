@@ -81,3 +81,4 @@ m.save('hardware/configs/my_variant.json')
 - 只有用户提出要求、并且正在运行 [Fusion 插件](../user/fusion.md)时，才用 `asfinger send`。这个命令会改动 Fusion 里打开的设计，加 `--save` 还会改写配置文件。它不返回执行结果，结果要请用户看面板。
 - 把和用户的请求有关的局限告诉用户，这些局限列在[检查与干涉规则](../user/checks.md#这些测试发现不了什么)和[坐标系](../user/frames.md#手机坐标系的已知局限)两页里。`back_to_mount` 必须和用户的手机壳相符。
 - 用户没有 Python 环境时，让他们用[网页编辑器](https://asembodiedaisyst.github.io/asFinger/zh/editor/)。
+- `robot/` 里的脚本控制的是真实的机械臂。替用户使用之前，先读[机械臂工具与安全规则](../user/robot-arm-tools.md)。带 `--sim` 的工具可以随意运行。会连接真机或手机的命令，只有操作者在机械臂旁边、已经知道会发生什么并且同意时才运行。程序出错之后，运行 `robot/arm state`，并告诉用户电机是否还在使能。

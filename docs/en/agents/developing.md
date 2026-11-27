@@ -18,6 +18,10 @@ This page is for an agent that changes the code, the site or the documentation i
 - Add third-party material only with its licence, and record it in `NOTICE`.
 - Change the version only in `pyproject.toml`.
 - The code in `hardware/cad/fusion/` runs inside Autodesk Fusion. Do not start Fusion, do not load the add-in, and do not change a Fusion document to test it. Run the tests, and tell the user to try the change in Fusion.
+- The code in `robot/` moves a real arm. Never run a command that connects to the real arm or to a phone from an agent session unless the operator is at the arm and asked for that command. Everything with `--sim` is free to run.
+- Do not refactor `robot/`. A change that can alter a motion needs a run on the real arm by the owner of the setup. Say in your report what was run in the simulator and that nothing was run on the arm.
+- Do not write an address, a device id or a host name of the setup into a tracked file. They belong in `robot/cameras.local.yaml`. Do not commit files from `calibration/data/` or `data/`, and do not add photos of the setup.
+- `robot/arm_sign_check.py` and `robot/arm_listen_ab.py` connect to the arm at once, also with `--help`. Do not start them to read their usage; read the docstring.
 - Do not push tags and do not change the deployment settings. Tell the user what to do.
 
 ## Code map
@@ -37,6 +41,10 @@ This page is for an agent that changes the code, the site or the documentation i
 | `tests/test_docs.py` | Tests of the documentation: same pages in both languages, the example config builds. |
 | `tests/test_send.py`, `tests/test_fusion_addin.py` | Tests of `asfinger send`, and of the Fusion add-in with stand-ins for the `adsk` modules. |
 | `hardware/configs/`, `hardware/assets/` | Configs and the meshes they import. |
+| `robot/` | Scripts for the real arm. `arm` is the rebot-control wrapper; `arm_*.py` are arm tools and calibration; `teleop*.py` teleoperation; `episode.py`, `record.py`, `to_lerobot.py` data; `snapshot.py`, `tags.py`, `make_tags.py`, `calibrate_color.py` cameras and markers. |
+| `calibration/` | The calibration files that the tools read. `calibration/data/` is local and ignored. |
+| `sim/` | The MuJoCo scene (`scene.py`, `scene.yaml`) and its registration (`register.py`, `registration.yaml`). |
+| `tests/robot/` | Tests of the robot side in the simulator. They need `uv sync --group robot`. |
 | `hardware/cad/fusion/` | The Fusion add-in (`asFingerAddIn`), its script (`asFingerFromJSON`) and their shared module (`asfinger_fusion`). In each folder, the folder, the `.py` file and the `.manifest` file have the same name. |
 | `site/scripts/sync-core.mjs`, `sync-docs.mjs` | Copy the package, the configs and the docs into the site before a build. |
 | `site/src/engine/` | The web worker (Pyodide and Manifold). |
@@ -60,6 +68,12 @@ If the change touches `site/`, `docs/`, `src/asfinger/` or `hardware/`, also run
 
 ```bash
 cd site && npm ci && npm run build
+```
+
+If the change touches `robot/`, `sim/` or `calibration/`, also run:
+
+```bash
+uv sync --group robot --python 3.12 && uv run --group robot pytest tests/robot
 ```
 
 ## Common tasks

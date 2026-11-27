@@ -28,3 +28,8 @@
 | mesh | 网格 | 三角面片表面，例如 STL 文件。 |
 | add-in | 插件 | `hardware/cad/fusion/` 里那个在 Autodesk Fusion 中运行的程序。 |
 | palette | 面板 | 插件在 Fusion 里的窗口，列出全部参数。 |
+| episode | episode | 一次录制：机械臂的伺服日志和手机的数据流，放在一个目录里。 |
+| leader | leader | 遥操作时操作者手里的设备：一部手机，或者一台 leader 臂。 |
+| follower | follower | 跟随 leader 的机械臂。 |
+| top camera, wrist camera | 顶部相机、腕部相机 | 固定在工作区上方的手机，和装在工具上的手机。 |
+| arm frame | 机械臂坐标系 | 机械臂的底座坐标系：原点在安装面上，X 朝前，Y 朝左，Z 朝上。 |

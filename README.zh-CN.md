@@ -37,6 +37,19 @@ print(m.root_to('T_tcp').p)  # TCP position in the robot flange frame, mm
 想在 Autodesk Fusion 里把工具当作参数化设计来改，用 `hardware/cad/fusion/` 里的插件
 （[说明](https://asembodiedaisyst.github.io/asFinger/zh/docs/user/fusion/)）。
 
+## 用在真机上
+
+`robot/` 里是把工具用在 Seeed reBot Arm B601-RS 上的脚本：机械臂工具、标定、遥操作和数据采集，`sim/` 里有对应的
+MuJoCo 场景。它们需要 `robot` 依赖组：
+
+```bash
+uv sync --group robot --python 3.12
+uv run python robot/arm_move.py --waypoints "0,15,20,=,0,0" --sim
+```
+
+使用真机之前，先读[真机环境](https://asembodiedaisyst.github.io/asFinger/zh/docs/user/robot-setup/)和
+[安全规则](https://asembodiedaisyst.github.io/asFinger/zh/docs/user/robot-arm-tools/)。
+
 ## 文档
 
 网站：<https://asembodiedaisyst.github.io/asFinger/zh/docs/>

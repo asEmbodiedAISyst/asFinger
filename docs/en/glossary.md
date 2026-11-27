@@ -28,3 +28,8 @@ The English and the Chinese pages use the same terms. This table is the referenc
 | mesh | 网格 | A triangle surface, for example an STL file. |
 | add-in | 插件 | The program in `hardware/cad/fusion/` that runs inside Autodesk Fusion. |
 | palette | 面板 | The window of the add-in in Fusion that lists the parameters. |
+| episode | episode | One recording: the servo log of the arm and the streams of the phones, in one folder. |
+| leader | leader | The device in the hand of the operator in teleoperation: a phone or a leader arm. |
+| follower | follower | The arm that follows the leader. |
+| top camera, wrist camera | 顶部相机、腕部相机 | The fixed phone above the workspace, and the phone on the tool. |
+| arm frame | 机械臂坐标系 | The base frame of the arm: origin on the mounting surface, X forward, Y left, Z up. |

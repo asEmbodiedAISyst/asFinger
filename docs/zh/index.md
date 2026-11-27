@@ -18,11 +18,13 @@ asFinger 是一根装在机械臂或人手上的推杆，用手机当腕部相�
 | 在自己电脑上生成 STL 和 MJCF | [安装](user/installation.md)，然后看[快速上手](user/quickstart.md) |
 | 写配置或改配置 | [配置文件](user/config-file.md)和[坐标系](user/frames.md) |
 | 把工具当作 CAD 设计来改 | [Fusion 插件](user/fusion.md) |
+| 把工具用到真机上 | [真机环境](user/robot-setup.md)，然后是[机械臂工具与安全规则](user/robot-arm-tools.md) |
+| 用机械臂采集数据 | [遥操作](user/teleoperation.md)和[数据采集](user/data-collection.md) |
 | 了解项目怎么工作 | [开发指南](developer/index.md) |
 | 让 AI agent 来用这个项目 | [Agent 指南](agents/index.md) |
 
 ## 现状
 
-当前版本 0.1.0。生成器、编辑器和这套文档已经公开。仿真、机器人侧代码和学习代码还没有放进仓库，见[路线图](developer/roadmap.md)。
+当前版本 0.1.0。生成器、编辑器、Fusion 插件、真机一侧的工具和第一版仿真场景，以及这套文档已经公开。学习代码不在仓库里，见[路线图](developer/roadmap.md)。
 
 iPhone 17 Pro 配 Seeed reBot Arm B601-RS 的推杆已经打印出来并在使用。编辑器里其他机械臂的法兰数据来自公开的数据手册，没有确认过的数值在编辑器里标着“待核实”。

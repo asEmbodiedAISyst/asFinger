@@ -80,6 +80,27 @@ site/src/data/                  载体、转接件、相机的目录，以及参
 
 `asfinger send` 命令和插件之间走 127.0.0.1:47910 上的 HTTP。Fusion 的 API 只能在一个线程里调用，所以请求通过自定义事件转交给 Fusion 的主线程。`tests/test_fusion_addin.py` 用替身代替 `adsk` 模块来导入插件。见 [Fusion 插件](../user/fusion.md)。
 
+## 真机一侧
+
+`robot/`、`calibration/` 和 `sim/` 是仓库的第二部分。它们不导入 `asfinger` 包，`asfinger` 包也不导入它们。两部分之间靠数据衔接：工具文件 `calibration/tool_ip17pro_print.yaml` 是按生成器给出的推杆实物坐标系写的，`sim/assets/meshes/ipush_print.stl` 是生成器的打印输出。
+
+```text
+robot/*.py            脚本，在仓库根目录下运行，彼此按文件名导入
+   │  rebot_control   控制库（从 GitHub 取的依赖）：伺服循环、各种限制、笛卡尔控制、仿真器
+   │  imuninn         手机：视频流和 IMU 流
+   ▼
+calibration/*.yaml    一台机械臂和一个工具的增益与模型；工具读它们，其中几个工具也写它们
+sim/scene.py          MuJoCo 场景；工具加 `--sim` 后，同一份代码跑在 rebot-control 的仿真电机上
+data/episodes/        录制工具写出的数据（不进 git）
+```
+
+- `robot/teleop.py` 是遥操作里机械臂这一侧的逻辑，`teleop_iphone.py` 和 `teleop_star.py` 给它提供指令来源。
+- `robot/episode.py` 负责录制和读取 episode，`record.py` 加上按键，`to_lerobot.py` 做转换。
+- `robot/snapshot.py` 里的 `camera()` 是唯一知道手机在哪的函数，它读 `robot/cameras.local.yaml`，这个文件不进 git。
+- 这些脚本依赖 `pyproject.toml` 里的 `robot` 组，持续集成的其他任务不安装它。
+
+这部分代码会让真实的机械臂动起来。导入时没有改动它的控制流程；会要求改代码的 `ruff` 规则，对 `robot/` 是关掉的。见[机械臂工具与安全规则](../user/robot-arm-tools.md)。
+
 ## 沿用旧项目名的名称
 
-项目在改名为 asFinger 之前叫 iPush。下面这些名称属于文件格式或已存储的数据，所以没有改：输出文件 `ipush_tool.xml` 和 `ipush_print.stl`，打印组的名字 `ipush_print`，MJCF 里的 body `ipush` 和 class `ipush_col`、`ipush_vis`，local storage 的键 `ipush.editor.v3` 和 `ipush.theme`，导出的配置文件名，`send` 命令用的路径 `/ipush/apply` 和端口 47910，Fusion 插件健康检查回复里的名字 `ipush-fusion`，以及 Fusion 设计里的属性组 `ipush` 和它的键（插件靠它们找到已有设计里的特征）。给人看的名字只定义两处：Python 包里的 `PRODUCT_NAME`，网站里的 `PRODUCT` 和 `EDITOR_NAME`（`site/src/i18n/index.ts`）。
+项目在改名为 asFinger 之前叫 iPush。下面这些名称属于文件格式或已存储的数据，所以没有改：输出文件 `ipush_tool.xml` 和 `ipush_print.stl`，打印组的名字 `ipush_print`，MJCF 里的 body `ipush` 和 class `ipush_col`、`ipush_vis`，local storage 的键 `ipush.editor.v3` 和 `ipush.theme`，导出的配置文件名，`send` 命令用的路径 `/ipush/apply` 和端口 47910，Fusion 插件健康检查回复里的名字 `ipush-fusion`，以及 Fusion 设计里的属性组 `ipush` 和它的键（插件靠它们找到已有设计里的特征）。真机一侧，网格 `sim/assets/meshes/ipush_print.stl`、工具文件名 `tool_ip17pro_print.yaml`、episode 里的字段和任务名都属于数据名称，没有改。环境变量换了新名字（`ASFINGER_TOP_CAM`、`ASFINGER_WRIST_CAM`、`ASFINGER_TEST_ABORT`），以 `IPUSH_` 开头的旧名字仍然有效。给人看的名字只定义两处：Python 包里的 `PRODUCT_NAME`，网站里的 `PRODUCT` 和 `EDITOR_NAME`（`site/src/i18n/index.ts`）。

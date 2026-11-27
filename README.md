@@ -38,6 +38,19 @@ To design a pusher without an installation, open the [editor](https://asembodied
 To edit the tool as a parametric design in Autodesk Fusion, use the add-in in `hardware/cad/fusion/`
 ([guide](https://asembodiedaisyst.github.io/asFinger/docs/user/fusion/)).
 
+## On a real arm
+
+`robot/` holds the scripts that use the tool on a Seeed reBot Arm B601-RS: arm tools, calibration, teleoperation
+and data collection, with a MuJoCo scene in `sim/`. They need the dependency group `robot`:
+
+```bash
+uv sync --group robot --python 3.12
+uv run python robot/arm_move.py --waypoints "0,15,20,=,0,0" --sim
+```
+
+Read [the robot setup](https://asembodiedaisyst.github.io/asFinger/docs/user/robot-setup/) and the
+[safety rules](https://asembodiedaisyst.github.io/asFinger/docs/user/robot-arm-tools/) before you use the real arm.
+
 ## Documentation
 
 Website: <https://asembodiedaisyst.github.io/asFinger/docs/>

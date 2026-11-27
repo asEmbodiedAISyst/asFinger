@@ -9,3 +9,5 @@ Instructions for coding agents that work in this repository.
 - When you change a page in `docs/en/`, make the same change in `docs/zh/`. Do the same in the other direction.
 - Do not rename `ipush_tool.xml`, `ipush_print`, the frame names or the config keys. They are part of file formats. The same applies to the HTTP path `/ipush/apply`, the port 47910 and the attribute group `ipush` of the Fusion add-in.
 - The code in `hardware/cad/fusion/` runs inside Autodesk Fusion. Do not start Fusion or load the add-in to test it.
+- The code in `robot/` moves a real arm. Run it with `--sim` only, unless the operator is at the arm and asks for the real arm. Do not refactor it. If the change touches `robot/`, `sim/` or `calibration/`, also run `uv run --group robot pytest tests/robot`.
+- Do not write addresses, device ids or host names of the setup into tracked files, and do not commit `calibration/data/`, `data/` or photos of the setup.
