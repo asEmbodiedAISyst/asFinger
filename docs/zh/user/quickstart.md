@@ -108,4 +108,5 @@ for length in (140, 160, 180):
 | --- | --- |
 | `iphone17pro_default.json` | iPhone 17 Pro 配 reBot Arm B601-RS 的推杆，装在机械臂的夹爪连接件上。 |
 | `rebot_rs_flange.json` | 同一根推杆，不用安装转接件，底座直接用螺钉装在 reBot 第 6 关节的转子上。 |
+| `pad_finger.json` | 指腹推杆：22 × 22 方杆加 R15 指腹，一体打印。`--set tip_split=1` 把指尖单独做成一个用 TPU 打印的实体（`tip_tpu`）；`--option tactile=1` 加上 48 × 48 电子皮肤的凹槽、FPC 槽和读出板及其盖板。其余和 `iphone17pro_default.json` 相同。 |
 | `square_rod.json` | 更早的方杆推杆：10 × 10 mm 方杆、平头（编辑器里的“方杆推杆”）；其余和 `iphone17pro_default.json` 相同，只是手机支架没有背部加强。 |

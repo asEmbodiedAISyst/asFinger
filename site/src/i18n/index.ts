@@ -44,6 +44,7 @@ const UI = {
   planned: { en: 'Planned', zh: '规划中' },
   none: { en: 'None', zh: '未选' },
   notForCarrier: { en: 'Other carrier', zh: '不适用于此载体' },
+  notForPusher: { en: 'Other pusher', zh: '不适用于此推杆' },
   // center
   overall: { en: 'Full assembly', zh: '整体预览' },
   soloHint: { en: 'Show only this part', zh: '只看这个部件' },

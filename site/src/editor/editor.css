@@ -69,6 +69,13 @@
 .card-sub { font-size: 10px; color: var(--ink-3); line-height: 1.2; }
 /* between the sections of a group: a full-width bar, the next section starts on a new row */
 .cards-divider { grid-column: 1 / -1; width: 100%; height: 0; margin: 2px 0; border: 0; border-top: 1px solid var(--line); }
+/* a switch that belongs to the selected card (e.g. the sensor of a tip): a full-width row under the cards */
+.card-variant { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 2px 2px 4px; }
+.card-variant-label { font-size: var(--fs-xs); color: var(--ink-2); margin-right: 2px; }
+.card-variant .var-chip { font: inherit; font-size: var(--fs-xs); padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--surface); color: var(--ink); cursor: pointer; }
+.card-variant .var-chip:hover { border-color: var(--ink-3); }
+.card-variant .var-chip.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 @keyframes float-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .left, .right { animation: none; } }
 
