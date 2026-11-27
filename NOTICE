@@ -27,6 +27,13 @@ site/public/arms/rebot_rs.glb
     Modifications: as for the Franka FR3; in addition the gripper and the gripper connector are left out and the
     meshes are reduced to about 320 000 triangles.
 
+site/public/arms/unitree_g1.glb
+    Baked from the Unitree G1 model of MuJoCo Menagerie (unitree_g1), which derives from Unitree's
+    unitree_ros g1_description. Copyright 2016-2023 HangZhou YuShu TECHNOLOGY CO.,LTD. ("Unitree Robotics"),
+    licensed under the BSD 3-Clause License; full text in site/public/arms/licenses/unitree_g1.BSD-3-Clause.txt.
+    Modifications: as for the Franka FR3; in addition the right rubber hand is left out and the meshes are
+    reduced to about 300 000 triangles.
+
 site/scripts/rebot_no_tool.xml
     A MuJoCo model of the reBot Arm B601-RS without gripper, gripper connector and tool, generated from the URDF of
     the same repository (same copyright and licence). It is the input of site/scripts/bake-arms.py for that arm
@@ -85,4 +92,4 @@ Trademarks
 ----------
 
 asFinger is an independent project. It is not affiliated with, and not endorsed by, Apple, Seeed Studio,
-Franka Robotics or Universal Robots. iPhone and MagSafe are trademarks of Apple Inc.
+Franka Robotics, Universal Robots or Unitree Robotics. iPhone and MagSafe are trademarks of Apple Inc.

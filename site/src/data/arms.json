@@ -86,5 +86,35 @@
   "source": "Seeed reBot-DevArm, Rebot_Arm_description/RS meshes; kinematics from the Seeed URDF, pose HOME_QPOS",
   "url": "https://github.com/Seeed-Projects/reBot-DevArm",
   "license": "CERN-OHL-W-2.0"
+ },
+ "unitree_g1": {
+  "file": "arms/unitree_g1.glb",
+  "flange": {
+   "pos": [
+    373.078,
+    -197.17,
+    920.583
+   ],
+   "quat": [
+    7.2e-05,
+    0.865935,
+    4.7e-05,
+    0.500157
+   ]
+  },
+  "qpos": {
+   "right_shoulder_pitch_joint": -0.874,
+   "right_shoulder_roll_joint": -0.2765,
+   "right_shoulder_yaw_joint": -0.128,
+   "right_elbow_joint": 0.9688,
+   "right_wrist_roll_joint": 0.1266,
+   "right_wrist_pitch_joint": 0.4454,
+   "right_wrist_yaw_joint": 0.1046
+  },
+  "short": "MuJoCo Menagerie unitree_g1",
+  "pose": "stand",
+  "source": "MuJoCo Menagerie unitree_g1 (from Unitree unitree_ros g1_description, 29 DoF rev 1.0)",
+  "url": "https://github.com/google-deepmind/mujoco_menagerie/tree/main/unitree_g1",
+  "license": "BSD-3-Clause"
  }
 }

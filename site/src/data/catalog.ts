@@ -46,7 +46,7 @@ export interface CatalogItem {
   defaultAdapter?: string;
   /** adapter: value of the config option `adapter` (false = no adapter parts, pusher base on the robot flange) */
   option?: boolean;
-  /** camera: config options this choice switches (e.g. `telephoto: false` for a phone without one) */
+  /** camera, adapter: config options this choice switches (e.g. `telephoto: false` for a phone without one) */
   options?: Record<string, boolean>;
   /** adapter: carriers it fits (ids); missing = all */
   fits?: string[];
@@ -154,7 +154,21 @@ export const GROUPS: Group[] = [
         ],
       },
       {
-        section: 2, id: 'unitree_g1', name: 'Unitree G1', subtitle: { en: 'Unitree · humanoid', zh: 'Unitree · 人形' }, icon: 'humanoid', disabled: true, defaultAdapter: 'g1_wrist',
+        section: 2, id: 'unitree_g1', name: 'Unitree G1', subtitle: { en: 'Unitree · humanoid', zh: 'Unitree · 人形' }, icon: 'humanoid',
+        sets: FLANGES.rebot.sets, mountRot: 180, defaultAdapter: 'g1_wrist',
+        // like the reBot without an adapter: the beam moves aside so that the 4 x M3 into the adapter stay reachable
+        direct: { defaults: { beam_x: 18 } },
+        info: [
+          { label: { en: 'End interface', zh: '末端接口' }, value: { en: 'The right wrist end (URDF: right_wrist_yaw_link, 41.5 mm out along X). There is no flange: the hand is held by a split clamp ring, so the pusher needs the G1 wrist adapter.', zh: '右手腕末端（URDF：right_wrist_yaw_link 沿 X 向外 41.5 mm）。这里没有法兰，手是靠一个开口夹环夹住的，所以推杆要用 G1 腕部转接件。' } },
+          { label: { en: 'Arm DOF', zh: '手臂自由度' }, value: { en: '7 per arm (29-DoF version); the 23-DoF version has no wrist pitch and yaw', zh: '每条手臂 7 个（29 自由度版本）；23 自由度版本没有腕部俯仰和偏航' } },
+          { label: { en: 'Arm payload', zh: '手臂负载' }, value: { en: 'about 2 kg (G1), about 3 kg (G1 EDU)', zh: '约 2 kg（G1），约 3 kg（G1 EDU）' } },
+          { label: { en: 'Pose shown', zh: '显示的姿态' }, value: { en: 'Standing, right arm raised so that the wrist end faces 30° below horizontal, like the arms', zh: '站立，右臂抬起，让手腕末端朝向水平以下 30°，和机械臂一致' } },
+          { label: { en: 'Model source', zh: '模型来源' }, value: { en: 'MuJoCo Menagerie unitree_g1, from Unitree unitree_ros g1_description (BSD-3-Clause); right rubber hand left out', zh: 'MuJoCo Menagerie unitree_g1，源自 Unitree unitree_ros 的 g1_description（BSD-3-Clause）；去掉了右手橡胶手' } },
+        ],
+        links: [
+          { label: 'MuJoCo Menagerie · unitree_g1', url: 'https://github.com/google-deepmind/mujoco_menagerie/tree/main/unitree_g1' },
+          { label: { en: 'Unitree g1_description (URDF / MJCF)', zh: 'Unitree g1_description（URDF / MJCF）' }, url: 'https://github.com/unitreerobotics/unitree_ros/tree/master/robots/g1_description' },
+        ],
       },
     ],
   },
@@ -164,6 +178,7 @@ export const GROUPS: Group[] = [
     items: [
       {
         section: 0, id: 'none', name: { en: 'None', zh: '无' }, subtitle: { en: 'Pusher base bolted straight onto the robot flange', zh: '推杆底座直接装在机械臂法兰上' }, icon: 'adapter-none',
+        fits: ['hand', 'custom', 'rebot_rs', 'franka_fr3', 'ur5e'],   // not a wrist without a flange (G1)
         option: false, sets: { adapter_h: 0, mount_screws: 2 },
         info: [
           { label: { en: 'Interface', zh: '接口' }, value: { en: 'The pusher base takes the hole pattern of the selected carrier (through holes with counterbores, screws from the tool side into the robot flange).', zh: '推杆底座直接用所选载体的法兰孔位（通孔 + 沉孔，螺钉从工具一侧拧进机械臂法兰）。' } },
@@ -201,8 +216,17 @@ export const GROUPS: Group[] = [
         links: [{ label: { en: 'reBot-DevArm metal parts (STEP)', zh: 'reBot-DevArm 金属件（STEP）' }, url: 'https://github.com/Seeed-Projects/reBot-DevArm/tree/main/hardware/reBot_B601_RS/Metal_Parts' }],
       },
       {
-        section: 2, id: 'g1_wrist', name: { en: 'G1 wrist adapter', zh: 'G1 腕部转接件' }, icon: 'adapter-wrist', fits: ['unitree_g1'], disabled: true,
-        subtitle: { en: 'Clamps on the Unitree G1 wrist · reBot hole pattern on the tool side', zh: '夹在 Unitree G1 手腕上 · 工具一侧是 reBot 孔位' },
+        section: 2, id: 'g1_wrist', name: { en: 'G1 wrist adapter', zh: 'G1 腕部转接件' }, icon: 'adapter-wrist', fits: ['unitree_g1'],
+        subtitle: { en: 'Clamped in the Unitree G1 wrist · reBot hole pattern on the tool side', zh: '夹在 Unitree G1 手腕里 · 工具一侧是 reBot 孔位' },
+        option: false, options: { g1_adapter: true },
+        // the reBot rectangle turned 90 deg (long side along Y of the wrist frame): holes at 60/120/240/300 deg
+        sets: { ...FLANGES.rebot.sets, adapter_h: 16, mount_screws: 2, hole_rot: 60, hole_ang2: 60, relief_h: 0 },
+        info: [
+          { label: { en: 'Wrist side', zh: '手腕一侧' }, value: { en: 'A plug that the G1 wrist clamp ring holds (2 × M3)', zh: '一个让 G1 手腕夹环（2 × M3）夹住的插头' } },
+          { label: { en: 'Tool side', zh: '工具一侧' }, value: { en: 'Ø63 × 16 flange: 4 × M3 heat-set inserts on the reBot rectangle (23.4 × 13.6), turned 90° so that the rod leans down with the phone on top at wrist zero; also 4 × M4 inserts on PCD 50 on the axes, with side nut slots', zh: 'Ø63 × 16 的法兰：4 个 M3 热熔螺母在 reBot 的矩形孔位上（23.4 × 13.6），转过 90°，这样手腕在零位时杆朝下、手机在上；另有 4 个 M4 热熔螺母，节圆 Ø50、在轴线上，带侧面螺母槽' } },
+          { label: { en: 'Pusher', zh: '推杆' }, value: { en: 'Any pusher made for the bare reBot flange: its base is screwed onto the adapter from the tool side', zh: '直接装 reBot 法兰的推杆都能用：底座从工具一侧用螺钉固定在转接件上' } },
+          { label: { en: 'Status', zh: '状态' }, value: { en: 'Variant rot90 of the adapter, not printed yet; the mesh is drawn as it is', zh: '转接件的 rot90 版本，还没有打印过；这里直接画它的网格' } },
+        ],
       },
     ],
   },
