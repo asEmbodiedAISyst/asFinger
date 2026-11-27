@@ -11,6 +11,8 @@
 // What is converted here, to the parameters of hardware/configs/iphone17pro_default.json, whose P_phone is the same
 // `device` frame:
 //   * outline_x / outline_y = centre of the phone outline in `device` (0 to 0.005 mm on these models);
+//   * corner_r = corner radius of the outline seen from the back: 0.15 x the short side, iMuninn's glb estimate (Apple
+//     does not dimension it);
 //   * bump_h = height of the rear camera cover glass above the back (`camera_glass` on the drawing: plateau + glass);
 //   * magsafe_x / magsafe_y = centre of the MagSafe circle, where the holder sits;
 //   * telephoto / lidar = whether the drawing has them (config options of the same name).
@@ -52,6 +54,7 @@ for (const [slug, id] of Object.entries(MODELS)) {
     lens_x: main.origin[0], lens_y: main.origin[1],
     bump_h: r3(-main.origin[2] - o.thickness),
     ring_D: c.main.window_diameter,
+    corner_r: r3(0.15 * Math.min(o.width, o.height)), // not dimensioned by Apple; iMuninn's glb estimate
   };
   const put = (name, p) => { if (p) [sets[`${name}_x`], sets[`${name}_y`]] = [p[0], p[1]]; };
   put('uw', f.cam_ultra_wide_optical?.origin);

@@ -99,6 +99,7 @@
     "lens_y": 41.395,
     "bump_h": 4.43,
     "ring_D": 16.2,
+    "corner_r": 10.777,
     "uw_x": 21.555,
     "uw_y": 60.635,
     "tele_x": 3.565,
@@ -1026,24 +1027,92 @@
       "name": "phone",
       "frame": "P_phone",
       "role": "reference",
-      "density": 2.18,
+      "density": 2.142,
       "color": "#2b2f36",
-      "desc": "Phone stand-in (box + main lens ring, sized by the phone parameters; the editor's camera group sets them per phone). Replace with a 1:1 model via a mesh leaf; frames are unaffected. Density set so the iPhone 17 Pro box weighs about 206 g.",
+      "desc": "Phone shape, as in iMuninn's glb: body outline with rounded corners (corner_r, estimated) and one cylinder per rear lens window (ring_D) up to the camera glass (bump_h); the telephoto lens goes with the telephoto option. Sized by the phone parameters; the editor's camera group sets them per phone. Frames are unaffected. Density set so the iPhone 17 Pro shape weighs 206 g (Apple).",
       "csg": {
         "union": [
           {
             "name": "phone_body",
-            "box": {
-              "size": [
-                "phone_W",
-                "phone_L",
-                "phone_t"
-              ]
-            },
-            "pos": [
-              "outline_x",
-              "outline_y",
-              "-phone_t/2"
+            "union": [
+              {
+                "name": "body_long",
+                "box": {
+                  "size": [
+                    "phone_W - 2*corner_r",
+                    "phone_L",
+                    "phone_t"
+                  ]
+                },
+                "pos": [
+                  "outline_x",
+                  "outline_y",
+                  "-phone_t/2"
+                ]
+              },
+              {
+                "name": "body_wide",
+                "box": {
+                  "size": [
+                    "phone_W",
+                    "phone_L - 2*corner_r",
+                    "phone_t"
+                  ]
+                },
+                "pos": [
+                  "outline_x",
+                  "outline_y",
+                  "-phone_t/2"
+                ]
+              },
+              {
+                "name": "corner1",
+                "cylinder": {
+                  "r": "corner_r",
+                  "h": "phone_t"
+                },
+                "pos": [
+                  "outline_x + (phone_W/2 - corner_r)",
+                  "outline_y + (phone_L/2 - corner_r)",
+                  "-phone_t/2"
+                ]
+              },
+              {
+                "name": "corner2",
+                "cylinder": {
+                  "r": "corner_r",
+                  "h": "phone_t"
+                },
+                "pos": [
+                  "outline_x - (phone_W/2 - corner_r)",
+                  "outline_y + (phone_L/2 - corner_r)",
+                  "-phone_t/2"
+                ]
+              },
+              {
+                "name": "corner3",
+                "cylinder": {
+                  "r": "corner_r",
+                  "h": "phone_t"
+                },
+                "pos": [
+                  "outline_x - (phone_W/2 - corner_r)",
+                  "outline_y - (phone_L/2 - corner_r)",
+                  "-phone_t/2"
+                ]
+              },
+              {
+                "name": "corner4",
+                "cylinder": {
+                  "r": "corner_r",
+                  "h": "phone_t"
+                },
+                "pos": [
+                  "outline_x + (phone_W/2 - corner_r)",
+                  "outline_y - (phone_L/2 - corner_r)",
+                  "-phone_t/2"
+                ]
+              }
             ]
           },
           {
@@ -1056,6 +1125,31 @@
               "lens_x",
               "lens_y",
               "-(phone_t + bump_h/2)"
+            ]
+          },
+          {
+            "name": "lens_uw",
+            "cylinder": {
+              "r": "ring_D/2",
+              "h": "bump_h"
+            },
+            "pos": [
+              "uw_x",
+              "uw_y",
+              "-(phone_t + bump_h/2)"
+            ]
+          },
+          {
+            "name": "lens_tele",
+            "frame": "C_tele",
+            "cylinder": {
+              "r": "ring_D/2",
+              "h": "bump_h"
+            },
+            "pos": [
+              0,
+              0,
+              "bump_h/2"
             ]
           }
         ]
@@ -1804,7 +1898,8 @@
     "outline_x": "Centre of the phone outline in P_phone (mm). P_phone is the display-area centre (iMuninn device frame); 0 for the iPhone 17 Pro, at most 0.005 for the phones in the editor.",
     "lens_x": "Main camera lens window centre in P_phone (lens_x, lens_y; mm), from iMuninn's phone data.",
     "bump_h": "Height of the rear camera cover glass above the back glass (mm): camera plateau + lens glass. 4.43 for the iPhone 17 Pro (iMuninn, from Apple's drawing; confirmed by measurement 2026-11-27). Was 1.88, the glass above the plateau only.",
-    "magsafe_x": "MagSafe circle centre in P_phone (magsafe_x, magsafe_y; mm), from iMuninn's phone data. The holder (S_mount) sits on it because the phone locks on by MagSafe."
+    "magsafe_x": "MagSafe circle centre in P_phone (magsafe_x, magsafe_y; mm), from iMuninn's phone data. The holder (S_mount) sits on it because the phone locks on by MagSafe.",
+    "corner_r": "Corner radius of the phone body outline seen from the back (mm). Apple's drawings do not dimension it; 0.15 x the short side is iMuninn's estimate (its glb uses the same). Only the look and the phone's volume depend on it."
   },
   "shapes": {
     "connector_b": {
