@@ -161,7 +161,7 @@ A camera has the name of a frame. That frame gives its pose.
 The camera data of the default config has these limits:
 
 - `min_focus_mm` is `null` for all cameras, because Apple does not publish it. The focus check is off.
-- The field of view of `C_main` and `C_tele` comes from the equivalent focal length. It is not measured. The value of `C_ultrawide` is measured with the focus at infinity.
+- The field of view of `C_main` and `C_tele` comes from the equivalent focal length. It is not measured. The value of `C_ultrawide` is measured on an iPhone 17 Pro with the focus at infinity; the editor keeps it for the other phones, which also have a 13 mm Ultra Wide.
 - The pose of the front camera `C_front` is an estimate. See [Frames](frames.md#frames-of-the-default-tool).
 
 ## A complete example

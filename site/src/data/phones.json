@@ -11,6 +11,8 @@
     "phone_W": 71.85,
     "phone_L": 150.01,
     "phone_t": 8.75,
+    "outline_x": 0,
+    "outline_y": 0,
     "lens_x": 21.555,
     "lens_y": 41.395,
     "bump_h": 4.89,
@@ -24,16 +26,14 @@
     "lidar_x": -22.105,
     "lidar_y": 40.845,
     "flash_x": -22.105,
-    "flash_y": 61.185
+    "flash_y": 61.185,
+    "magsafe_x": 0.005,
+    "magsafe_y": -2.735
    },
    "options": {
     "telephoto": true,
     "lidar": true
    },
-   "display_offset": [
-    0,
-    0
-   ],
    "camera_plateau": 2.78,
    "front_estimated": true,
    "cones_deg": {
@@ -58,6 +58,8 @@
     "phone_W": 71.85,
     "phone_L": 150.01,
     "phone_t": 8.75,
+    "outline_x": 0,
+    "outline_y": 0,
     "lens_x": 21.555,
     "lens_y": 41.395,
     "bump_h": 4.43,
@@ -71,16 +73,14 @@
     "lidar_x": -22.105,
     "lidar_y": 40.845,
     "flash_x": -22.105,
-    "flash_y": 61.185
+    "flash_y": 61.185,
+    "magsafe_x": 0.005,
+    "magsafe_y": -2.735
    },
    "options": {
     "telephoto": true,
     "lidar": true
    },
-   "display_offset": [
-    0,
-    0
-   ],
    "camera_plateau": 2.55,
    "front_estimated": true,
    "cones_deg": {
@@ -105,6 +105,8 @@
     "phone_W": 71.45,
     "phone_L": 149.61,
     "phone_t": 7.95,
+    "outline_x": 0,
+    "outline_y": 0,
     "lens_x": 22.105,
     "lens_y": 43.465,
     "bump_h": 3.45,
@@ -114,16 +116,14 @@
     "front_x": 7.825,
     "front_y": 67.015,
     "flash_x": 5.315,
-    "flash_y": 52.325
+    "flash_y": 52.325,
+    "magsafe_x": 0.005,
+    "magsafe_y": -0.005
    },
    "options": {
     "telephoto": false,
     "lidar": false
    },
-   "display_offset": [
-    0,
-    0
-   ],
    "camera_plateau": 1.78,
    "front_estimated": true,
    "cones_deg": {
@@ -147,6 +147,8 @@
     "phone_W": 71.45,
     "phone_L": 149.61,
     "phone_t": 8.25,
+    "outline_x": 0,
+    "outline_y": 0,
     "lens_x": 21.555,
     "lens_y": 41.395,
     "bump_h": 4.28,
@@ -158,16 +160,14 @@
     "front_x": 7.315,
     "front_y": 67.015,
     "flash_x": 3.545,
-    "flash_y": 64.585
+    "flash_y": 64.585,
+    "magsafe_x": 0.005,
+    "magsafe_y": -0.245
    },
    "options": {
     "telephoto": true,
     "lidar": false
    },
-   "display_offset": [
-    0,
-    0
-   ],
    "camera_plateau": 2.05,
    "front_estimated": true,
    "cones_deg": {
@@ -192,6 +192,8 @@
     "phone_W": 70.6,
     "phone_L": 146.61,
     "phone_t": 8.25,
+    "outline_x": 0,
+    "outline_y": 0,
     "lens_x": 21.13,
     "lens_y": 39.895,
     "bump_h": 3.78,
@@ -205,16 +207,14 @@
     "lidar_x": 3.14,
     "lidar_y": 34.485,
     "flash_x": 3.14,
-    "flash_y": 63.085
+    "flash_y": 63.085,
+    "magsafe_x": 0,
+    "magsafe_y": -1.675
    },
    "options": {
     "telephoto": true,
     "lidar": true
    },
-   "display_offset": [
-    0,
-    0
-   ],
    "camera_plateau": 2.05,
    "front_estimated": true,
    "cones_deg": {
@@ -239,29 +239,29 @@
     "phone_W": 71.45,
     "phone_L": 147.46,
     "phone_t": 7.85,
-    "lens_x": 21.445,
-    "lens_y": 40.21,
+    "outline_x": -0.005,
+    "outline_y": 0.005,
+    "lens_x": 21.44,
+    "lens_y": 40.215,
     "bump_h": 4.18,
     "ring_D": 15.61,
-    "uw_x": 3.605,
-    "uw_y": 49.83,
-    "tele_x": 21.445,
-    "tele_y": 59.45,
-    "front_x": 7.315,
-    "front_y": 65.63,
-    "lidar_x": 3.605,
-    "lidar_y": 36.23,
-    "flash_x": 3.605,
-    "flash_y": 63.41
+    "uw_x": 3.6,
+    "uw_y": 49.835,
+    "tele_x": 21.44,
+    "tele_y": 59.455,
+    "front_x": 7.31,
+    "front_y": 65.635,
+    "lidar_x": 3.6,
+    "lidar_y": 36.235,
+    "flash_x": 3.6,
+    "flash_y": 63.415,
+    "magsafe_x": -0.01,
+    "magsafe_y": -1.665
    },
    "options": {
     "telephoto": true,
     "lidar": true
    },
-   "display_offset": [
-    0.005,
-    -0.005
-   ],
    "camera_plateau": 1.85,
    "front_estimated": true,
    "cones_deg": {

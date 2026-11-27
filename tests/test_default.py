@@ -33,11 +33,14 @@ def test_frames_match_fusion():
     a = G.mul(G.col(w['C_main'].R, 2), -1)
     assert abs(a[1]) < 1e-9 and abs(w['C_main'].p[1]) < 1e-9
     assert abs(math.degrees(math.acos(a[2])) - 55.14) < 1e-6
-    # MagSafe centre: lateral offset vs measured -42.0; in-plane residual is reported, not asserted tightly
+    # The holder sits on the phone's MagSafe centre: lateral offset = -(lens_y - magsafe_y), so the main camera stays
+    # on the centre line. The printed connector (measured in Fusion at -42.0) predates the iMuninn phone data of
+    # 2026-11-27 (camera glass 4.43 mm, MagSafe 2.735 mm below the display centre); its residual is only reported.
+    P = Model.load(CFG).params()
     s = w['S_mount'].p
-    assert abs(s[1] - (-42.0)) < 1.0, s
+    assert abs(s[1] + (P['lens_y'] - P['magsafe_y'])) < 1e-6, s
     print(
-        'S_mount offset vs the current physical connector (mm):',
+        'S_mount offset vs the printed connector (mm):',
         [round(x - y, 2) for x, y in zip(s, [-27.27, -42.0, 56.98])],
     )
     assert not info['P_phone']['stale']
@@ -108,7 +111,8 @@ def test_adapter_modes():
     assert [p['name'] for p in Rd['parts']] == ['tool_body', 'holder', 'phone']
     assert 'F_adapter' not in Rd['world'] and close(Rd['world']['F_mount'].p, [0, 0, 0], 1e-12)
     assert d.interference(Rd) == [], d.interference(Rd)  # all four rotor screws reachable
-    assert len(d.interference(Rd, level='warn')) == 1  # one of them only with a short key
+    # since the phone data of 2026-11-27 the support sits 2.7 mm further out and all four take a straight driver
+    assert d.interference(Rd, level='warn') == []
     bad = Model.load(DIRECT).set(mount_rot=180, beam_x=0)  # the default layout straight on the rotor
     ids = [x.split('(')[-1].split(':')[0] for x in bad.interference(bad.resolve(resolve=True))]
     assert 'screw_access' in ids, ids

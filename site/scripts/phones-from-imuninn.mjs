@@ -8,10 +8,11 @@
 // drawings into one table per model, in the frame convention asFinger follows: `device` = centre of the display
 // active area on the front glass, x right, y to the top, z out of the screen; lengths in mm.
 //
-// What is converted here, to the parameters of hardware/configs/iphone17pro_default.json:
-//   * the config's P_phone is the centre of the phone outline (the stand-in box is centred on it), so every
-//     position is shifted by where the display centre sits in the outline (0 to 0.005 mm on these models);
-//   * bump_h = height of the rear camera cover glass above the back (`camera_glass` on the drawing);
+// What is converted here, to the parameters of hardware/configs/iphone17pro_default.json, whose P_phone is the same
+// `device` frame:
+//   * outline_x / outline_y = centre of the phone outline in `device` (0 to 0.005 mm on these models);
+//   * bump_h = height of the rear camera cover glass above the back (`camera_glass` on the drawing: plateau + glass);
+//   * magsafe_x / magsafe_y = centre of the MagSafe circle, where the holder sits;
 //   * telephoto / lidar = whether the drawing has them (config options of the same name).
 // The file is committed; run this again when the iMuninn data changes.
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -42,28 +43,27 @@ for (const [slug, id] of Object.entries(MODELS)) {
   const m = data.models[slug];
   if (!m) throw new Error(`${slug} is not in ${src}`);
   const o = m.outline, a = m.display_active_area;
-  // display centre in the outline-centred frame (x right, y up, seen from the front)
+  // display centre in the outline frame (x right, y up, seen from the front); the outline centre in `device` is minus that
   const dx = a.left + a.width / 2 - o.width / 2, dy = -(a.top + a.height / 2 - o.height / 2);
-  const xy = (p) => [r3(p[0] + dx), r3(p[1] + dy)];
   const f = m.frames, c = m.cameras, ex = m.extras ?? {};
   const main = f.cam_main_optical;
   const sets = {
-    phone_W: o.width, phone_L: o.height, phone_t: o.thickness,
-    lens_x: xy(main.origin)[0], lens_y: xy(main.origin)[1],
+    phone_W: o.width, phone_L: o.height, phone_t: o.thickness, outline_x: r3(-dx) + 0, outline_y: r3(-dy) + 0,
+    lens_x: main.origin[0], lens_y: main.origin[1],
     bump_h: r3(-main.origin[2] - o.thickness),
     ring_D: c.main.window_diameter,
   };
-  const put = (name, frame) => { if (frame) [sets[`${name}_x`], sets[`${name}_y`]] = xy(frame); };
+  const put = (name, p) => { if (p) [sets[`${name}_x`], sets[`${name}_y`]] = [p[0], p[1]]; };
   put('uw', f.cam_ultra_wide_optical?.origin);
   put('tele', f.cam_telephoto_optical?.origin);
   put('front', f.cam_front_optical?.origin);
   put('lidar', ex.lidar?.position_in_body);
   put('flash', ex.flash?.position_in_body);
+  put('magsafe', f.magsafe?.origin);
   phones.push({
     id, slug, name: m.name, identifiers: m.identifiers,
     sets,
     options: { telephoto: !!f.cam_telephoto_optical, lidar: !!ex.lidar },
-    display_offset: [r3(dx), r3(dy)],
     camera_plateau: m.rear_heights_from_back?.camera_plateau ?? null,
     front_estimated: f.cam_front_optical?.provenance === 'estimated',
     cones_deg: Object.fromEntries(Object.entries(c).filter(([, v]) => v.keepout_cone_deg).map(([k, v]) => [k, v.keepout_cone_deg])),
