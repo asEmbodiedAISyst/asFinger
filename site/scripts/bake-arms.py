@@ -64,6 +64,36 @@ ARMS = {
         url='https://github.com/Seeed-Projects/reBot-DevArm',
         license='CERN-OHL-W-2.0',
     ),
+    # A humanoid: standing (keyframe "stand"), the right arm raised so that the wrist's end face is pitched 30 deg
+    # below horizontal like the arms above, with the wrist-yaw axis upward in the vertical plane (the flange x of
+    # the other arms points the same way, so the same mount_rot puts the phone on top). The flange is the end
+    # interface of the official URDF: right_wrist_yaw_link at x = 41.5 mm, normal +X; its x axis is the yaw axis
+    # (the long side of the G1 wrist adapter). The right rubber hand is left out: the adapter and the pusher go
+    # there. The arm angles come from a small least-squares fit (wrist face direction, yaw axis, hand in front of
+    # the chest). The ground of the editor is the floor under the feet.
+    'unitree_g1': dict(
+        xml='unitree_g1/g1.xml',
+        key='stand',
+        joints={
+            'right_shoulder_pitch_joint': -0.874,
+            'right_shoulder_roll_joint': -0.2765,
+            'right_shoulder_yaw_joint': -0.128,
+            'right_elbow_joint': 0.9688,
+            'right_wrist_roll_joint': 0.1266,
+            'right_wrist_pitch_joint': 0.4454,
+            'right_wrist_yaw_joint': 0.1046,
+        },
+        short='MuJoCo Menagerie unitree_g1',
+        flange=('body', 'right_wrist_yaw_link'),
+        # flange frame in the body: origin at the end interface, x = body z (yaw axis), y = -body y, z = body x
+        flange_local=dict(pos=[0.0415, 0.0, 0.0], mat=[[0, 0, 1], [0, -1, 0], [1, 0, 0]]),
+        hide_meshes=['right_rubber_hand'],
+        tris=300_000,
+        crease=40,
+        source='MuJoCo Menagerie unitree_g1 (from Unitree unitree_ros g1_description, 29 DoF rev 1.0)',
+        url='https://github.com/google-deepmind/mujoco_menagerie/tree/main/unitree_g1',
+        license='BSD-3-Clause',
+    ),
 }
 
 
@@ -86,6 +116,8 @@ def bake(arm_id, cfg, xml_path, out_dir, gltf_transform=None):
     d = mujoco.MjData(m)
     if cfg.get('key'):
         mujoco.mj_resetDataKeyframe(m, d, mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_KEY, cfg['key']))
+        for name, q in cfg.get('joints', {}).items():
+            d.qpos[m.jnt_qposadr[mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, name)]] = q
     else:
         d.qpos[: len(cfg['qpos'])] = cfg['qpos']
     mujoco.mj_forward(m, d)
@@ -93,6 +125,8 @@ def bake(arm_id, cfg, xml_path, out_dir, gltf_transform=None):
     by_colour: dict[tuple, list[trimesh.Trimesh]] = {}
     for g in range(m.ngeom):
         if m.geom_type[g] != mujoco.mjtGeom.mjGEOM_MESH or m.geom_group[g] != 2:
+            continue
+        if mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_MESH, m.geom_dataid[g]) in cfg.get('hide_meshes', ()):
             continue
         mid = m.geom_dataid[g]
         v0, nv = m.mesh_vertadr[mid], m.mesh_vertnum[mid]
@@ -152,6 +186,10 @@ def bake(arm_id, cfg, xml_path, out_dir, gltf_transform=None):
     else:
         i = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, name)
         pos, mat = d.xpos[i], d.xmat[i]
+    if cfg.get('flange_local'):
+        Rb = mat.reshape(3, 3)
+        pos = pos + Rb @ np.array(cfg['flange_local']['pos'])
+        mat = (Rb @ np.array(cfg['flange_local']['mat'], dtype=float)).ravel()
     quat = np.zeros(4)
     mujoco.mju_mat2Quat(quat, mat)
     print(
@@ -161,7 +199,9 @@ def bake(arm_id, cfg, xml_path, out_dir, gltf_transform=None):
     return {
         'file': f'arms/{arm_id}.glb',
         'flange': {'pos': [round(float(x) * 1000, 3) for x in pos], 'quat': [round(float(x), 6) for x in quat]},
-        'qpos': [round(float(x), 5) for x in d.qpos[: m.njnt]],
+        'qpos': [round(float(x), 5) for x in d.qpos[: m.njnt]] if not cfg.get('key') else {
+            k: round(float(v), 5) for k, v in cfg.get('joints', {}).items()
+        },
         'short': cfg['short'],
         'pose': cfg.get('key') or cfg.get('pose'),
         'source': cfg['source'],
@@ -175,9 +215,8 @@ def main():
     ap.add_argument('--menagerie', type=pathlib.Path, default=pathlib.Path('.'))
     ap.add_argument(
         '--rebot',
-        required=True,
         type=pathlib.Path,
-        help='rebot MJCF without tool and gripper connector (body "link6" = flange)',
+        help='rebot MJCF without tool and gripper connector (body "link6" = flange); needed unless --only leaves rebot_rs out',
     )
     ap.add_argument(
         '--gltf-transform', help='path of the gltf-transform CLI (node_modules/.bin/gltf-transform): compress the GLBs'
@@ -191,6 +230,8 @@ def main():
     for arm_id, cfg in ARMS.items():
         if a.only and arm_id not in a.only:
             continue
+        if cfg['xml'] is None and a.rebot is None:
+            ap.error(f'--rebot is needed for {arm_id} (or leave it out with --only)')
         xml = a.rebot if cfg['xml'] is None else a.menagerie / cfg['xml']
         manifest[arm_id] = bake(arm_id, cfg, xml, out_dir, a.gltf_transform)
     path.write_text(json.dumps(manifest, indent=1) + '\n')

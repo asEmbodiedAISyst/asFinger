@@ -43,6 +43,7 @@ The groups depend on each other:
 - When you select a carrier, the editor also selects the default adapter of that carrier.
 - An adapter decides the hole pattern of the pusher base. With the adapter "None", the carrier decides it.
 - The carrier gives the default mounting angle, so that the phone is on top on every arm.
+- The Unitree G1 has no flange: its wrist holds the hand in a clamp ring. Only the "G1 wrist adapter" fits it. The adapter has the reBot hole pattern on its tool side, turned 90°, so the pusher sits on it as on a bare reBot flange and the rod leans down with the phone on top at wrist zero.
 - With the carrier "Custom flange", you enter the hole pattern in the pusher parameters. The base has four holes on one circle, as two opposite pairs.
 - A phone fixes the phone size, the camera positions and the height of the camera glass, and switches the telephoto and LiDAR frames off when the phone has none. The editor then solves the phone pose again so that the main camera still looks at the TCP, and the holder moves with the phone. The holder sits on the phone's MagSafe circle. All phones take their values from Apple's dimensional drawings, as read into the phone data of [iMuninn](https://imuninn.projects.weijinqi.com/en/parameter-definition/); the iPhone 17 Pro values are those of the config.
 
@@ -82,6 +83,7 @@ To build the exported config on your computer, put it in a folder `configs/` tha
 - **Values to verify.** Some data in the information panel is marked "to verify". It does not come from an official drawing, or a program read it from the drawing and nobody has checked it yet. Examine it before you depend on it.
 - **Other phones are not printed.** The holder and the case gap (`back_to_mount`) were made for an iPhone 17 Pro in its case. For another phone, check the case thickness before you print.
 - **The printed pusher is older than the phone data.** The pusher printed on 2026-11-08 was solved with a camera glass height of 1.88 mm and the holder under the display centre. With the phone data of 2026-11-27, the default config moves the holder by 3.7 mm so that the camera looks at the TCP as intended.
+- **The G1 wrist adapter is not printed yet.** The view draws its mesh. The G1 is shown standing, with the right arm raised so that the wrist faces the way the arm flanges do.
 - **The human hand carrier is a placeholder.** The grip model in the view is a sketch, and its dimensions are not final.
 - **Four screw holes only.** The pusher base supports four holes as two opposite pairs. A flange with six holes is not supported.
 - **The arm models are for display.** The arm in the view shows how the tool sits on the flange. The editor does not test collisions with the arm.

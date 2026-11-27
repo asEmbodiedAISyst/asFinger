@@ -37,6 +37,14 @@
       ],
       "desc": "LiDAR scanner frame (S_lidar). Off for a phone without LiDAR, or when its position is not known. Needs the option phone.",
       "desc_zh": "LiDAR 扫描仪的坐标系（S_lidar）。没有 LiDAR 的手机，或位置未知时关掉。依赖 phone 选项。"
+    },
+    "g1_adapter": {
+      "value": false,
+      "modules": [
+        "g1_adapter"
+      ],
+      "desc": "Unitree G1 wrist adapter: a plug that the G1 wrist clamp ring holds, with a flat face carrying the reBot hole pattern (4 x M3 heat-set inserts, turned 90 deg). On = the adapter is drawn on F_robot = the G1 wrist end interface; use it with adapter off, adapter_h = 16 and the hole pattern of the adapter (the editor sets these when the G1 wrist adapter is selected).",
+      "desc_zh": "Unitree G1 腕部转接件：G1 手腕的夹环夹住它的插头，另一面是 reBot 孔位（4 个 M3 热熔螺母，转过 90°）。打开 = 在 F_robot（即 G1 手腕末端接口）上画出转接件；同时要关掉 adapter，adapter_h 设为 16，孔位用这个转接件的（编辑器选“G1 腕部转接件”时会自动设好）。"
     }
   },
   "params": {
@@ -162,6 +170,11 @@
       "parent": "F_robot",
       "module": "adapter",
       "desc": "Flange adapter frame = F_robot: the gripper connector sits on the rotor as in the official assembly (rotor screws at +-30 deg from +-X, radial screws at 60/180/300 deg)."
+    },
+    "F_g1_adapter": {
+      "parent": "F_robot",
+      "module": "g1_adapter",
+      "desc": "G1 wrist adapter frame = F_robot = the G1 wrist end interface (URDF: wrist_yaw_link + 41.5 mm along X): +Z out of the wrist, +X along the wrist yaw axis. The plug is in -Z, the flange face at z = 16."
     },
     "F_mount": {
       "parent": "F_robot",
@@ -1552,6 +1565,21 @@
             ]
           }
         ]
+      }
+    },
+    {
+      "name": "g1_wrist_adapter",
+      "frame": "F_g1_adapter",
+      "role": "hardware",
+      "material": "PLA",
+      "density": 1.24,
+      "color": "#9aa3ae",
+      "mjcf": false,
+      "desc": "Unitree G1 wrist adapter (variant rot90: reBot hole pattern with its long side along Y, 4 x M4 on the axes at PCD 50), drawn from its mesh.",
+      "csg": {
+        "mesh": {
+          "file": "assets/g1_wrist_adapter/g1_wrist_adapter_rot90.stl"
+        }
       }
     }
   ],

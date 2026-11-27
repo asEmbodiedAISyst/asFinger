@@ -168,7 +168,7 @@ export default function Editor({ lang = 'en' }: { lang?: Lang }) {
     return p;
   }, [edits, fixed, defaults, custom]);
 
-  const options = useMemo(() => ({ ...camera?.options, adapter: !direct }), [camera, direct]);
+  const options = useMemo(() => ({ ...camera?.options, g1_adapter: false, ...adapter?.options, adapter: !direct }), [camera, adapter, direct]);
 
   useEffect(() => {
     if (engineState !== 'ready' || !config || !engine.current) return;

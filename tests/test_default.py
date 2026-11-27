@@ -208,7 +208,7 @@ def test_phone_option_off_leaves_rod_only():
     full = Model.load(CFG).resolve()
     assert close(R['world']['T_tcp'].p, full['world']['T_tcp'].p, 1e-9)  # the rod itself does not move
     rj = m.resolved_json(R)
-    assert rj['cameras'] == {} and rj['options'] == {'adapter': True, 'phone': False, 'telephoto': True, 'lidar': True}
+    assert rj['cameras'] == {} and rj['options'] == {'adapter': True, 'phone': False, 'telephoto': True, 'lidar': True, 'g1_adapter': False}
     out = tempfile.mkdtemp()
     _, rep = m.build(out)
     assert (

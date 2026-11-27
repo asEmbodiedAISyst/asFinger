@@ -96,14 +96,19 @@ To add a language, add it to `LANGS` and give every `UI` entry and `Txt` value t
 ## Arm models
 
 `public/arms/<id>.glb` are baked, posed and in mm, by `scripts/bake-arms.py` from MuJoCo Menagerie (FR3, UR5e:
-all of their visual triangles, about 230k and 120k) and from the full-detail reBot meshes of
+all of their visual triangles, about 230k and 120k; Unitree G1: 350k reduced to 300k, without the right rubber
+hand) and from the full-detail reBot meshes of
 Seeed-Projects/reBot-DevArm (`Rebot_Arm_description/RS/meshes`, about 590k triangles without the gripper, reduced
 to 320k). Materials keep their metallic / roughness values; the GLBs are quantized and meshopt-compressed
 (1.1 to 3.7 MB each), and `scene.ts` gives the loader the meshopt decoder. The flange pose, pose name and source
 go to `src/data/arms.json`; the scene attaches the config's root frame `F_robot` (the robot's own flange) there.
 All three arms are posed with the flange pitched 30° below horizontal, so one mounting rule (phone on top) gives
 each its default `mountRot`, and with the pusher base face 265.4 mm above the arm base (where the reBot holds it
-in the pose HOME_QPOS), so the pusher and the ground stay where they are when the arm is swapped. Licences of the meshes are in `public/arms/licenses/`.
+in the pose HOME_QPOS), so the pusher and the ground stay where they are when the arm is swapped.
+The G1 stands in its keyframe `stand` with the right arm raised (joint angles in `bake-arms.py`) so that the
+wrist end face is pitched 30° below horizontal in the same way; its "flange" is the end interface of the official
+URDF (`right_wrist_yaw_link`, 41.5 mm out along x), with x along the wrist-yaw axis like the flange x of the arms.
+Its ground is the floor under its feet, about 920 mm below the wrist. Licences of the meshes are in `public/arms/licenses/`.
 A carrier without a GLB falls back to the drawn placeholder arm.
 
     pip install mujoco trimesh fast-simplification scipy
@@ -115,7 +120,8 @@ For `--rebot`, copy `scripts/rebot_no_tool.xml` next to the `meshes` folder of r
 `Rebot_Arm_description/RS` and pass that path. It is an MJCF of the reBot arm without a tool and without the
 gripper connector mesh (`link6.STL`): the flange frame is the `link6` body itself, and the editor draws the
 connector as the flange adapter.
-`--only ur5e` re-bakes one arm and keeps the other entries of `arms.json`. `crease` (per arm, degrees) is the edge
+`--only ur5e` re-bakes one arm and keeps the other entries of `arms.json` (`--rebot` is then only needed for
+`rebot_rs`). `crease` (per arm, degrees) is the edge
 angle above which shading stays hard; the UR5e needs 50 because its tubes have about 10 sides.
 
 The view is lit by three.js' `RoomEnvironment` plus a fill and a key light, with neutral tone mapping, so the metal
