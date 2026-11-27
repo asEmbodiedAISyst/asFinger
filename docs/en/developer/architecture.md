@@ -80,6 +80,27 @@ The list `PURE` in `sync-core.mjs` names the modules that are copied. A module i
 
 The command `asfinger send` and the add-in talk over HTTP on 127.0.0.1:47910. The request goes to the main thread of Fusion through a custom event, because the API of Fusion runs on one thread. `tests/test_fusion_addin.py` imports the add-in with stand-ins for the `adsk` modules. See [The Fusion add-in](../user/fusion.md).
 
+## The robot side
+
+`robot/`, `calibration/` and `sim/` are a second part of the repository. They do not import the package `asfinger`, and the package does not import them. The link between the two parts is data: the tool file `calibration/tool_ip17pro_print.yaml` is written from the frames that the generator gives for the pusher as built, and `sim/assets/meshes/ipush_print.stl` is the print output of the generator.
+
+```text
+robot/*.py            scripts, run from the root of the repository; they import each other by file name
+   │  rebot_control   the control library (a dependency from GitHub): servo loop, limits, Cartesian control, simulator
+   │  imuninn         the phones: video and IMU streams
+   ▼
+calibration/*.yaml    the gains and models of one arm and one tool; the tools read them and some tools write them
+sim/scene.py          the MuJoCo scene; `--sim` in a tool makes the same code run on rebot-control's simulated motors
+data/episodes/        what the recording tools write (not in git)
+```
+
+- `robot/teleop.py` holds the arm side of teleoperation. `teleop_iphone.py` and `teleop_star.py` give it a source of commands.
+- `robot/episode.py` records and reads episodes. `record.py` adds the keys. `to_lerobot.py` converts.
+- `robot/snapshot.py` has `camera()`, the one function that knows where the phones are. It reads `robot/cameras.local.yaml`, which is not in git.
+- The scripts depend on the group `robot` in `pyproject.toml`. The other jobs of the continuous integration do not install it.
+
+This code moves a real arm. It was imported without changes to its control flow, and `ruff` rules that would need an edit are switched off for `robot/`. See [Arm tools and safety rules](../user/robot-arm-tools.md).
+
 ## Names kept from the earlier project name
 
-The project was named iPush before it became asFinger. These names are part of file formats or stored data and did not change: the output files `ipush_tool.xml` and `ipush_print.stl`, the print set name `ipush_print`, the MJCF body `ipush` and the classes `ipush_col` and `ipush_vis`, the local storage keys `ipush.editor.v3` and `ipush.theme`, the name of the exported config file, the path `/ipush/apply` of the `send` command with its port 47910, the name `ipush-fusion` in the health reply of the Fusion add-in, and the attribute group `ipush` with its keys in a Fusion design (the add-in finds the features of an existing design through them). The name that people see is defined once in the package (`PRODUCT_NAME`) and once in the site (`PRODUCT` and `EDITOR_NAME` in `site/src/i18n/index.ts`).
+The project was named iPush before it became asFinger. These names are part of file formats or stored data and did not change: the output files `ipush_tool.xml` and `ipush_print.stl`, the print set name `ipush_print`, the MJCF body `ipush` and the classes `ipush_col` and `ipush_vis`, the local storage keys `ipush.editor.v3` and `ipush.theme`, the name of the exported config file, the path `/ipush/apply` of the `send` command with its port 47910, the name `ipush-fusion` in the health reply of the Fusion add-in, and the attribute group `ipush` with its keys in a Fusion design (the add-in finds the features of an existing design through them). On the robot side, the mesh `sim/assets/meshes/ipush_print.stl`, the tool file name `tool_ip17pro_print.yaml`, the fields of an episode and the task names are data names and did not change. The environment variables have new names (`ASFINGER_TOP_CAM`, `ASFINGER_WRIST_CAM`, `ASFINGER_TEST_ABORT`), and the earlier names with `IPUSH_` still work. The name that people see is defined once in the package (`PRODUCT_NAME`) and once in the site (`PRODUCT` and `EDITOR_NAME` in `site/src/i18n/index.ts`).

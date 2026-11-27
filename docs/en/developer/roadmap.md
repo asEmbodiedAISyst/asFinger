@@ -11,9 +11,11 @@ The version is 0.1.0.
 | Generator (`src/asfinger`) | In use. It builds the printed pusher, the MuJoCo model and the preview. |
 | Configs (`hardware/configs`) | Two configs: the pusher on the reBot gripper connector (default), and the same pusher bolted to the reBot flange. |
 | Web editor | In use for the reBot Arm RS. Franka FR3 and UR5e use flange data from datasheets and are not tested on a real arm. |
-| Fusion add-in (`hardware/cad/fusion`) | In the repository. It was used with the layout of the earlier project and is not run in Fusion from this location yet. |
+| Fusion add-in (`hardware/cad/fusion`) | In the repository. Tried in Fusion by hand: build in a new document and update in place. |
+| Robot-side tools (`robot/`, `calibration/`) | In the repository: arm tools, calibration, teleoperation, recording and export. They were moved from the working repository of the setup and are not run on the real arm from this repository yet. |
+| Simulation (`sim/`) | A first MuJoCo scene of the setup. The tools of `robot/` run in it with `--sim`. |
 | Documentation | English and Chinese, for users, developers and agents. |
-| Tests | The default configs, the options, the checks and the interference rules, `asfinger send`, and the parts of the Fusion add-in that run without Fusion. The STL export of the browser and the features that the add-in makes in Fusion are not tested automatically. |
+| Tests | The default configs, the options, the checks and the interference rules, `asfinger send`, the parts of the Fusion add-in that run without Fusion, and the robot-side tools in the simulator. The STL export of the browser, the features that the add-in makes in Fusion, and everything that needs the real arm or a phone are not tested automatically. |
 
 ## Known weak points
 
@@ -26,14 +28,17 @@ The version is 0.1.0.
 - A print set name, the MJCF body name and the output file names still use the earlier project name.
 - The pusher base supports four screw holes only.
 - The minimum focus distance of the phone cameras is unknown, so the focus check is off.
+- The robot-side scripts are not a package. They run from the root of the repository and import each other by file name.
+- The messages for the operator in two robot-side tools are in Chinese.
+- The simulation scene has estimated contact values and no collision of the arm links.
 
 ## Roadmap
 
 These parts exist and will be added to this repository after review:
 
 - the CAD exports and the records of the printed versions;
-- the simulation of the tool on a robot arm;
-- the robot-side code: calibration, teleoperation and data collection;
+- a more complete simulation scene;
+- pictures of the real setup;
 - the learning code.
 
 Planned for the generator and the editor:

@@ -25,6 +25,15 @@ uv run pytest
 
 `uv run ruff format` 用来整理格式。测试会生成 `hardware/configs/` 里的配置，并把结果加载到 MuJoCo 里；还会生成文档里的例子，并比较两种语言的页面清单。`asfinger send` 和 Fusion 插件的测试用的是本机的 HTTP 服务和 `adsk` 模块的替身，不会启动 Fusion，所以改了 `hardware/cad/fusion/` 之后还要在 Fusion 里手工试一遍。
 
+`tests/robot/` 里的测试在仿真里运行真机一侧的工具。它们需要 `robot` 依赖组，没装这个组时会被跳过：
+
+```bash
+uv sync --group robot --python 3.12
+uv run --group robot pytest tests/robot
+```
+
+没有任何测试会去连接机械臂或手机。对 `robot/` 的修改只要可能影响运动，就还得由这套设备的负责人在真机上跑一遍，旁边要有人守着电源开关。在 pull request 里写明哪些在真机上跑过、哪些没有。需要 `calibration/data/` 里的原始标定数据或真实场景照片的测试，只在有这些文件的地方运行。
+
 修改生成器时，把修改前后的输出对比一下。不打算改变几何的修改，STL 文件和 `ipush_tool.xml` 必须逐字节相同：
 
 ```bash
@@ -77,7 +86,7 @@ SITE_URL=https://asembodiedaisyst.github.io BASE_PATH=/asFinger/ npm run build
 
 | Workflow | 触发 | 作用 |
 | --- | --- | --- |
-| `.github/workflows/ci.yml` | 推送到 `main`、pull request | 在每个支持的 Python 版本上运行 ruff 和 pytest，并构建网站。 |
+| `.github/workflows/ci.yml` | 推送到 `main`、pull request | 在每个支持的 Python 版本上运行 ruff 和 pytest，在一个 Python 版本上运行仿真里的真机工具测试，并构建网站。 |
 | `.github/workflows/pages.yml` | 推送到 `main`，且改动涉及网站、文档、包或硬件输入 | 构建网站并部署到 GitHub Pages。 |
 
 ## 提交修改

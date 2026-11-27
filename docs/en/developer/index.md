@@ -18,5 +18,9 @@ The repository layout:
 | `hardware/configs/` | The configs of the real tool. |
 | `hardware/assets/` | The meshes that the configs import. |
 | `hardware/cad/fusion/` | The add-in and the script for Autodesk Fusion. |
+| `robot/` | The scripts for the real arm: arm tools, calibration, teleoperation, recording. |
+| `calibration/` | The calibration files of the arm and the tool that are in use. |
+| `sim/` | The MuJoCo scene of the setup. |
+| `data/` | Recorded episodes. Only its README is in git. |
 | `site/` | The website: landing page, editor and the documentation site. |
 | `docs/en/`, `docs/zh/` | The documentation source, in English and in Chinese. |

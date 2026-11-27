@@ -35,7 +35,7 @@ const SECTIONS = [
 ];
 const ORDER = {
   '': ['index', 'glossary'],
-  user: ['index', 'installation', 'quickstart', 'config-file', 'frames', 'checks', 'mjcf', 'editor', 'fusion', 'troubleshooting'],
+  user: ['index', 'installation', 'quickstart', 'config-file', 'frames', 'checks', 'mjcf', 'editor', 'fusion', 'robot-setup', 'robot-arm-tools', 'robot-calibration', 'teleoperation', 'data-collection', 'simulation', 'troubleshooting'],
   developer: ['index', 'architecture', 'decisions', 'contributing', 'roadmap'],
   agents: ['index', 'using', 'developing'],
 };

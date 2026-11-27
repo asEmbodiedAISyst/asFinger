@@ -18,11 +18,13 @@ The project has three parts:
 | Build STL and MJCF on your computer | [Installation](user/installation.md), then [Quick start](user/quickstart.md) |
 | Write or change a config | [The config file](user/config-file.md) and [Frames](user/frames.md) |
 | Edit the tool as a CAD design | [The Fusion add-in](user/fusion.md) |
+| Use the tool on a real arm | [The robot setup](user/robot-setup.md), then [Arm tools and safety rules](user/robot-arm-tools.md) |
+| Record data with the arm | [Teleoperation](user/teleoperation.md) and [Data collection](user/data-collection.md) |
 | Understand how the project works | [Developer guide](developer/index.md) |
 | Use the project through an AI agent | [Agent guides](agents/index.md) |
 
 ## Status
 
-The version is 0.1.0. The generator, the editor and these pages are public. The simulation, the robot-side code and the learning code are not in the repository yet. See the [roadmap](developer/roadmap.md).
+The version is 0.1.0. The generator, the editor, the Fusion add-in, the robot-side tools with a first simulation scene, and these pages are public. The learning code is not in the repository. See the [roadmap](developer/roadmap.md).
 
 The pusher for the iPhone 17 Pro on the Seeed reBot Arm B601-RS is printed and in use. Other arms in the editor use flange data from public datasheets. Values that are not confirmed are marked "to verify" in the editor.

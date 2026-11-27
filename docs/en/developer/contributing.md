@@ -25,6 +25,15 @@ uv run pytest
 
 `uv run ruff format` applies the format. The tests build the configs in `hardware/configs/` and load the result in MuJoCo. They also build the example of the documentation and compare the page lists of the two languages. The tests of `asfinger send` and of the Fusion add-in use a local HTTP server and stand-ins for the `adsk` modules. They do not start Fusion, so a change to `hardware/cad/fusion/` must also be tried in Fusion by hand.
 
+The tests in `tests/robot/` run the robot-side tools in the simulator. They need the dependency group `robot` and are skipped without it:
+
+```bash
+uv sync --group robot --python 3.12
+uv run --group robot pytest tests/robot
+```
+
+No test connects to an arm or a phone. A change to `robot/` that can alter a motion must also be run on the real arm by the owner of the setup, with an operator at the power switch. Say in the pull request what was run on the arm and what was not. Tests that need the raw calibration data or the pictures of the real scene in `calibration/data/` run only where those files exist.
+
 When you change the generator, compare the outputs before and after the change. A change that is not meant to change geometry must leave the STL files and `ipush_tool.xml` identical, byte for byte:
 
 ```bash
@@ -77,7 +86,7 @@ A new page also needs an entry in the list `ORDER` of `site/scripts/sync-docs.mj
 
 | Workflow | Runs on | Function |
 | --- | --- | --- |
-| `.github/workflows/ci.yml` | push to `main`, pull request | ruff and pytest for the package on each supported Python version, and a build of the site. |
+| `.github/workflows/ci.yml` | push to `main`, pull request | ruff and pytest for the package on each supported Python version, the robot-side tests in the simulator on one Python version, and a build of the site. |
 | `.github/workflows/pages.yml` | push to `main` that changes the site, the docs, the package or the hardware inputs | Builds the site and deploys it to GitHub Pages. |
 
 ## Send a change
