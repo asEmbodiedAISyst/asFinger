@@ -32,6 +32,15 @@ site/scripts/rebot_no_tool.xml
     the same repository (same copyright and licence). It is the input of site/scripts/bake-arms.py for that arm
     and loads the meshes of that repository, which are not included here.
 
+Third-party material that is downloaded, not included
+-----------------------------------------------------
+
+sim/assets/meshes/b601_rs_official/ (the meshes of the arm for the twin scene, sim/twin.py)
+    Not redistributed here. sim/fetch_arm_meshes.py downloads them, unmodified, from Seeed-Projects/reBot-DevArm
+    (Rebot_Arm_description/RS/meshes) at commit e0a06261f0c38a42e044821476b4ad664cb289ed, with that repository's
+    LICENSE, and checks them against the SHA256SUMS file kept in this repository. Copyright Seeed Studio, licensed
+    under the CERN Open Hardware Licence Version 2 - Weakly Reciprocal (CERN-OHL-W-2.0).
+
 Meshes designed for this project
 --------------------------------
 
