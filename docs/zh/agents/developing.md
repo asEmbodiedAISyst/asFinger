@@ -20,6 +20,8 @@
 - `hardware/cad/fusion/` 里的代码在 Autodesk Fusion 里运行。不要为了测试去启动 Fusion、加载插件或改动 Fusion 文档。运行测试，然后请用户在 Fusion 里试。
 - `robot/` 里的代码会让真实的机械臂动起来。在 agent 会话里，除非操作者就在机械臂旁边并且明确要求，否则不要运行任何会连接真机或手机的命令。带 `--sim` 的命令可以随时运行。
 - 不要重构 `robot/`。只要修改可能影响运动，就需要这套设备的负责人在真机上跑一遍。在报告里写明哪些在仿真里跑过，并说明没有在真机上运行。
+- 不要提交 `sim/twin_registration.yaml`，不要提交标定或配准的过程记录（用了哪些录像、日期、残差），也不要提交原始测量数据。结果文件里只放在用的数值。
+- 不要提交 `sim/assets/meshes/b601_rs_official/` 里的机械臂网格。它们由 `sim/fetch_arm_meshes.py` 下载，git 里只有 `SOURCE.md` 和 `SHA256SUMS`。
 - 不要把这套设备的地址、设备号或主机名写进被 git 跟踪的文件，它们应该放在 `robot/cameras.local.yaml` 里。不要提交 `calibration/data/` 和 `data/` 里的文件，也不要添加设备的照片。
 - `robot/arm_sign_check.py` 和 `robot/arm_listen_ab.py` 一启动就连接机械臂，加 `--help` 也一样。想看用法就读它们的 docstring，不要去运行。
 - 不要推送 tag，不要改部署设置。把该做的事告诉用户。
@@ -43,7 +45,7 @@
 | `hardware/configs/`、`hardware/assets/` | 配置和它们引用的网格。 |
 | `robot/` | 真机用的脚本。`arm` 是 rebot-control 的包装；`arm_*.py` 是机械臂工具和标定；`teleop*.py` 是遥操作；`episode.py`、`record.py`、`to_lerobot.py` 管数据；`snapshot.py`、`tags.py`、`make_tags.py`、`calibrate_color.py` 管相机和标记。 |
 | `calibration/` | 工具要读的标定文件。`calibration/data/` 是本地目录，git 忽略它。 |
-| `sim/` | MuJoCo 场景（`scene.py`、`scene.yaml`）和它的配准（`register.py`、`registration.yaml`）。 |
+| `sim/` | 第一版 MuJoCo 场景（`scene.py`、`scene.yaml`）和它的配准（`register.py`、`registration.yaml`），以及孪生场景（`twin.py`、`twin.yaml`、`twin_view.py`、`twin_filament.py`、`fetch_arm_meshes.py`）。孪生场景的相机位姿和白板几何是 `twin.yaml` 里的参数。 |
 | `tests/robot/` | 真机一侧在仿真里的测试，需要先 `uv sync --group robot`。 |
 | `hardware/cad/fusion/` | Fusion 插件（`asFingerAddIn`）、脚本（`asFingerFromJSON`）和两者共用的模块（`asfinger_fusion`）。每个目录里，目录名、`.py` 文件名和 `.manifest` 文件名必须相同。 |
 | `site/scripts/sync-core.mjs`、`sync-docs.mjs` | 构建前把包、配置和文档复制进网站。 |

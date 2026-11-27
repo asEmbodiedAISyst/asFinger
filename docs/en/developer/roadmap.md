@@ -13,7 +13,7 @@ The version is 0.1.0.
 | Web editor | In use for the reBot Arm RS. Franka FR3 and UR5e use flange data from datasheets and are not tested on a real arm. |
 | Fusion add-in (`hardware/cad/fusion`) | In the repository. Tried in Fusion by hand: build in a new document and update in place. |
 | Robot-side tools (`robot/`, `calibration/`) | In the repository: arm tools, calibration, teleoperation, recording and export. They were moved from the working repository of the setup and are not run on the real arm from this repository yet. |
-| Simulation (`sim/`) | A first MuJoCo scene of the setup. The tools of `robot/` run in it with `--sim`. |
+| Simulation (`sim/`) | Two MuJoCo scenes of the setup. The tools of `robot/` run in the first one with `--sim`. The twin scene has the arm meshes of the manufacturer (downloaded, not in the repository), the closed box, and lights and camera tone tuned to real pictures. |
 | Documentation | English and Chinese, for users, developers and agents. |
 | Tests | The default configs, the options, the checks and the interference rules, `asfinger send`, the parts of the Fusion add-in that run without Fusion, and the robot-side tools in the simulator. The STL export of the browser, the features that the add-in makes in Fusion, and everything that needs the real arm or a phone are not tested automatically. |
 
@@ -30,14 +30,15 @@ The version is 0.1.0.
 - The minimum focus distance of the phone cameras is unknown, so the focus check is off.
 - The robot-side scripts are not a package. They run from the root of the repository and import each other by file name.
 - The messages for the operator in two robot-side tools are in Chinese.
-- The simulation scene has estimated contact values and no collision of the arm links.
+- Both simulation scenes have estimated contact values and no collision of the arm links.
+- Rendering of the scenes is not tested in CI.
 
 ## Roadmap
 
 These parts exist and will be added to this repository after review:
 
 - the CAD exports and the records of the printed versions;
-- a more complete simulation scene;
+- the tools that register the twin scene from recorded video and replay episodes in it;
 - pictures of the real setup;
 - the learning code.
 

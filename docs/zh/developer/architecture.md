@@ -91,12 +91,14 @@ robot/*.py            脚本，在仓库根目录下运行，彼此按文件名�
    ▼
 calibration/*.yaml    一台机械臂和一个工具的增益与模型；工具读它们，其中几个工具也写它们
 sim/scene.py          MuJoCo 场景；工具加 `--sim` 后，同一份代码跑在 rebot-control 的仿真电机上
+sim/twin.py           孪生场景：同一台仿真机械臂，加上网格、封闭的箱子、灯光和相机色调
 data/episodes/        录制工具写出的数据（不进 git）
 ```
 
 - `robot/teleop.py` 是遥操作里机械臂这一侧的逻辑，`teleop_iphone.py` 和 `teleop_star.py` 给它提供指令来源。
 - `robot/episode.py` 负责录制和读取 episode，`record.py` 加上按键，`to_lerobot.py` 做转换。
 - `robot/snapshot.py` 里的 `camera()` 是唯一知道手机在哪的函数，它读 `robot/cameras.local.yaml`，这个文件不进 git。
+- `sim/twin.py` 根据 `sim/twin.yaml` 和工具文件里的 `sim:` 段搭出孪生场景。`sim/twin.yaml` 里的相机位姿和白板几何是一套参考设备的参数；本地如果有 `sim/twin_registration.yaml`（git 忽略），就以它为准。机械臂网格由 `sim/fetch_arm_meshes.py` 下载，不进 git。`sim/twin_filament.py` 是可选的第二个渲染器。
 - 这些脚本依赖 `pyproject.toml` 里的 `robot` 组，持续集成的其他任务不安装它。
 
 这部分代码会让真实的机械臂动起来。导入时没有改动它的控制流程；会要求改代码的 `ruff` 规则，对 `robot/` 是关掉的。见[机械臂工具与安全规则](../user/robot-arm-tools.md)。

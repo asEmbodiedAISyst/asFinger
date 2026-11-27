@@ -32,7 +32,7 @@ uv sync --group robot --python 3.12
 uv run --group robot pytest tests/robot
 ```
 
-没有任何测试会去连接机械臂或手机。对 `robot/` 的修改只要可能影响运动，就还得由这套设备的负责人在真机上跑一遍，旁边要有人守着电源开关。在 pull request 里写明哪些在真机上跑过、哪些没有。需要 `calibration/data/` 里的原始标定数据或真实场景照片的测试，只在有这些文件的地方运行。
+没有任何测试会去连接机械臂或手机。对 `robot/` 的修改只要可能影响运动，就还得由这套设备的负责人在真机上跑一遍，旁边要有人守着电源开关。在 pull request 里写明哪些在真机上跑过、哪些没有。需要 `calibration/data/` 里的原始标定数据或真实场景照片的测试，只在有这些文件的地方运行。需要机械臂网格（`uv run python sim/fetch_arm_meshes.py`）或 GL 上下文的测试也是这样：把 `ASFINGER_TEST_GL` 设成一个 MuJoCo 的 GL 后端（比如 macOS 上的 `glfw`），渲染测试才会运行。
 
 修改生成器时，把修改前后的输出对比一下。不打算改变几何的修改，STL 文件和 `ipush_tool.xml` 必须逐字节相同：
 
