@@ -1,0 +1,24 @@
+# Overhead workspace camera. The phone falls back to its defaults
+# (AR mode, main lens) when the iMuninn app restarts; re-apply with:
+#   uv run imuninn profile apply robot/top_camera.yaml <address of the top phone>
+#
+# Exposure and white balance are manual, found with robot/calibrate_color.py against
+# the colour card under the box lights (2026-11-12). Re-run it when the lighting changes.
+name: top_camera
+mode: camera
+streams:
+  rgb:
+    enabled: true
+    lens: ultra_wide
+    camera_format: 1920x1440@60
+    bitrate_kbps: 4000
+    keyframe_interval: 60
+    exposure_mode: manual
+    exposure_ms: 10
+    iso: 131
+    white_balance_mode: manual
+    wb_temperature_k: 4054
+    wb_tint: 9.8
+  imu:
+    enabled: true
+    rate_hz: 100

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# rebot-control for this arm: the mounted tool and this arm's calibration (gains) are filled in.
+#   robot/arm state              angles, temperatures, torque on/off; changes nothing
+#   robot/arm release --fold     fold an arm that was left holding, then torque off
+#   robot/arm release            torque off now (hand on the arm)
+# Any other rebot-control command works the same way; add --sim to try it in the simulator.
+# rebot-control comes from the dependency group `robot` (uv sync --group robot). The program in .venv is used when
+# it is there; otherwise uv starts it (and installs the group first).
+set -euo pipefail
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$root"
+if [ -x .venv/bin/rebot-control ]; then
+    exec .venv/bin/rebot-control "$@" --tool calibration/tool_ip17pro_print.yaml --calibration calibration/b601_rs.yaml
+fi
+exec uv run --group robot rebot-control "$@" --tool calibration/tool_ip17pro_print.yaml --calibration calibration/b601_rs.yaml
