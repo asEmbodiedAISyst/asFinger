@@ -1,0 +1,50 @@
+# The test scene around the arm, for sim/scene.py (MuJoCo).
+# Frame: the arm's base frame. Origin at the centre of the base on its mounting surface, x forward into the box,
+# y to the left (seen from behind the arm), z up. Metres, degrees.
+#
+# This file holds what is measured by hand or estimated. Where the cameras, the whiteboard and the tags are comes
+# from sim/register.py and is kept in sim/registration.yaml, which that script rewrites as a whole.
+#
+# How each number was obtained is noted next to it:
+#   measured   with a ruler, or reported by the device
+#   estimated  not measured: a plausible value, to be replaced
+
+box:                                  # the photo box; see calibration/workspace.yaml
+  x: [-0.15, 0.65]                    # measured (back wall); the front is open, -0.15 is only where the walls are drawn from
+  y: [-0.40, 0.40]                    # measured
+  height: 0.70                        # measured: lowest object under the top
+
+floor_z: -0.010                       # estimated: the whiteboard surface is level with the mounting surface to within
+                                      # 1 cm (measured), and the whiteboard is taken to be 10 mm thick
+
+whiteboard:
+  size: [0.30, 0.40]                  # estimated outer size along its short and long side (the white area measures
+                                      # 0.27 x 0.37 m in the overhead picture)
+  thickness: 0.010                    # estimated
+  friction: 0.4                       # estimated sliding friction of objects on the board; not identified
+
+objects:
+  cube:
+    size: 0.040                       # estimated edge length
+    mass: 0.030                       # estimated
+    pos: [0.30, 0.00]                 # where it starts, on the whiteboard
+    friction: 0.4                     # estimated
+    rgba: [0.08, 0.08, 0.08, 1]
+
+tool:                                 # collision shape of the pusher: the rod only (the arm's links do not collide)
+  # The rod runs from the flange centre to the tool tip of the tool config (calibration/tool_ip17pro_print.yaml),
+  # 30 deg to the flange axis; the tool z axis is along it. The capsule ends in the tip sphere of the real rod.
+  rod_start: 0.03                     # estimated: where the visible rod begins, from the flange centre (m)
+  rod_radius: 0.0075                  # as built: round rod, 15 mm, hemispherical tip
+  phone_size: [0.150, 0.072, 0.009]   # estimated (drawn only, at the wrist camera)
+
+cameras:                              # intrinsics as reported by the phones (no distortion model)
+  top:                                # the top phone, ultra wide
+    intrinsics: {width: 1920, height: 1440, fx: 766.0, fy: 766.0, cx: 956.6, cy: 720.2}
+  wrist:                              # the wrist phone on the tool, ultra wide; its pose is given in the flange frame
+    intrinsics: {width: 640, height: 480, fx: 255.9, fy: 255.9, cx: 318.9, cy: 240.0}
+
+registration:                         # input of sim/register.py: two pictures taken with the arm still at this pose
+  q_deg: [0.4, 0.3, 0.0, -0.2, 0.9, 0.0]
+  top_image: calibration/data/scene-top-20261116.jpg
+  wrist_image: calibration/data/scene-wrist-20261116.png

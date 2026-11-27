@@ -1,0 +1,47 @@
+# Written by sim/register.py on 2026-11-16: do not edit, run the script again.
+# Arm base frame, metres. Good to about 1 cm; see the script for how it is obtained.
+#   whiteboard: centre of the white area and rotation of the board about the vertical
+#   tags.corners: corner positions on the whiteboard surface, in the order the detector returns them
+#   cameras: position and axes (columns: image right, image down, optical axis); top in the arm frame, wrist in the
+#     flange frame. The wrist camera: PnP reprojection error 1.0 px, then moved
+#     12 mm sideways to put the rod tip where the wrist picture shows it.
+# Inputs: gravity [0.0636, -0.6565, -0.7516], camera height 0.762 m, rod tip [1276.0, 494.4] and rod point
+#   [1180.0, 496.4] px in the overhead picture, rod tip [351.0, 256.0] px in the wrist picture.
+whiteboard:
+  centre: [0.3022, -0.0085]
+  yaw_deg: 5.0
+tags:
+  corners:
+    1:
+    - [0.416, 0.1753]
+    - [0.4192, 0.1256]
+    - [0.3688, 0.122]
+    - [0.3658, 0.1718]
+    2:
+    - [0.2381, -0.1269]
+    - [0.2404, -0.1762]
+    - [0.192, -0.178]
+    - [0.1897, -0.1284]
+    90:
+    - [0.3968, -0.0875]
+    - [0.3965, -0.0586]
+    - [0.4268, -0.0586]
+    - [0.4264, -0.0878]
+    91:
+    - [0.3934, 0.0648]
+    - [0.3927, 0.0945]
+    - [0.423, 0.0951]
+    - [0.4236, 0.0654]
+cameras:
+  top:
+    pos: [0.5303, -0.1212, 0.762]
+    R:
+    - [0.754, 0.0854, -0.6513]
+    - [0.0227, -0.9943, -0.104]
+    - [-0.6565, 0.0636, -0.7516]
+  wrist:
+    pos: [0.0358, -0.0224, 0.102]
+    R:
+    - [0.0361, -0.5188, -0.8541]
+    - [0.9992, 0.0326, 0.0224]
+    - [0.0163, -0.8543, 0.5196]
