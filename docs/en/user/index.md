@@ -18,6 +18,7 @@ This guide shows how to build a tool from a config, how to write a config, and h
 | [Teleoperation](teleoperation.md) | Move the arm with a hand-held iPhone or a leader arm. |
 | [Data collection](data-collection.md) | Episodes, recording, and the export to a LeRobot dataset. |
 | [Simulation](simulation.md) | The MuJoCo scene of the setup, and `--sim`. |
+| [The twin scene](simulation-twin.md) | A more complete scene: the arm meshes of the manufacturer, the closed box, tuned lights and camera tone. |
 | [Troubleshooting](troubleshooting.md) | Messages and their causes. |
 
 All lengths are in millimetres and all angles are in degrees, unless a page says otherwise. The MJCF file is the one exception: MuJoCo uses metres.

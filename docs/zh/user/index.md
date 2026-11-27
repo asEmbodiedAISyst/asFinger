@@ -18,6 +18,7 @@
 | [遥操作](teleoperation.md) | 用手持 iPhone 或 leader 臂带着机械臂动。 |
 | [数据采集](data-collection.md) | episode、录制，以及导出成 LeRobot 数据集。 |
 | [仿真](simulation.md) | 这套设备的 MuJoCo 场景，和 `--sim`。 |
+| [孪生场景](simulation-twin.md) | 更完整的场景：厂家的机械臂网格、封闭的箱子、调过的灯光和相机色调。 |
 | [排错](troubleshooting.md) | 常见提示信息和原因。 |
 
 没有特别说明时，长度单位是毫米，角度单位是度。只有 MJCF 文件例外：MuJoCo 用米。

@@ -2,7 +2,7 @@
 
 `sim/` holds the test scene of the setup in MuJoCo: the arm in its box, the whiteboard with its markers, a cube and both cameras. The scene runs under the same control library as the real arm, so the same control code runs on both. The tools in `robot/` use it when you add `--sim`.
 
-This is a first scene. Positions agree with the real setup to about 1 cm. Contact and appearance are rough.
+This is a first scene. Positions agree with the real setup to about 1 cm. Contact and appearance are rough. A second scene with the real meshes of the arm, the closed box and tuned lights is described in [The twin scene](simulation-twin.md).
 
 ## Use it
 

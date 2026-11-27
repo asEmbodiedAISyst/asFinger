@@ -32,7 +32,7 @@ uv sync --group robot --python 3.12
 uv run --group robot pytest tests/robot
 ```
 
-No test connects to an arm or a phone. A change to `robot/` that can alter a motion must also be run on the real arm by the owner of the setup, with an operator at the power switch. Say in the pull request what was run on the arm and what was not. Tests that need the raw calibration data or the pictures of the real scene in `calibration/data/` run only where those files exist.
+No test connects to an arm or a phone. A change to `robot/` that can alter a motion must also be run on the real arm by the owner of the setup, with an operator at the power switch. Say in the pull request what was run on the arm and what was not. Tests that need the raw calibration data or the pictures of the real scene in `calibration/data/` run only where those files exist. The same applies to the tests that need the arm meshes (`uv run python sim/fetch_arm_meshes.py`) or a GL context: set `ASFINGER_TEST_GL` to a MuJoCo GL backend, for example `glfw` on macOS, to run the rendering tests.
 
 When you change the generator, compare the outputs before and after the change. A change that is not meant to change geometry must leave the STL files and `ipush_tool.xml` identical, byte for byte:
 

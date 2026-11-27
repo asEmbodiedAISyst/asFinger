@@ -4,13 +4,14 @@
 //   docs/en/<path>.md -> src/content/docs/docs/<path>.md      Starlight page  /docs/<path>/      (English, root locale)
 //   docs/zh/<path>.md -> src/content/docs/zh/docs/<path>.md   Starlight page  /zh/docs/<path>/   (Chinese)
 //   the same files, unchanged -> public/docs/<path>.md and public/zh/docs/<path>.md   (the Markdown originals)
+//   docs/assets/<file>    -> public/docs-assets/<file>       pictures that a page shows (linked as ../../assets/<file>)
 //   public/llms.txt       index of every page, linking to the Markdown originals (https://llmstxt.org)
 //   public/llms-full.txt  every page in one file
 //
 // A page's title is its first `# heading`; its description is the first paragraph after it. Links between pages
 // are written as relative links to the .md files (so they also work on GitHub) and are rewritten to site paths.
 // The order of the pages in the sidebar and in llms.txt is ORDER below; a page that is not listed goes last.
-import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, statSync, existsSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, statSync, existsSync } from 'node:fs';
 import { dirname, join, posix, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -35,7 +36,7 @@ const SECTIONS = [
 ];
 const ORDER = {
   '': ['index', 'glossary'],
-  user: ['index', 'installation', 'quickstart', 'config-file', 'frames', 'checks', 'mjcf', 'editor', 'fusion', 'robot-setup', 'robot-arm-tools', 'robot-calibration', 'teleoperation', 'data-collection', 'simulation', 'troubleshooting'],
+  user: ['index', 'installation', 'quickstart', 'config-file', 'frames', 'checks', 'mjcf', 'editor', 'fusion', 'robot-setup', 'robot-arm-tools', 'robot-calibration', 'teleoperation', 'data-collection', 'simulation', 'simulation-twin', 'troubleshooting'],
   developer: ['index', 'architecture', 'decisions', 'contributing', 'roadmap'],
   agents: ['index', 'using', 'developing'],
 };
@@ -78,6 +79,12 @@ function relink(body, rel, loc) {
     const [path, hash = ''] = href.split('#');
     const target = posix.normalize(posix.join(posix.dirname(`${loc.dir}/${rel}`), path));
     if (target.startsWith('../')) return `${a}${REPO_URL}/blob/main/${target.replace(/^(\.\.\/)+/, '')}${hash ? '#' + hash : ''}${c}`;
+    if (/^assets\/.+\.(png|jpe?g|svg|webp|gif)$/i.test(target)) {   // a picture in docs/assets: served from public/docs-assets
+      const out = join(pub, 'docs-assets', target.slice('assets/'.length));
+      mkdirSync(dirname(out), { recursive: true });
+      copyFileSync(join(docs, target), out);
+      return `${a}${BASE}docs-assets/${target.slice('assets/'.length)}${c}`;
+    }
     const [lang, ...rest] = target.split('/');
     const l = LOCALES.find((x) => x.dir === lang);
     if (!l || !target.endsWith('.md')) return `${a}${REPO_URL}/blob/main/docs/${target}${hash ? '#' + hash : ''}${c}`;
@@ -89,6 +96,7 @@ const yaml = (s) => JSON.stringify(s);
 
 rmSync(content, { recursive: true, force: true });
 for (const l of LOCALES) rmSync(join(pub, l.prefix, 'docs'), { recursive: true, force: true });
+rmSync(join(pub, 'docs-assets'), { recursive: true, force: true });
 
 const pages = [];   // { loc, rel, title, description, route, md, raw }
 for (const loc of LOCALES) {
