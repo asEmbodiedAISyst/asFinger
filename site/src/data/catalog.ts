@@ -7,7 +7,7 @@ import { PHONE_ITEMS } from './phones';
 export type { FlangeSpec } from './flanges';
 
 export type View = 'carrier' | 'adapter' | 'pusher' | 'tip' | 'camera';
-export type Icon = 'arm6' | 'arm7' | 'hand' | 'rod' | 'tip-ball' | 'tip-sensor' | 'tip-surface' | 'phone' | 'depthcam' | 'rod-arc' | 'flange' | 'adapter-none' | 'adapter-ab' | 'adapter-fused';
+export type Icon = 'arm6' | 'arm7' | 'hand' | 'rod' | 'tip-ball' | 'tip-sensor' | 'tip-surface' | 'phone' | 'depthcam' | 'rod-arc' | 'flange' | 'adapter-none' | 'adapter-ab' | 'adapter-fused' | 'humanoid' | 'camera-none' | 'rod-square' | 'adapter-wrist';
 
 /** A joint drawn away from the baked pose: `deg` on the joint turns the flange frame by `flangeDeg` about its Z. */
 export interface JointTurn { name: string; deg: number; flangeDeg: number }
@@ -22,6 +22,8 @@ export interface CatalogItem {
   subtitle?: Txt;
   icon: Icon;
   disabled?: boolean;         // shown as "planned"
+  /** the cards of a group are shown in sections, with a divider between them; items of one section stay together */
+  section?: number;
   info?: InfoRow[];
   links?: Link[];
   flange?: FlangeSpec;
@@ -68,7 +70,17 @@ export const GROUPS: Group[] = [
     hint: { en: 'What the pusher is mounted on: a robot arm or a hand. Sets the robot flange pattern and the default mounting angle.', zh: '推杆装在谁身上：机械臂或人手。决定机械臂法兰孔位和默认安装转角。' },
     items: [
       {
-        id: 'custom', name: { en: 'Custom flange', zh: '自定义法兰' }, icon: 'flange', customFlange: true, defaultAdapter: 'none', mountRot: 180,
+        section: 0, id: 'hand', name: { en: 'Human hand', zh: '人手' }, subtitle: { en: 'Handheld grip · demos / data', zh: '手持握把 · 示教 / 采集' }, icon: 'hand',
+        sets: FLANGES.rebot.sets, mountRot: 180, defaultAdapter: 'gripper_ab', direct: { defaults: { mount_rot: 90, beam_x: 18 } },
+        flange: { ...FLANGES.rebot.spec, title: { en: 'Handheld grip interface (same holes as the reBot flange)', zh: '手持握把接口（沿用 reBot 法兰孔位）' } },
+        info: [
+          { label: { en: 'Use', zh: '用途' }, value: { en: 'Hold the same pusher by hand for teleoperation demos and data collection', zh: '手持同一根推杆做遥操作示教和数据采集' } },
+          { label: { en: 'Interface', zh: '接口' }, value: { en: 'Same face as the reBot flange, so the same adapter and pusher fit both', zh: '端面与 reBot 法兰相同，同一套转接件和推杆两边通用' } },
+          { label: { en: 'Grip model', zh: '握把模型' }, value: { en: 'placeholder, dimensions pending', zh: '示意，尺寸待补' }, verify: true },
+        ],
+      },
+      {
+        section: 0, id: 'custom', name: { en: 'Custom flange', zh: '自定义法兰' }, icon: 'flange', customFlange: true, defaultAdapter: 'none', mountRot: 180,
         direct: { defaults: FLANGES.iso50.sets },   // a starting point; every value stays editable
         subtitle: { en: 'No carrier · enter your own hole pattern', zh: '无载体 · 自己填孔位' },
         info: [
@@ -77,7 +89,7 @@ export const GROUPS: Group[] = [
         ],
       },
       {
-        id: 'rebot_rs', name: 'reBot Arm RS', subtitle: { en: 'Seeed · 6-axis', zh: 'Seeed · 6 轴' }, icon: 'arm6', arm: { reach: 650, dof: 6 },
+        section: 1, id: 'rebot_rs', name: 'reBot Arm RS', subtitle: { en: 'Seeed · 6-axis', zh: 'Seeed · 6 轴' }, icon: 'arm6', arm: { reach: 650, dof: 6 },
         sets: FLANGES.rebot.sets, flange: FLANGES.rebot.spec, mountRot: 180, defaultAdapter: 'gripper_ab',
         direct: { defaults: { mount_rot: 90, beam_x: 18 }, joint: { name: 'joint6', deg: -90, flangeDeg: 90 } },   // the joint-6 axis is −Z of link6
         info: [
@@ -95,7 +107,7 @@ export const GROUPS: Group[] = [
         ],
       },
       {
-        id: 'franka_fr3', name: 'Franka FR3', subtitle: { en: 'Franka Robotics · 7-axis', zh: 'Franka Robotics · 7 轴' }, icon: 'arm7', arm: { reach: 855, dof: 7 },
+        section: 1, id: 'franka_fr3', name: 'Franka FR3', subtitle: { en: 'Franka Robotics · 7-axis', zh: 'Franka Robotics · 7 轴' }, icon: 'arm7', arm: { reach: 855, dof: 7 },
         sets: FLANGES.iso50.sets, mountRot: 180, defaultAdapter: 'none',
         flange: {
           ...FLANGES.iso50.spec, title: 'DIN ISO 9409-1-A50',
@@ -120,7 +132,7 @@ export const GROUPS: Group[] = [
         ],
       },
       {
-        id: 'ur5e', name: 'UR5e', subtitle: { en: 'Universal Robots · 6-axis', zh: 'Universal Robots · 6 轴' }, icon: 'arm6', arm: { reach: 850, dof: 6 },
+        section: 1, id: 'ur5e', name: 'UR5e', subtitle: { en: 'Universal Robots · 6-axis', zh: 'Universal Robots · 6 轴' }, icon: 'arm6', arm: { reach: 850, dof: 6 },
         sets: FLANGES.iso50.sets, mountRot: 90, defaultAdapter: 'none',
         flange: {
           ...FLANGES.iso50.spec, title: 'EN ISO 9409-1-50-4-M6',
@@ -142,23 +154,16 @@ export const GROUPS: Group[] = [
         ],
       },
       {
-        id: 'hand', name: { en: 'Human hand', zh: '人手' }, subtitle: { en: 'Handheld grip · demos / data', zh: '手持握把 · 示教 / 采集' }, icon: 'hand',
-        sets: FLANGES.rebot.sets, mountRot: 180, defaultAdapter: 'gripper_ab', direct: { defaults: { mount_rot: 90, beam_x: 18 } },
-        flange: { ...FLANGES.rebot.spec, title: { en: 'Handheld grip interface (same holes as the reBot flange)', zh: '手持握把接口（沿用 reBot 法兰孔位）' } },
-        info: [
-          { label: { en: 'Use', zh: '用途' }, value: { en: 'Hold the same pusher by hand for teleoperation demos and data collection', zh: '手持同一根推杆做遥操作示教和数据采集' } },
-          { label: { en: 'Interface', zh: '接口' }, value: { en: 'Same face as the reBot flange, so the same adapter and pusher fit both', zh: '端面与 reBot 法兰相同，同一套转接件和推杆两边通用' } },
-          { label: { en: 'Grip model', zh: '握把模型' }, value: { en: 'placeholder, dimensions pending', zh: '示意，尺寸待补' }, verify: true },
-        ],
+        section: 2, id: 'unitree_g1', name: 'Unitree G1', subtitle: { en: 'Unitree · humanoid', zh: 'Unitree · 人形' }, icon: 'humanoid', disabled: true, defaultAdapter: 'g1_wrist',
       },
     ],
   },
   {
-    id: 'adapter', title: { en: 'Flange adapter', zh: '法兰转接件' }, view: 'adapter',
-    hint: { en: 'What sits between the robot flange and the pusher base. Sets the hole pattern of the pusher base.', zh: '机械臂法兰和推杆底座之间的那一层。决定推杆底座的孔位。' },
+    id: 'adapter', title: { en: 'Mount adapter', zh: '安装转接件' }, view: 'adapter',
+    hint: { en: 'What sits between the carrier (a robot flange or a wrist) and the pusher base. Sets the hole pattern of the pusher base.', zh: '载体（机械臂法兰或手腕）和推杆底座之间的那一层。决定推杆底座的孔位。' },
     items: [
       {
-        id: 'none', name: { en: 'None', zh: '无' }, subtitle: { en: 'Pusher base bolted straight onto the robot flange', zh: '推杆底座直接装在机械臂法兰上' }, icon: 'adapter-none',
+        section: 0, id: 'none', name: { en: 'None', zh: '无' }, subtitle: { en: 'Pusher base bolted straight onto the robot flange', zh: '推杆底座直接装在机械臂法兰上' }, icon: 'adapter-none',
         option: false, sets: { adapter_h: 0, mount_screws: 2 },
         info: [
           { label: { en: 'Interface', zh: '接口' }, value: { en: 'The pusher base takes the hole pattern of the selected carrier (through holes with counterbores, screws from the tool side into the robot flange).', zh: '推杆底座直接用所选载体的法兰孔位（通孔 + 沉孔，螺钉从工具一侧拧进机械臂法兰）。' } },
@@ -168,7 +173,7 @@ export const GROUPS: Group[] = [
       },
       {
         // the pusher printed on 2026-11-08
-        id: 'gripper_ab', name: { en: 'Connector A + B', zh: '连接件 A + B' }, icon: 'adapter-ab', fits: ['rebot_rs', 'hand'],
+        section: 1, id: 'gripper_ab', name: { en: 'Connector A + B', zh: '连接件 A + B' }, icon: 'adapter-ab', fits: ['rebot_rs', 'hand'],
         subtitle: { en: 'reBot gripper connector · both official parts, pusher screwed onto part B', zh: 'reBot 夹爪连接件 · 两个官方零件都用，推杆用螺钉装在零件 B 上' },
         option: true,
         sets: { mount_screws: 2, base_R: 28.4, hole_pcd: 38.01, hole_rot: 45, hole_ang2: 90, hole_d: 3.2, cbore_d: 7.5, cbore_depth: 3.5, relief_h: 0, screw_head_d: 5.5, screw_head_h: 3 },
@@ -182,7 +187,7 @@ export const GROUPS: Group[] = [
         links: [{ label: { en: 'reBot-DevArm metal parts (STEP)', zh: 'reBot-DevArm 金属件（STEP）' }, url: 'https://github.com/Seeed-Projects/reBot-DevArm/tree/main/hardware/reBot_B601_RS/Metal_Parts' }],
       },
       {
-        id: 'gripper_fused', name: { en: 'Fused connector', zh: '一体连接件' }, icon: 'adapter-fused', fits: ['rebot_rs', 'hand'],
+        section: 1, id: 'gripper_fused', name: { en: 'Fused connector', zh: '一体连接件' }, icon: 'adapter-fused', fits: ['rebot_rs', 'hand'],
         subtitle: { en: 'reBot gripper connector · part A + a copy of part B printed as one piece with the pusher', zh: 'reBot 夹爪连接件 · 零件 A + 推杆底部一体打印出零件 B 的形状' },
         option: true,
         sets: { mount_screws: 0, base_R: 28.4, hole_pcd: 38, hole_rot: 45, hole_ang2: 90, hole_d: 2.6, cbore_d: 6.5, cbore_depth: 3.5, relief_h: 0, screw_head_d: 5.5, screw_head_h: 3 },
@@ -195,14 +200,19 @@ export const GROUPS: Group[] = [
         ],
         links: [{ label: { en: 'reBot-DevArm metal parts (STEP)', zh: 'reBot-DevArm 金属件（STEP）' }, url: 'https://github.com/Seeed-Projects/reBot-DevArm/tree/main/hardware/reBot_B601_RS/Metal_Parts' }],
       },
+      {
+        section: 2, id: 'g1_wrist', name: { en: 'G1 wrist adapter', zh: 'G1 腕部转接件' }, icon: 'adapter-wrist', fits: ['unitree_g1'], disabled: true,
+        subtitle: { en: 'Clamps on the Unitree G1 wrist · reBot hole pattern on the tool side', zh: '夹在 Unitree G1 手腕上 · 工具一侧是 reBot 孔位' },
+      },
     ],
   },
   {
     id: 'pusher', title: { en: 'Pusher', zh: '推杆' }, view: 'pusher',
     hint: { en: 'The rod and the phone holder. Tune it on the right.', zh: '推杆本体和手机支架。参数在右侧调整。' },
     items: [
+      { id: 'pad', name: { en: 'Pad', zh: '指腹推杆' }, subtitle: { en: 'Square bar with an arc finger pad · one piece', zh: '方杆 + 弧面指腹 · 一体打印' }, icon: 'rod-arc', disabled: true },
       {
-        id: 'rod_v1', name: { en: 'Round rod v1', zh: '圆杆推杆 v1' }, subtitle: { en: 'Ø15 rod · printed and tested', zh: 'Ø15 圆杆 · 已打印验证' }, icon: 'rod',
+        id: 'round', name: { en: 'Round', zh: '圆杆推杆' }, subtitle: { en: 'Ø15 round rod, reinforced support · printed and in use', zh: 'Ø15 圆杆，加强支撑 · 已打印、在用' }, icon: 'rod',
         config: 'configs/iphone17pro_default.json',
         info: [
           { label: { en: 'Process', zh: '加工方式' }, value: { en: 'FDM 3D printing (PLA / PETG)', zh: 'FDM 3D 打印（PLA / PETG）' } },
@@ -210,7 +220,16 @@ export const GROUPS: Group[] = [
           { label: { en: 'Known issue', zh: '已知问题' }, value: { en: 'The snaps are brittle in PLA matte and break easily; print them flat as a separate part or use PETG', zh: '卡扣用 PLA matte 打印很脆，易断；建议卡扣单独平放打印或改用 PETG' } },
         ],
       },
-      { id: 'rod_arc', name: { en: 'Arc-pad pusher', zh: '弧面推杆' }, icon: 'rod-arc', disabled: true },
+      {
+        id: 'square', name: { en: 'Square', zh: '方杆推杆' }, subtitle: { en: '10 × 10 square rod, flat end · the earlier shape', zh: '10 × 10 方杆，平头 · 更早的形状' }, icon: 'rod-square',
+        config: 'configs/square_rod.json',
+        info: [
+          { label: { en: 'Rod', zh: '杆' }, value: { en: '10 × 10 mm square, flat end; same place, angle (30°) and length as the round rod', zh: '10 × 10 mm 方杆，平头；位置、角度（30°）和长度都和圆杆相同' } },
+          { label: 'TCP', value: { en: 'Centre of the flat end face (T_tcp = T_tip)', zh: '平头端面中心（T_tcp = T_tip）' } },
+          { label: { en: 'Source', zh: '来源' }, value: { en: 'Measured on the first printed tool, modelled in Fusion (iPhone17_DataTool); the rod end agrees with that model to 0.02 mm', zh: '按最早打印的那一版测得，Fusion 模型 iPhone17_DataTool；杆端和该模型相差 0.02 mm' } },
+          { label: { en: 'Holder', zh: '手机支架' }, value: { en: 'As on the Round pusher, without the back reinforcement (the first tool did not have it)', zh: '和圆杆推杆相同，但没有背部加强（最早那一版没有）' } },
+        ],
+      },
     ],
   },
   {
@@ -218,7 +237,7 @@ export const GROUPS: Group[] = [
     hint: { en: 'The part that touches the object. The TCP is defined here.', zh: '和物体接触的部分。TCP 定义在这里。' },
     items: [
       {
-        id: 'bare', name: { en: 'Bare tip', zh: '裸末端' }, subtitle: { en: 'Hemisphere · part of the rod', zh: '半球 · 与推杆一体' }, icon: 'tip-ball',
+        section: 0, id: 'bare', name: { en: 'Standard tip', zh: '标准末端' }, subtitle: { en: 'The pusher\'s own end, unchanged', zh: '推杆自带的末端，不做调整' }, icon: 'tip-ball',
         info: [
           { label: { en: 'Shape', zh: '形状' }, value: { en: 'Hemisphere, radius = rod diameter / 2', zh: '半球，半径 = 杆径 / 2' } },
           { label: 'TCP', value: { en: 'Apex of the hemisphere (T_tcp)', zh: '半球顶点（T_tcp）' } },
@@ -227,21 +246,27 @@ export const GROUPS: Group[] = [
           { label: { en: 'Sensor', zh: '传感器' }, value: { en: 'none', zh: '无' } },
         ],
       },
-      { id: 'surface', name: { en: 'Surface / coating', zh: '表面处理 / 贴材料' }, icon: 'tip-surface', disabled: true },
+      { section: 1, id: 'soft_tpu', name: { en: 'Soft TPU tip', zh: 'TPU 软指尖' }, subtitle: { en: 'For the Pad pusher · optional 48 × 48 e-skin', zh: '配指腹推杆 · 可选 48 × 48 电子皮肤' }, icon: 'tip-sensor', disabled: true },
     ],
   },
   {
     id: 'camera', title: { en: 'Camera', zh: '相机' }, view: 'camera',
     hint: { en: 'The phone or camera on the pusher. Sets the view.', zh: '装在推杆上的手机或相机，决定视野。' },
     items: [
-      ...PHONE_ITEMS,
-      { id: 'realsense', name: 'Intel RealSense', icon: 'depthcam', disabled: true },
-      { id: 'other_phone', name: { en: 'Other phones', zh: '其他手机' }, icon: 'phone', disabled: true },
+      {
+        section: 0, id: 'none', name: { en: 'None', zh: '无' }, subtitle: { en: 'The pusher alone, no camera', zh: '只有推杆，不带相机' }, icon: 'camera-none',
+        options: { phone: false, telephoto: false, lidar: false },
+        info: [
+          { label: { en: 'Built', zh: '生成' }, value: { en: 'The rod and its base only: the phone, its holder, the beam and the spine are left out, and the camera solve is skipped.', zh: '只有推杆和底座：手机、手机支架、横梁和支撑条都去掉，也不做相机求解。' } },
+        ],
+      },
+      ...PHONE_ITEMS.map((p) => ({ ...p, section: 1 })),
+      { section: 2, id: 'realsense_d435i', name: 'RealSense D435i', subtitle: { en: 'Intel · depth camera · placeholder', zh: 'Intel · 深度相机 · 占位' }, icon: 'depthcam', disabled: true },
     ],
   },
 ];
 
-export const DEFAULT_SELECTION: Record<string, string> = { carrier: 'rebot_rs', adapter: 'gripper_ab', pusher: 'rod_v1', tip: 'bare', camera: 'iphone17pro' };
+export const DEFAULT_SELECTION: Record<string, string> = { carrier: 'rebot_rs', adapter: 'gripper_ab', pusher: 'round', tip: 'bare', camera: 'iphone17pro' };
 
 export function item(groupId: string, id: string): CatalogItem | undefined {
   return GROUPS.find((g) => g.id === groupId)?.items.find((i) => i.id === id);

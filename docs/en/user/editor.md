@@ -30,13 +30,13 @@ The tool is made of five groups.
 
 | Group | Selection | Effect |
 | --- | --- | --- |
-| Carrier | reBot Arm RS, Franka FR3, UR5e, human hand, or a custom flange | Sets the flange hole pattern and the default mounting angle. |
-| Flange adapter | None, Connector A + B, Fused connector | Sets the hole pattern, the height and the screw direction of the pusher base. |
-| Pusher | Round rod v1 | The rod and the phone holder. |
-| Tip | Bare tip | The hemisphere at the end of the rod. The TCP is its apex. |
-| Camera | iPhone 18 Pro, iPhone 17 Pro, iPhone 17, iPhone 16 Pro, iPhone 15 Pro, iPhone 14 Pro | Sets the phone dimensions and the lens positions. |
+| Carrier | Human hand, custom flange · reBot Arm RS, Franka FR3, UR5e · Unitree G1 | Sets the flange hole pattern and the default mounting angle. |
+| Mount adapter | None · Connector A + B, fused connector (reBot) · G1 wrist adapter | Sets the hole pattern, the height and the screw direction of the pusher base. |
+| Pusher | Pad, Round, Square | The rod and the phone holder. Pad: a square bar with an arc finger pad, printed in one piece. Round: the Ø15 rod with the reinforced holder, the one in use. Square: the earlier 10 × 10 rod with a flat end. |
+| Tip | Standard tip · Soft TPU tip | Standard: the pusher's own end (a hemisphere on Round, the flat end on Square). The TCP is defined here. |
+| Camera | None · iPhone 18 Pro, iPhone 17 Pro, iPhone 17, iPhone 16 Pro, iPhone 15 Pro, iPhone 14 Pro · RealSense D435i | Sets the phone dimensions and the lens positions. "None" builds the pusher without the phone, its holder and the camera solve. |
 
-Items marked "Planned" are not available yet.
+In the cards, a bar separates the sections of a group (the "·" in the table). Items marked "Planned" are not available yet.
 
 The groups depend on each other:
 

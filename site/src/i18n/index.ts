@@ -130,7 +130,7 @@ const UI = {
   exConfigHint: { en: `Current parameters and solved frames; loads into ${PY_PACKAGE} / the Fusion add-in`, zh: `当前参数和求解好的坐标系，可再导入 ${PY_PACKAGE} / Fusion 插件` },
   exPart: { en: 'Part {name}.stl', zh: '单件 {name}.stl' },
   exPartHint: { en: 'A single part, in its own frame', zh: '单个零件，在自己的坐标系里' },
-  noParamsCarrier: { en: 'Carriers have no parameters. The carrier sets the default mounting angle and, without a flange adapter, the hole pattern of the pusher base; those values appear read-only in the pusher parameters.', zh: '载体没有可调参数。载体决定默认安装转角；不用法兰转接件时还决定推杆底座的孔位，这些值在推杆参数里只读显示。' },
+  noParamsCarrier: { en: 'Carriers have no parameters. The carrier sets the default mounting angle and, without a mount adapter, the hole pattern of the pusher base; those values appear read-only in the pusher parameters.', zh: '载体没有可调参数。载体决定默认安装转角；不用安装转接件时还决定推杆底座的孔位，这些值在推杆参数里只读显示。' },
   noParamsCamera: { en: 'Phone size and lens position come from the selected model and appear read-only in the pusher parameters. The angle and distance at which the lens looks at the TCP are pusher parameters.', zh: '相机尺寸和镜头位置由所选机型决定，在推杆参数里只读显示。镜头看向 TCP 的角度和距离在推杆参数里调。' },
   noParams: { en: 'This group has no parameters yet.', zh: '这一组暂时没有可调参数。' },
   dragSplit: { en: 'Drag to resize (double-click to reset)', zh: '拖动调整高度（双击恢复）' },

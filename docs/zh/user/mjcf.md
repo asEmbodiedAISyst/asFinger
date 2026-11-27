@@ -26,7 +26,7 @@
 {"name": "adapter_a", "mjcf": false, ...}
 ```
 
-机械臂模型里已经带有法兰转接件时，两处一起用。默认配置就是这样做的：reBot Arm B601-RS 的 URDF 把夹爪连接件算作 `link6`，所以默认配置只输出推杆本身，坐标相对于安装面 `F_mount`。`report.json` 里记着 body 的坐标系和包含的零件（`total.frame`、`total.parts`）。
+机械臂模型里已经带有安装转接件时，两处一起用。默认配置就是这样做的：reBot Arm B601-RS 的 URDF 把夹爪连接件算作 `link6`，所以默认配置只输出推杆本身，坐标相对于安装面 `F_mount`。`report.json` 里记着 body 的坐标系和包含的零件（`total.frame`、`total.parts`）。
 
 ## 把工具装到机械臂上
 

@@ -7,7 +7,7 @@ asFinger 是一根装在机械臂或人手上的推杆，用手机当腕部相�
 项目分三部分：
 
 - **生成器。** Python 包 `asfinger` 读配置，输出 STL、MuJoCo 模型（MJCF）、HTML 预览和一份报告。
-- **网页编辑器。** [asFinger 编辑器](https://asembodiedaisyst.github.io/asFinger/zh/editor/)在浏览器里运行同一套 Python。选好机械臂、法兰转接件和手机，调参数，然后导出配置和 STL。
+- **网页编辑器。** [asFinger 编辑器](https://asembodiedaisyst.github.io/asFinger/zh/editor/)在浏览器里运行同一套 Python。选好机械臂、安装转接件和手机，调参数，然后导出配置和 STL。
 - **硬件输入。** `hardware/` 目录存放实物工具的配置，以及配置引用的网格文件。
 
 ## 从哪里开始

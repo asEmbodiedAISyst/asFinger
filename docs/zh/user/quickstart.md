@@ -107,4 +107,5 @@ for length in (140, 160, 180):
 | 配置 | 工具 |
 | --- | --- |
 | `iphone17pro_default.json` | iPhone 17 Pro 配 reBot Arm B601-RS 的推杆，装在机械臂的夹爪连接件上。 |
-| `rebot_rs_flange.json` | 同一根推杆，不用法兰转接件，底座直接用螺钉装在 reBot 第 6 关节的转子上。 |
+| `rebot_rs_flange.json` | 同一根推杆，不用安装转接件，底座直接用螺钉装在 reBot 第 6 关节的转子上。 |
+| `square_rod.json` | 更早的方杆推杆：10 × 10 mm 方杆、平头（编辑器里的“方杆推杆”）；其余和 `iphone17pro_default.json` 相同，只是手机支架没有背部加强。 |

@@ -1,5 +1,6 @@
 // Config: a rail with one button per catalog group, always visible, and a panel beside it with the cards of the
 // group being configured. The panel is closed until a rail button is clicked.
+import { Fragment } from 'react';
 import { GROUPS, item, fits } from '../data/catalog';
 import { Ico } from './icons';
 import { useI18n } from '../i18n';
@@ -36,18 +37,24 @@ export function LeftPanel(p: Props) {
             <button className="icon-btn" title={t('closePanel')} aria-label={t('closePanel')} onClick={p.onClose}><Ico name="close" size={18} /></button>
           </div>
           <div className="cards">
-            {g.items.map((it) => {
+            {g.items.map((it, i) => {
               // an adapter made for another carrier cannot be picked
               const unfit = g.id === 'adapter' && !it.disabled && !fits(it, p.selection.carrier);
               const why = it.disabled ? t('planned') : unfit ? t('notForCarrier') : '';
+              // a divider where a new section starts (sections are given in the catalog, the order is the catalog's)
+              const prev = g.items[i - 1];
+              const divider = !!prev && (prev.section ?? 0) !== (it.section ?? 0);
               return (
-                <button key={it.id} disabled={it.disabled || unfit} title={why ? `${tx(it.name)} (${why})` : `${tx(it.name)}${it.subtitle ? ' · ' + tx(it.subtitle) : ''}`}
+                <Fragment key={it.id}>
+                {divider && <hr className="cards-divider" />}
+                <button disabled={it.disabled || unfit} title={why ? `${tx(it.name)} (${why})` : `${tx(it.name)}${it.subtitle ? ' · ' + tx(it.subtitle) : ''}`}
                   className={'card' + (p.selection[g.id] === it.id ? ' selected' : '')}
                   onClick={() => p.onSelect(g.id, it.id)}>
                   <Ico name={it.icon} size={32} />
                   <span className="card-name">{tx(it.name)}</span>
                   {why && <span className="card-sub">{why}</span>}
                 </button>
+                </Fragment>
               );
             })}
           </div>

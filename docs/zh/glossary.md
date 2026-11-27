@@ -10,7 +10,7 @@
 | TCP (tool centre point) | TCP（工具中心点） | 接触参考点，即坐标系 `T_tcp`，在末端的顶点。 |
 | carrier | 载体 | 拿着推杆的东西：机械臂，或者手持握把。 |
 | robot flange | 机械臂法兰 | 机械臂上用来装工具的端面，即坐标系 `F_robot`。 |
-| flange adapter | 法兰转接件 | 机械臂法兰和推杆底座之间的零件。 |
+| mount adapter | 安装转接件 | 载体（机械臂法兰或手腕）和推杆底座之间的零件。 |
 | pusher base | 推杆底座 | 推杆底部的那块板，它的安装面是坐标系 `F_mount`。 |
 | mounting angle | 安装转角 | 推杆绕法兰轴线转过的角度（`mount_rot`）。 |
 | holder | 手机支架 | 把手机固定在推杆上的零件。 |

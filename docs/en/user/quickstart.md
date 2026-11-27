@@ -107,4 +107,5 @@ A pose has the attributes `p` (position, a list of 3 numbers) and `R` (rotation 
 | Config | Tool |
 | --- | --- |
 | `iphone17pro_default.json` | The pusher for the iPhone 17 Pro on the reBot Arm B601-RS, mounted on the gripper connector of the arm. |
-| `rebot_rs_flange.json` | The same pusher without the flange adapter. The base is bolted to the joint-6 rotor of the reBot arm. |
+| `rebot_rs_flange.json` | The same pusher without the mount adapter. The base is bolted to the joint-6 rotor of the reBot arm. |
+| `square_rod.json` | The earlier pusher with a 10 × 10 mm square rod and a flat end (the Square pusher of the editor); otherwise like `iphone17pro_default.json`, without the back reinforcement of the holder. |

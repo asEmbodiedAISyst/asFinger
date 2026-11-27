@@ -24,6 +24,17 @@ const P: Record<Icon | 'chevron' | 'panel' | 'overall' | 'reset' | 'download' | 
   'rod-arc': (<>
     <path d="M12 10h14v6H12z" /><path d="M19 16l-3 16" /><path d="M23 16l-3 16" /><path d="M10 34c3-3 9-3 12 0" />
   </>),
+  'rod-square': (<>
+    <path d="M12 10h14v6H12z" /><path d="M17 16l-4 18" /><path d="M25 16l-4 18" /><path d="M13 34h8" />
+    <path d="M26 13l8 4" /><path d="M31 15.5 36 34" /><path d="M33 14l6 22" /><path d="M36 34l3 2" />
+  </>),
+  humanoid: (<>
+    <circle cx="24" cy="9.5" r="3.5" /><path d="M18 15h12l1 13h-3l-1 12h-6l-1-12h-3z" /><path d="M18 16l-6 11" /><path d="M30 16l6 11" />
+    <path d="M22 28v12M26 28v12" />
+  </>),
+  'camera-none': (<>
+    <rect x="8" y="15" width="32" height="18" rx="3.5" strokeDasharray="2.4 2.8" /><path d="M14 38 34 10" />
+  </>),
   'tip-ball': (<>
     <path d="M18 8v20" /><path d="M30 8v20" /><path d="M18 28a6 6 0 0 0 12 0" /><path d="M10 40h28" /><circle cx="24" cy="34" r="0.8" />
   </>),
@@ -50,6 +61,10 @@ const P: Record<Icon | 'chevron' | 'panel' | 'overall' | 'reset' | 'download' | 
   </>),
   'adapter-fused': (<>
     <path d="M9 38h30" strokeDasharray="2 2.6" /><path d="M15 38v-6h18v6" /><path d="M9 34V20h30v14" /><path d="M9 30H5M39 30h4" /><path d="M22 20 25 9M29 20 32 9" />
+  </>),
+  // a ring clamped round a wrist (left), the pusher base on its tool side (right)
+  'adapter-wrist': (<>
+    <path d="M6 18h10v12H6" strokeDasharray="2 2.6" /><path d="M16 14h10v20H16z" /><path d="M21 14v-3M21 34v3" /><path d="M26 18h6v12h-6" /><path d="M32 21 42 13M32 27l10-8" />
   </>),
   depthcam: (<>
     <rect x="6" y="18" width="36" height="12" rx="6" /><circle cx="14" cy="24" r="2.5" /><circle cx="24" cy="24" r="2" /><circle cx="34" cy="24" r="2.5" />

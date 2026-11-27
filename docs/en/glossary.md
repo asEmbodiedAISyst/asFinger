@@ -10,7 +10,7 @@ The English and the Chinese pages use the same terms. This table is the referenc
 | TCP (tool centre point) | TCP（工具中心点） | The contact reference point. It is the frame `T_tcp`, at the apex of the tip. |
 | carrier | 载体 | What holds the pusher: a robot arm or a hand grip. |
 | robot flange | 机械臂法兰 | The face of the robot that a tool is bolted to. It is the frame `F_robot`. |
-| flange adapter | 法兰转接件 | A part between the robot flange and the pusher base. |
+| mount adapter | 安装转接件 | A part between the carrier (a robot flange or a wrist) and the pusher base. |
 | pusher base | 推杆底座 | The plate at the bottom of the pusher. Its mounting face is the frame `F_mount`. |
 | mounting angle | 安装转角 | The turn of the pusher about the flange axis (`mount_rot`). |
 | holder | 手机支架 | The part that carries the phone on the pusher. |
