@@ -1,12 +1,10 @@
-# Written by sim/register.py on 2026-11-16: do not edit, run the script again.
+# Written by sim/register.py: do not edit, run the script again.
 # Arm base frame, metres. Good to about 1 cm; see the script for how it is obtained.
 #   whiteboard: centre of the white area and rotation of the board about the vertical
 #   tags.corners: corner positions on the whiteboard surface, in the order the detector returns them
 #   cameras: position and axes (columns: image right, image down, optical axis); top in the arm frame, wrist in the
 #     flange frame. The wrist camera: PnP reprojection error 1.0 px, then moved
 #     12 mm sideways to put the rod tip where the wrist picture shows it.
-# Inputs: gravity [0.0636, -0.6565, -0.7516], camera height 0.762 m, rod tip [1276.0, 494.4] and rod point
-#   [1180.0, 496.4] px in the overhead picture, rod tip [351.0, 256.0] px in the wrist picture.
 whiteboard:
   centre: [0.3022, -0.0085]
   yaw_deg: 5.0

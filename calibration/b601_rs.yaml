@@ -4,7 +4,7 @@
 #
 # gains: the library defaults are kp [40, 120, 120, 40, 40, 40], kd [2.4, 8, 8, 4, 3.2, 3.2]. On this arm kd = 8 on
 # the shoulder and elbow makes the rs-06 motors hum, so their kd is 4. The base (joint 1, also rs-06) runs at kp 80,
-# kd 4 since 2026-11-17 (owner's decision): at kp 40 its torque ripple alone was as stiff as the position loop.
+# kd 4 (owner's decision): at kp 40 its torque ripple alone was as stiff as the position loop.
 # link_params: masses and centres of mass from the gravity calibration, with the pusher tool mounted.
 # ripple: torque the shoulder and elbow motors need as a function of the joint angle (126 periods per turn), written by
 #   robot/arm_calib_ripple.py. The library feeds it forward as soon as this section exists. It belongs to the joints'
@@ -12,23 +12,16 @@
 # friction, feedforward: dry friction of joints 1-3 from the same sweeps, and the share of it that is fed forward along
 #   the commanded direction of motion (friction_scale).
 meta:
-  gains_date: '2026-11-16'
   gains_note: shoulder and elbow kd lowered from 8 to 4 against motor hum, step-checked
-    at the home pose 2026-11-16; base (joint 1) raised from kp 40, kd 2.4 to kp 80,
-    kd 4 on 2026-11-17 against its torque ripple, NOT yet step-checked on the real
-    arm
-  gravity_date: '2026-11-16T16:55:32'
+    at the home pose; base (joint 1) raised from kp 40, kd 2.4 to kp 80, kd 4 against
+    its torque ripple, NOT yet step-checked on the real arm
   gravity_tool: pusher_ip17
   gravity_poses: 39
   gravity_prior_rel: 1.0
   gravity_rms_before: [0.306, 0.88, 1.171, 0.431, 0.206, 0.252]
   gravity_rms_after: [0.306, 0.248, 0.447, 0.153, 0.2, 0.252]
   gravity_fit_bias: false
-  gravity_note: fit of calibration/data/gravity-wide-20261116-163218.npz and gravity-board-20261116-165455.npz
-    together (39 poses), from the URDF model, no torque offset; valid inside the pose
-    ranges of robot/arm_calib_gravity.py
   gravity_bias: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  ripple_date: '2026-11-17T01:38:51'
   ripple_joints: [1]
   ripple_amplitude: [0.253]
   ripple_explained: [0.215]

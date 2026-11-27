@@ -1,6 +1,6 @@
 # Star Arm 102 leader arm for robot/teleop_star.py.
 # Values follow the official reBot support (lerobot-teleoperator-rebot-arm-102 and lerobot-robot-seeed-b601,
-# LeRobot's rebot_102_leader / rebot_b601_follower with motor_family=rs), read 2026-11-17. Not yet checked against
+# LeRobot's rebot_102_leader / rebot_b601_follower with motor_family=rs). Not yet checked against
 # this leader and this arm: run `robot/teleop_star.py --check` first.
 #
 # port: the USB serial adapter of the leader (UC-01, 1 Mbit/s).

@@ -5,10 +5,10 @@
 #
 # How F_robot (the tool's mounting face) sits on the arm's flange frame link6 is NOT in the frame file. Used here:
 #   p_link6 = Rz(180 deg) * p_F_robot + (0, 0, 8.98 mm)
-# - Rz(180): on the arm the rod is on the -x side of link6 (seen in the wrist and overhead pictures, 2026-11-16).
+# - Rz(180): on the arm the rod is on the -x side of link6 (seen in the wrist and overhead pictures).
 # - 8.98 mm: inferred, not measured. With it the tip sphere centre T_tip lands on the TCP of `pusher_ip17`
 #   (-96.33, 0, 172.18) mm to 0.01 mm, which was computed from an earlier MuJoCo model with the tool on link6.
-#   A wrist-camera measurement of the tip height above the whiteboard (2026-11-17) agrees with it to about 2 mm
+#   A wrist-camera measurement of the tip height above the whiteboard agrees with it to about 2 mm
 #   and with 0 mm to about 5 mm. To be confirmed by the owner.
 # tcp: origin = T_tcp, the end of the rod (apex of the tip sphere); z along the rod, as in the frame file.
 #   x and y are turned 180 deg about the rod compared with T_tcp, so that x points away from the base when the rod
@@ -18,8 +18,8 @@
 # payload: copied from `pusher_ip17` on purpose. calibration/b601_rs.yaml (link masses) was fitted with it in the
 #   model; changing it here would shift the gravity compensation. The real weights have not been measured.
 # home_deg: rod vertical, tool x forward, tip at (0.24, 0, 0.12) m. The owner accepted a vertical rod for simple data
-#   collection (2026-11-17); pushing in general should not fix the tool's orientation. Until 2026-11-17 the home
-#   was [0, 20, 28.6, -38.8, 0, 0] (the joint angles of `pusher_ip17`), where the rod leans 30 deg forward.
+#   collection; pushing in general should not fix the tool's orientation. An earlier home was
+#   [0, 20, 28.6, -38.8, 0, 0] (the joint angles of `pusher_ip17`), where the rod leans 30 deg forward.
 # cartesian: z lower limit = table (calibration/table.yaml, +0.020 m for the TCP with the rod vertical) + 5 mm.
 name: ip17pro_print_20261108
 mount_frame: link6
