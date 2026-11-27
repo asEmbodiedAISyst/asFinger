@@ -17,8 +17,8 @@ the opening, behind the arm) and the ceiling are hidden so you can look in from 
     F8 front (operator side)   F9 back   F10 left (+y)   F11 right (-y)   F12 top (ceiling, cloth, light strips)
     number keys 1-4, or "Group enable" > Geom on the left panel: 1 front, 2 top, 3 both side walls, 4 back
 This window always draws with MuJoCo's classic renderer, whatever base.renderer says: MuJoCo 4.0.0's Filament viewer
-(MuJoCo Studio) does not open a window on this machine (its Python wrapper fails with "Target not found"; tried
-2026-11-27, also `python -m mujoco.studio.viewer`).
+(MuJoCo Studio) did not open a window when it was tried (its Python wrapper fails with "Target not found", also
+with `python -m mujoco.studio.viewer`).
 """
 
 from __future__ import annotations

@@ -63,7 +63,7 @@ Hiding a face changes only the picture in this window. `twin.render()` always dr
 | --- | --- |
 | `sim/twin.yaml` | The scene: the fixed part (arm meshes, box, floor, lights, camera intrinsics and tone, Filament settings) and the list of objects (whiteboard, cube). Each number says if it is measured, taken from video, tuned or estimated. |
 | The `sim:` block of `calibration/tool_ip17pro_print.yaml` | How the scene draws the tool: mesh, collision shapes, the phone, the frame of the wrist camera. The control library ignores this block. |
-| `sim/twin_registration.yaml` | Results of a registration from recorded video: the pose of the top camera on two days, the pose of the wrist camera on the flange, the outline of the whiteboard, and where the markers are on it. |
+| `sim/twin_registration.yaml` | The camera and marker positions that the scene uses: the pose of the top camera, the pose of the wrist camera on the flange, the white area and the frame of the whiteboard, and where the markers are on it. |
 | `sim/twin.py` | Builds the scene, renders, projects points, reads and sets object poses. |
 | `sim/twin_filament.py` | The optional Filament renderer. |
 | `sim/twin_view.py` | The viewer. |
@@ -102,8 +102,8 @@ with twin.make_arm(cfg) as arm:
 - **The colours agree on average only.** The lights and the tones were tuned on a few pictures of both real cameras. A real picture has much more variation inside one surface: uneven light, creases of the cloth, reflections, automatic exposure. The reflection of the light strips on the whiteboard, the cables and the view through the opening are not modelled.
 - **Filament looks better from outside, but is not closer to the real cameras.** In the comparison of colours with real pictures, the classic renderer was slightly closer. Filament also takes about two to four times as long for a picture.
 - **Some sizes are estimated:** the inner height of the box, the opening of the front face, the mass of the whiteboard. The thickness of the whiteboard is not measured: the scene sets it so that the top of the board is at the table height that the arm measured.
-- **`sim/twin_registration.yaml` belongs to one setup on two days.** The top phone was moved between those days, and the file holds one camera pose for each day. After a camera moved, this file is out of date.
-- **The tools that write the registration and the start state of an episode are not in this repository yet.** The registration file is here as those tools wrote it. `twin.load_state()` and the options `--episode` and `--replay` read files in `data/derived/twin/<episode>/` that only those tools write. Without such a file they stop and say what is absent.
+- **`sim/twin_registration.yaml` belongs to one setup.** Its values were fitted to recorded video of that setup. After a camera or a marker moved, they are out of date. The file can hold more than one pose of the top camera; `default_session` names the one in use.
+- **The tools that fit the registration and measure the start state of an episode are not in this repository yet.** The registration file holds the fitted values only. `twin.load_state()` and the options `--episode` and `--replay` read files in `data/derived/twin/<episode>/` that only those tools write. Without such a file they stop and say what is absent.
 - **Rendering is not tested in CI.** The tests in CI run without the meshes and without a GL context. Rendering was checked by hand on macOS (both renderers) and compared with the source of the scene.
 
 ## Recorded data

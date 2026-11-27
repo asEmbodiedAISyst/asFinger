@@ -44,10 +44,10 @@ base:
                                                  # the floor in the top video lies within ~1 cm of it)
     y: [-0.40, 0.40]                             # measured; from-video agrees within 1-2 cm (wall-floor creases, top video)
     top: 0.80                                    # estimated: inner height of the 80 cm cube (owner); the top phone, registered
-                                                 # at z = 0.774 / 0.783, hangs just under it
+                                                 # at z = 0.78, hangs just under it
     wall_thickness: 0.004                        # drawing only
     silver:                                      # side walls, ceiling and operator-side face: silver-white reflective cloth
-      rgba: [0.79, 0.78, 0.76, 1]                # owner, 2026-11-27: plain white / silver-white, brightness tuned to the real
+      rgba: [0.79, 0.78, 0.76, 1]                # owner: plain white / silver-white, brightness tuned to the real
                                                  # frames (the real foil looks warm there because it mirrors the backdrop)
       emission: 0.1                              # tuned: extra glow of the cloth (the light it bounces)
       specular: 0.4                              # estimated: a dull sheen, no mirror reflection
@@ -57,11 +57,11 @@ base:
     back: backdrop                               # from-video: the pink-yellow backdrop paper runs up the back wall (wrist video);
                                                  # backdrop | silver
     front:                                       # the operator-side face (cloth, silver inside) behind the arm base
-      opening: {y: [-0.23, 0.22], z: [0.125, 0.62]}   # from-video, estimated: the window's corners in the 2026-11-19 top video,
+      opening: {y: [-0.23, 0.22], z: [0.125, 0.62]}   # from-video, estimated: the window's corners in the top video,
                                                  # back-projected onto the face (+-2 cm; corners are rounded in reality).
                                                  # "closed" for none
       outside_rgba: [0.13, 0.12, 0.115, 1]      # from-video: the room seen through the opening, as one flat,
-                                                 # self-lit colour 40 cm behind it: its mean in the 2026-11-19 top video
+                                                 # self-lit colour 40 cm behind it: its mean in the top video
     cloth:                                       # white diffusion cloth under the light strips (the strips are behind it)
       z: 0.79                                    # estimated: under the strips, above the top phone
       rgba: [1.0, 1.0, 1.0, 1]
@@ -73,7 +73,7 @@ base:
     rgba: [0.69, 0.53, 0.33, 1.0]                # the pink-yellow backdrop, tuned to real frames (linear: the camera tone adds the
                                                  # gamma; was [0.93, 0.76, 0.58] by eye)
   lights:                                        # two LED strips under the box top, each along y, behind the diffusion cloth
-    strips_x: [0.117, 0.383]                     # owner, 2026-11-27: at 1/3 of the box top (read as 1/3 and 2/3 of the depth,
+    strips_x: [0.117, 0.383]                     # owner: at 1/3 of the box top (read as 1/3 and 2/3 of the depth,
                                                  # x = -0.15 .. 0.65)
     z: 0.795                                     # estimated: just under the top, above the cloth
     length: 0.60                                 # estimated
@@ -119,8 +119,8 @@ base:
       top: {gain: [1.153, 1.002, 0.982], gamma: 1.61, input: srgb}     # tuned, as base.camera_tone
       wrist: {gain: [0.592, 0.508, 0.534], gamma: 2.19, input: srgb}
   camera_tone:                                   # each phone's response, applied by twin.render() to the rendered picture (taken as
-    # linear light): out = (gain * in) ^ (1 / gamma), per channel R, G, B. Tuned to real frames (2026-11-27; 6 frames
-    # of 3 episodes, both days; docs/en/user/simulation-twin.md), together with the lights and the floor and foil colours.
+    # linear light): out = (gain * in) ^ (1 / gamma), per channel R, G, B. Tuned to real frames of both cameras
+    # (docs/en/user/simulation-twin.md), together with the lights and the floor and foil colours.
     # The phones expose and white-balance automatically, so this is a fixed average: the wrist phone sees the same
     # scene about 25 L* darker than the top phone. render(..., raw=True) skips it.
     top: {gain: [1.068, 0.934, 0.878], gamma: 2.10}
@@ -147,8 +147,8 @@ objects:
     line: {width: 0.003, rgba: [0.03, 0.03, 0.03, 1]}   # the hand-drawn line; its points come from each episode (estimated width)
   - name: cube
     type: box
-    size: 0.040                                  # measured by the owner (edge, 2026-11-22)
-    mass: 0.010                                  # measured by the owner, approximate (3D printed, 2026-11-22)
+    size: 0.040                                  # measured by the owner (edge)
+    mass: 0.010                                  # measured by the owner, approximate (3D printed)
     friction: 0.4                                # estimated; only against other loose objects (see sim/twin.py)
     rgba: [0.06, 0.06, 0.06, 1]
     pose: {x: 0.30, y: 0.0, yaw_deg: 0.0}        # default; an episode overrides it

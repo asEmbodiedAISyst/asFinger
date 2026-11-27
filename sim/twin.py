@@ -9,7 +9,7 @@ From code (the same control library as the real arm, as in sim/scene.py):
 
     import sys; sys.path.insert(0, "sim")
     import twin
-    cfg = twin.load_config(state=twin.load_state("20261118-194043-push-line"))   # state optional
+    cfg = twin.load_config(state=twin.load_state("<episode>"))   # state optional
     with twin.make_arm(cfg) as arm:
         arm.backend.set_q(q)                           # or arm.enable(); arm.move_home(); ...
         image = twin.render(arm, "top")                # RGB as the overhead phone would see it; "wrist" for the tool's
@@ -18,7 +18,7 @@ Files: sim/twin.yaml (the scene: what is measured, what estimated), the tool fil
 the tool's kinematics and its `sim:` block with mesh, collision shapes and camera frames), sim/twin_registration.yaml
 (overhead camera pose and where the tags are on the whiteboard) and, per episode, a start state. The registration
 file and the start states are written by tools that are not part of this repository yet (twin_register.py,
-episode_state.py): the registration file is here as written, and the twin runs without a start state.
+episode_state.py): the registration file holds the values in use, and the twin runs without a start state.
 sim/scene.py (the first version) is left as it was.
 
 Recorded data is looked for in the repository's data/ folder, as robot/episode.py writes it (data/episodes); the
