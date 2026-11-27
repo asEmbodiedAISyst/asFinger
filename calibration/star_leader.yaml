@@ -1,0 +1,18 @@
+# Star Arm 102 leader arm for robot/teleop_star.py.
+# Values follow the official reBot support (lerobot-teleoperator-rebot-arm-102 and lerobot-robot-seeed-b601,
+# LeRobot's rebot_102_leader / rebot_b601_follower with motor_family=rs), read 2026-11-17. Not yet checked against
+# this leader and this arm: run `robot/teleop_star.py --check` first.
+#
+# port: the USB serial adapter of the leader (UC-01, 1 Mbit/s).
+# ids: bus ids of the servos of joints 1..6 (the handle, id 6, is not used: the arm has no gripper).
+# follower joint angle [deg] = signs * leader angle [deg] + offsets_deg
+#   The official zero is written into the leader's servos with the leader folded (`--set-zero`), so the offsets
+#   are zero. Joint 6 of this arm was zeroed by eye with the tool level: if the leader's wrist roll then does not
+#   match, put the difference into offsets_deg[5] instead of re-zeroing the arm.
+# ranges_deg: valid leader angles; readings are brought into the 360 deg window around each range and clipped.
+port: /dev/ttyUSB0
+baudrate: 1000000
+ids: [0, 1, 2, 3, 4, 5]
+signs: [1, 1, -1, -1, -1, 1]
+offsets_deg: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+ranges_deg: [[-150, 150], [-1, 170], [-200, 1], [-80, 90], [-90, 90], [-130, 130]]

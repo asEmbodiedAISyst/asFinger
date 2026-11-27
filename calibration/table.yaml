@@ -1,0 +1,17 @@
+# Written by robot/arm_touch_table.py on 2026-11-17: do not edit, run the tool again
+# (--from-data recomputes it from the saved joint angles, e.g. after the tool model changed).
+# Height of the table (whiteboard surface) in the arm's base frame, metres, as the arm itself measures it by
+# touching: z is the mean over the touches, points are the touched positions, plane is fitted through them.
+table:
+  z: 0.0197
+  z_min: 0.0192
+  z_max: 0.0206
+  points:
+  - [0.2909, 0.1082, 0.0192]
+  - [0.2912, -0.1075, 0.0206]
+  - [0.3409, 0.0801, 0.0195]
+  plane: {z0: 0.0192, dz_dx: 0.0024, dz_dy: -0.0065, residual_rms: 0.0}
+tool: calibration/tool_ip17pro_print.yaml
+tip_below_tcp: 0.0
+calibration: calibration/b601_rs.yaml
+data: calibration/data/table-20261116-235858.npz

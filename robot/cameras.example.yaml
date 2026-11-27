@@ -1,0 +1,17 @@
+# The two workspace phones (iPhones that run the iMuninn app): where they are and which devices they must be.
+# Copy this file to cameras.local.yaml in the same folder and fill it in. Git ignores cameras.local.yaml, so the
+# addresses and identities of your phones stay on your computer.
+#
+# address:   the phone's address or iMuninn name on your network. `uv run imuninn list` shows the phones it finds.
+#            ASFINGER_TOP_CAM / ASFINGER_WRIST_CAM override it for one run.
+# device_id: the id the phone reports when a tool connects. A tool warns when another phone answers at the address,
+#            and prints the id it found: copy it from that warning the first time.
+# label:     how you call the phone; used in messages only.
+top:                # overhead camera
+  address: 192.0.2.11
+  device_id: 00000000-0000-0000-0000-000000000000
+  label: top phone
+wrist:              # camera on the arm's tool
+  address: 192.0.2.12
+  device_id: 00000000-0000-0000-0000-000000000000
+  label: wrist phone

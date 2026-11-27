@@ -1,0 +1,74 @@
+# Calibration of this arm (reBot B601-RS in the photo box) for the rebot-control library.
+# Load it with `--calibration calibration/b601_rs.yaml`; `robot/arm` and the robot/arm_*.py tools load it by default.
+# Written by the tools (robot/arm_calib_gravity.py for link_params); the comments here are restored by hand.
+#
+# gains: the library defaults are kp [40, 120, 120, 40, 40, 40], kd [2.4, 8, 8, 4, 3.2, 3.2]. On this arm kd = 8 on
+# the shoulder and elbow makes the rs-06 motors hum, so their kd is 4. The base (joint 1, also rs-06) runs at kp 80,
+# kd 4 since 2026-11-17 (owner's decision): at kp 40 its torque ripple alone was as stiff as the position loop.
+# link_params: masses and centres of mass from the gravity calibration, with the pusher tool mounted.
+# ripple: torque the shoulder and elbow motors need as a function of the joint angle (126 periods per turn), written by
+#   robot/arm_calib_ripple.py. The library feeds it forward as soon as this section exists. It belongs to the joints'
+#   zeros: after re-zeroing a motor, calibrate again.
+# friction, feedforward: dry friction of joints 1-3 from the same sweeps, and the share of it that is fed forward along
+#   the commanded direction of motion (friction_scale).
+meta:
+  gains_date: '2026-11-16'
+  gains_note: shoulder and elbow kd lowered from 8 to 4 against motor hum, step-checked
+    at the home pose 2026-11-16; base (joint 1) raised from kp 40, kd 2.4 to kp 80,
+    kd 4 on 2026-11-17 against its torque ripple, NOT yet step-checked on the real
+    arm
+  gravity_date: '2026-11-16T16:55:32'
+  gravity_tool: pusher_ip17
+  gravity_poses: 39
+  gravity_prior_rel: 1.0
+  gravity_rms_before: [0.306, 0.88, 1.171, 0.431, 0.206, 0.252]
+  gravity_rms_after: [0.306, 0.248, 0.447, 0.153, 0.2, 0.252]
+  gravity_fit_bias: false
+  gravity_note: fit of calibration/data/gravity-wide-20261116-163218.npz and gravity-board-20261116-165455.npz
+    together (39 poses), from the URDF model, no torque offset; valid inside the pose
+    ranges of robot/arm_calib_gravity.py
+  gravity_bias: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  ripple_date: '2026-11-17T01:38:51'
+  ripple_joints: [1]
+  ripple_amplitude: [0.253]
+  ripple_explained: [0.215]
+  ripple_note: torque ripple per joint angle from slow single-joint sweeps (robot/arm_calib_ripple.py);
+    belongs to the joints' zeros
+  ripple_saved_share: [1.0]
+  friction_note: dry friction per joint from the same sweeps (half the torque difference
+    between directions)
+link_params:
+  link1:
+    mass: 0.4655
+    com: [0.008177, 0.001226, 0.033142]
+  link2:
+    mass: 1.552
+    com: [-0.117179, -0.002599, -0.027155]
+  link3:
+    mass: 1.186172
+    com: [0.121409, -0.05612, -0.028611]
+  link4:
+    mass: 0.570501
+    com: [0.041619, -0.043024, -0.025327]
+  link5:
+    mass: 0.255828
+    com: [0.08555, -0.009641, 0.026393]
+  link6:
+    mass: 0.195117
+    com: [0.004455, 0.007726, 0.031767]
+friction:
+  fc_pos: [0.49612, 0.329922, 0.445041, 0.0, 0.0, 0.0]
+  fc_neg: [0.49612, 0.329922, 0.445041, 0.0, 0.0, 0.0]
+  fv: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  vs: [0.02, 0.02, 0.02, 0.02, 0.02, 0.02]
+  bias: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+ripple:
+  cycles: [126.0, 126.0, 126.0, 0.0, 0.0, 0.0]
+  a1: [0.252651, -0.151493, -0.247427, 0.0, 0.0, 0.0]
+  b1: [0.018686, 0.241073, -0.481171, 0.0, 0.0, 0.0]
+  a2: [0.043986, 0.048768, 0.012509, 0.0, 0.0, 0.0]
+  b2: [0.005104, -0.044075, -0.027507, 0.0, 0.0, 0.0]
+feedforward: {friction_scale: 0.7}
+gains:
+  kp: [80.0, 120.0, 120.0, 40.0, 40.0, 40.0]
+  kd: [4.0, 4.0, 4.0, 4.0, 3.2, 3.2]

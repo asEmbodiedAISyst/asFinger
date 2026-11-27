@@ -1,0 +1,21 @@
+# Camera on the arm's end. The phone falls back to its defaults when the
+# iMuninn app restarts; re-apply with:
+#   uv run imuninn profile apply robot/wrist_camera.yaml <address of the wrist phone>
+#
+# 640x480 keeps the full ultra-wide field of view (102.7 x 86.3 deg, same as 1920x1440)
+# at a ninth of the pixels. Exposure and white balance stay automatic: the view changes
+# as the arm moves.
+name: wrist_camera
+mode: camera
+streams:
+  rgb:
+    enabled: true
+    lens: ultra_wide
+    camera_format: 640x480@60
+    bitrate_kbps: 2000
+    keyframe_interval: 60
+    exposure_mode: auto
+    white_balance_mode: auto
+  imu:
+    enabled: true
+    rate_hz: 100
