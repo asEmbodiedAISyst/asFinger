@@ -54,6 +54,24 @@ jobs:
     - name: Run tests
       run: uv run pytest
 
+  # The scripts in robot/ and sim/, in the simulator: no arm, no phone, no GL context.
+  robot:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v7
+
+    - name: Install uv and Python 3.12
+      uses: astral-sh/setup-uv@v10.4.0
+      with:
+        python-version: "3.12"
+
+    - name: Install dependencies with the robot group
+      run: uv sync --locked --group robot
+
+    - name: Run the robot-side tests
+      run: uv run --group robot pytest tests/robot
+
   site:
     runs-on: ubuntu-latest
     defaults:
