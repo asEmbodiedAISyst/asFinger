@@ -22,7 +22,7 @@ The version is 0.1.0.
 - `resolved.json` contains an absolute local path (`base_dir`).
 - The mesh step exists twice, in `mesh.py` and in `site/src/engine/csg.ts`.
 - The package has no type hints.
-- The command `send` gets no result from the Fusion add-in, and the add-in accepts requests without authentication. See [The Fusion add-in](../user/fusion.md#limits).
+- The command `send` gets no result from the Fusion add-in, and the add-in accepts a request from any program on the computer. See [The Fusion add-in](../user/fusion.md#limits).
 - A print set name, the MJCF body name and the output file names still use the earlier project name.
 - The pusher base supports four screw holes only.
 - The minimum focus distance of the phone cameras is unknown, so the focus check is off.

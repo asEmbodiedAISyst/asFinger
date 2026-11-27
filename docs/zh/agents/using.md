@@ -10,7 +10,7 @@ cd asFinger
 python3 -m pip install .
 ```
 
-- 需要 Python 3.10 或更高版本。
+- 需要 Python 3.11 或更高版本。
 - 导入名是小写的 `asfinger`，命令是 `asfinger`。
 - 配置在 `hardware/configs/`，配置引用的网格在 `hardware/assets/`。
 

@@ -6,6 +6,7 @@
 * A small HTTP server on 127.0.0.1:47910 lets a script or `python -m asfinger send` push a config to Fusion:
   POST /ipush/apply  {"config": "/abs/path.json" | {...config...}, "params": {...}, "mode": "update"}
   Fusion's API is single-threaded, so the request is handed to the main thread through a custom event.
+  A request that carries an Origin header comes from a web page in a browser and is refused.
 
 The geometry code lives in ../asfinger_fusion/asfinger_fusion.py and the model (params, frame solving, CSG) in the
 repository's `asfinger` package (src/asfinger); both are pure Python, so nothing needs to be installed into Fusion.
@@ -235,23 +236,40 @@ class ApplyEvent(adsk.core.CustomEventHandler):
 
 class Bridge(BaseHTTPRequestHandler):
     def _send(self, code, obj):
+        # no Access-Control-* header on any reply: a web page gets no permission to use this server
         body = json.dumps(obj).encode()
         self.send_response(code)
         self.send_header('Content-Type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.send_header('Access-Control-Allow-Private-Network', 'true')
         self.end_headers()
         self.wfile.write(body)
 
+    def _refuse_web_page(self):
+        """Refuse a request that comes from a web page. A browser puts an Origin header on such a request;
+        `asfinger send`, curl and scripts send none. Returns True when the request was refused.
+        A future "send from the web editor" needs an explicit allow-list of origins here, not a wildcard."""
+        if self.headers.get('Origin') is None:
+            return False
+        # read the body (at most 1 MB of it) before the reply, or the sender may see a reset connection
+        try:
+            self.rfile.read(min(int(self.headers.get('Content-Length', 0)), 1 << 20))
+        except ValueError:
+            pass
+        self._send(403, {'ok': False, 'error': 'requests from web pages are refused'})
+        return True
+
     def do_OPTIONS(self):
-        self._send(204, {})
+        # only a browser sends a preflight request
+        self._send(403, {'ok': False, 'error': 'requests from web pages are refused'})
 
     def do_GET(self):
+        if self._refuse_web_page():
+            return
         # the health reply keeps the earlier name: other programs look for it
         self._send(200, {'ok': True, 'app': 'ipush-fusion', 'port': PORT})
 
     def do_POST(self):
+        if self._refuse_web_page():
+            return
         if self.path.rstrip('/') != '/ipush/apply':
             return self._send(404, {'ok': False})
         n = int(self.headers.get('Content-Length', 0))

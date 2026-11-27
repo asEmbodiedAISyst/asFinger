@@ -10,7 +10,7 @@ cd asFinger
 python3 -m pip install .
 ```
 
-- The package needs Python 3.10 or later.
+- The package needs Python 3.11 or later.
 - The import name is `asfinger` (lowercase). The command is `asfinger`.
 - The configs are in `hardware/configs/`. The meshes they import are in `hardware/assets/`.
 

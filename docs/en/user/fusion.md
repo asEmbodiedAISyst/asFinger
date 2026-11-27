@@ -88,7 +88,7 @@ POST http://127.0.0.1:47910/ipush/apply
 {"config": "/absolute/path/config.json", "params": {"rod_L": "150"}, "mode": "update", "save": false}
 ```
 
-`config` is a path, or the config itself as a JSON object. `mode` is `update`, `rebuild` or `new` (always a new document). A GET request returns `{"ok": true, "app": "ipush-fusion", "port": 47910}`. The path `/ipush/apply` and the name `ipush-fusion` come from an earlier name of the project.
+`config` is a path, or the config itself as a JSON object. `mode` is `update`, `rebuild` or `new` (always a new document). The request must not have an `Origin` header. A browser adds that header to the requests of a web page, so a web page cannot send a config: the add-in answers 403. A GET request returns `{"ok": true, "app": "ipush-fusion", "port": 47910}`. The path `/ipush/apply` and the name `ipush-fusion` come from an earlier name of the project.
 
 ## Use a config from the web editor
 
@@ -108,7 +108,7 @@ The script finds the meshes through the key `base_dir` of the file. If the key i
 
 - **Not run in Fusion from this location yet.** The add-in was used with the layout of the earlier project. In this repository it is tested without Fusion only: the paths, the list of parameters, the HTTP server and the agreement with `asfinger send`. The steps that make or change a design are not tested automatically.
 - **One port.** The port 47910 is fixed. If another program holds it when the add-in starts, the palette still works, but the add-in receives no requests. The palette and the Text Commands window of Fusion show a message. Stop the other program, then stop and run the add-in again.
-- **No authentication.** The server listens on 127.0.0.1 only, but it accepts a request from any program on the computer and from any web page that is open in a browser on it. A request can make Fusion load a config file and, with `save`, write that file again.
+- **Any local program can send a request.** The server listens on 127.0.0.1 only and refuses requests from web pages. It has no other authentication: a request from any program on the computer is accepted. A request can make Fusion load a config file and, with `save`, write that file again.
 - **No result for the sender.** A request gets the answer "queued". If the palette is closed, the result is not shown.
 - **Checks only.** The add-in runs the checks of the config. It does not run the interference rules. Use `asfinger build` or the web editor for those.
 - **A failed check stops the operation.** The palette has no control to build a design while a check fails.
