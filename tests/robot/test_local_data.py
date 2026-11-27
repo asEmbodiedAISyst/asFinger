@@ -52,3 +52,17 @@ def test_registration_and_render_against_the_real_pictures(tool, tmp_path):
     assert r.returncode == 0, r.stderr
     assert r.stdout.count('simulated vs real corner positions differ by') == 8
     assert os.path.isfile(tmp_path / 'sim-top.png') and os.path.isfile(tmp_path / 'sim-wrist.png')
+
+
+def test_twin_renders_both_cameras(tool, tmp_path):
+    if not os.path.isfile(os.path.join(ROOT, 'sim', 'assets', 'meshes', 'b601_rs_official', 'base_link.STL')):
+        pytest.skip('the arm meshes are not fetched (sim/fetch_arm_meshes.py)')
+    gl = os.environ.get('ASFINGER_TEST_GL')
+    if not gl:
+        pytest.skip('set ASFINGER_TEST_GL to a MuJoCo GL backend to render')
+    r = tool('sim/twin.py', 'render', '--out', str(tmp_path), '--scale', '0.5', env={'MUJOCO_GL': gl})
+    assert r.returncode == 0, r.stderr
+    assert (
+        'top:' in r.stdout and 'tags seen: [1, 2]' in r.stdout
+    )  # the two tags of the whiteboard, found in the picture
+    assert os.path.isfile(tmp_path / 'twin-top.png') and os.path.isfile(tmp_path / 'twin-wrist.png')
