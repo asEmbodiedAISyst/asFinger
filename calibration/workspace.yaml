@@ -1,7 +1,7 @@
 # The space the arm may use, in the arm's base frame: origin at the centre of the base on its mounting surface,
 # x forward into the box, y to the left (seen from behind the arm), z up. Metres.
 #
-# box: where the nearest obstacle is in each direction, measured by hand on 2026-11-16 (to about 2 cm):
+# box: where the nearest obstacle is in each direction, measured by hand (to about 2 cm):
 #   side walls 0.40 m to the left and right, back wall 0.65 m ahead, lowest object under the box top (lights,
 #   overhead phone) 0.70 m above the mounting surface. The whiteboard surface is level with the mounting
 #   surface to within 1 cm. Behind the base is the front opening of the box, with a curtain and no wall: the folded
@@ -10,7 +10,7 @@
 #   the tool tip; the links, the phone on the tool and the cables stick out beyond those points.
 # table_clearance: how far every checked point stays above the table in free-space moves (pushing uses its own
 #   limits). The table height is read from table.yaml in this folder (the arm's own touch measurement, written by
-#   robot/arm_touch_table.py: +0.020 m, touched on 2026-11-16); without that file the table is taken to be at z = 0.
+#   robot/arm_touch_table.py: +0.020 m); without that file the table is taken to be at z = 0.
 box:
   x: [-0.45, 0.65]
   y: [-0.40, 0.40]

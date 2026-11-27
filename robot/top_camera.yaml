@@ -3,7 +3,7 @@
 #   uv run imuninn profile apply robot/top_camera.yaml <address of the top phone>
 #
 # Exposure and white balance are manual, found with robot/calibrate_color.py against
-# the colour card under the box lights (2026-11-12). Re-run it when the lighting changes.
+# the colour card under the box lights. Re-run it when the lighting changes.
 name: top_camera
 mode: camera
 streams:
