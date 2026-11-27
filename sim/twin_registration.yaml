@@ -1,0 +1,54 @@
+# Written by twin_register.py on 2026-11-22. That tool is not part of this repository yet, so the file is here as it
+# wrote it. The episodes it names are recordings of the setup; they are not published.
+# Arm base frame, metres. Table plane z = 0.0197 (calibration/table.yaml).
+#   top_camera: per recording day (the phone was moved between days), position and axes (columns: image right,
+#     image down, optical axis), with the episodes used and tag 10's pixel position (to check later recordings)
+#   wrist_camera: on the flange (link6), fitted from the wrist video against the joint log; it replaces the as-built
+#     C_ultrawide of the tool file in sim/twin.py. dist_k1k2: radial distortion (OpenCV), not used by the renderer
+#   board_outer: the whiteboard's outline (short, long side), from a top-down picture of the table; board_frame: width
+#     of its aluminium frame (a faint step in the same picture); board_white = outer - 2 frame. board_tags: tag
+#     centres and turns in the board frame (origin: centre of the board, x along its short side, tag 1 on the +y half)
+#   video_delay_s: the videos' frames show the arm this long before their time stamps
+# Fit residuals: wrist 1.64 px median, overhead 0.75 px median.
+default_session: '2026-11-19'
+top_camera:
+  '2026-11-18':
+    pos: [0.5534, -0.14211, 0.77371]
+    R:
+    - [0.73632, 0.05853, -0.6741]
+    - [0.00392, -0.9966, -0.08225]
+    - [-0.67662, 0.05791, -0.73405]
+    tag10_px: [1053.5, 597.4000244140625]
+    episodes: [20261118-194043-push-line, 20261118-194612-push-line, 20261118-194844-push-line, 20261118-195058-push-line, 20261118-195325-push-line, 20261118-195506-push-line, 20261118-195628-push-line,
+      20261118-195857-push-line, 20261118-200128-push-line, 20261118-200300-push-line]
+    residual_px: 0.75
+  '2026-11-19':
+    pos: [0.54162, -0.1436, 0.78305]
+    R:
+    - [0.75191, 0.01149, -0.65917]
+    - [0.00086, -0.99986, -0.01644]
+    - [-0.65927, 0.0118, -0.75182]
+    tag10_px: [1050.0999755859375, 647.2000122070312]
+    episodes: [20261119-203904-push-line, 20261119-204018-push-line, 20261119-204659-push-line, 20261119-205459-push-line, 20261119-205639-push-line, 20261119-210146-push-line, 20261119-211026-push-line,
+      20261119-211252-push-line, 20261119-212124-push-line, 20261119-212757-push-line]
+    residual_px: 0.75
+board_white: [0.26932, 0.36888]
+board_frame: 0.015
+board_outer: [0.29932, 0.39888]
+board_tags:
+  size: 0.05
+  1:
+    pos: [0.0984, 0.1451]
+    yaw_deg: -88.75
+  2:
+    pos: [-0.093, -0.1482]
+    yaw_deg: -90.84
+video_delay_s: 0.0
+wrist_camera:
+  frame: flange
+  pos: [0.03837, -0.02582, 0.10714]
+  R:
+  - [0.06742, -0.49007, -0.86908]
+  - [0.99716, 0.00389, 0.07516]
+  - [-0.03345, -0.87168, 0.48894]
+  dist_k1k2: [-0.02791, 0.01705]

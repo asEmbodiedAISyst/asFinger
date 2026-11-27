@@ -1,0 +1,155 @@
+# The digital twin of the data-collection scene, second version (sim/twin.py). Frame: the arm's base frame, origin at the
+# centre of the base on its mounting surface, x forward into the box, y to the left, z up. Metres, degrees, kg.
+#
+# Two parts:
+#   base     what does not move between episodes: the arm, the photo box, its floor, the lights and the cameras
+#   objects  a list of loose things on the floor. The whiteboard is one of them (a free body resting on the floor, not
+#            welded), the cube another; more can be added. A recorded episode overrides their poses (and the drawn
+#            line, the cube's size) with a start state measured in its top video.
+# Where the overhead camera is, is kept in sim/twin_registration.yaml. The tools that write the registration and the
+# start states (twin_register.py, episode_state.py) are not part of this repository yet.
+#
+# How each number was obtained is noted next to it:
+#   measured   with a ruler, by the owner, by the arm itself, or reported by the device
+#   from-video measured in the recorded videos
+#   estimated  not measured: a plausible value, to be replaced
+
+base:
+  tool: calibration/tool_ip17pro_print.yaml     # tool kinematics (tcp) and its `sim:` block (mesh, collision, cameras)
+  calibration: calibration/b601_rs.yaml          # link masses fitted on this arm
+  table: calibration/table.yaml                  # measured by the arm touching the whiteboard: its z is the board surface
+  arm_meshes:                                    # visual only (no collision): Seeed's official reBot B601-RS meshes, not decimated
+    dir: sim/assets/meshes/b601_rs_official      # (Seeed-Projects/reBot-DevArm, CERN-OHL-W-2.0: see SOURCE.md and LICENSE there)
+    materials:                                   # rgba, as in the official URDF (Rebot_Arm_description/RS/urdf/ReBot_Arm_RS.urdf)
+      base_black: [0.055, 0.065, 0.060, 1]
+      motor_black: [0.045, 0.052, 0.049, 1]
+      pla_black: [0.090, 0.106, 0.102, 1]
+      wordmark_black: [0.010, 0.012, 0.011, 1]
+      silver: [0.720, 0.760, 0.730, 1]
+      green: [0.725, 0.835, 0.118, 1]
+    links:                                       # body: [[mesh, material], ...]; meshes are in the URDF link frames. base_link
+      world: [[base_link, base_black]]           # includes the black base plate (140 x 200 x 10 mm, its underside at z = 0)
+      link1: [[link1, silver]]
+      link2: [[motor_2_3, motor_black], [cnc2, silver], [pla2_black, pla_black], [pla2_green, green]]
+      link3: [[cnc3, silver], [motor_4, motor_black], [pla3_black_without_seeed_badge, pla_black],
+              [pla3_seeed_badge_with_counters, green], [pla3_seeed_wordmark_backing, wordmark_black], [pla3_green, green]]
+      link4: [[motor_5, motor_black], [cnc4, silver]]
+      link5: [[motor_6, motor_black], [cnc5, silver], [pla5_green, green]]
+      link6: [[link6, motor_black]]
+
+  box:                                           # the 80 cm photo box, closed on all six sides; see calibration/workspace.yaml.
+    # Only the floor collides. The walls, the ceiling and the cloth with the opening behind the arm are drawn only
+    # (contype = conaffinity = 0): the operator-side face is soft cloth the folded arm reaches through.
+    x: [-0.15, 0.65]                             # back wall 0.65: measured. Operator-side face -0.15: from-video (its crease with
+                                                 # the floor in the top video lies within ~1 cm of it)
+    y: [-0.40, 0.40]                             # measured; from-video agrees within 1-2 cm (wall-floor creases, top video)
+    top: 0.80                                    # estimated: inner height of the 80 cm cube (owner); the top phone, registered
+                                                 # at z = 0.774 / 0.783, hangs just under it
+    wall_thickness: 0.004                        # drawing only
+    silver:                                      # side walls, ceiling and operator-side face: silver-white reflective cloth
+      rgba: [0.79, 0.78, 0.76, 1]                # owner, 2026-11-27: plain white / silver-white, brightness tuned to the real
+                                                 # frames (the real foil looks warm there because it mirrors the backdrop)
+      emission: 0.1                              # tuned: extra glow of the cloth (the light it bounces)
+      specular: 0.4                              # estimated: a dull sheen, no mirror reflection
+      shininess: 0.3                             # estimated
+      crinkle: 0.0                               # optional procedural crinkle texture: its contrast (0: plain; 0.08 looked too busy)
+      crinkle_cell: 0.006                        # facet size of the crinkles (m), when crinkle > 0
+    back: backdrop                               # from-video: the pink-yellow backdrop paper runs up the back wall (wrist video);
+                                                 # backdrop | silver
+    front:                                       # the operator-side face (cloth, silver inside) behind the arm base
+      opening: {y: [-0.23, 0.22], z: [0.125, 0.62]}   # from-video, estimated: the window's corners in the 2026-11-19 top video,
+                                                 # back-projected onto the face (+-2 cm; corners are rounded in reality).
+                                                 # "closed" for none
+      outside_rgba: [0.13, 0.12, 0.115, 1]      # from-video: the room seen through the opening, as one flat,
+                                                 # self-lit colour 40 cm behind it: its mean in the 2026-11-19 top video
+    cloth:                                       # white diffusion cloth under the light strips (the strips are behind it)
+      z: 0.79                                    # estimated: under the strips, above the top phone
+      rgba: [1.0, 1.0, 1.0, 1]
+      emission: 0.8                              # estimated: a softly glowing panel (only its own look; MuJoCo has no area lights)
+  tool_friction: 0.4                             # estimated: the tool (rod, phone) against anything it touches
+  floor:                                         # the PVC cloth (backdrop) the whiteboard and the arm's base plate lie on
+    z: 0.0                                       # the base plate stands on it: its underside is the base frame's z = 0
+    friction: 0.6                                # estimated: cloth against anything on it (board back, a cube off the board)
+    rgba: [0.69, 0.53, 0.33, 1.0]                # the pink-yellow backdrop, tuned to real frames (linear: the camera tone adds the
+                                                 # gamma; was [0.93, 0.76, 0.58] by eye)
+  lights:                                        # two LED strips under the box top, each along y, behind the diffusion cloth
+    strips_x: [0.117, 0.383]                     # owner, 2026-11-27: at 1/3 of the box top (read as 1/3 and 2/3 of the depth,
+                                                 # x = -0.15 .. 0.65)
+    z: 0.795                                     # estimated: just under the top, above the cloth
+    length: 0.60                                 # estimated
+    per_strip: 2                                 # spot lights per strip (MuJoCo has no area lights; 8 lights at most in all)
+    diffuse: 0.30                                # tuned against the real frames (each light)
+    cutoff: 55                                   # spot half-angle (deg): wide (the cloth spreads the light); a wider one makes the
+                                                 # shadow maps coarse and the shadows blocky
+    exponent: 2
+    fill: 0.16                                   # tuned: 3 light-grey fill lights, one from each silver wall (the bounce off them)
+    ambient: 0.10                                # tuned: the box's diffuse light from everywhere
+    shadows: true                                # one light per strip casts a shadow; the other lights keep it faint. (MuJoCo's
+                                                 # bulbradius made no difference here: shadow edges stay sharp, a little blurred)
+  cameras:
+    top:                                         # the top phone, ultra wide, fixed under the box top; pose: twin_registration.yaml
+      intrinsics: {width: 1920, height: 1440, fx: 766.0, fy: 766.0, cx: 956.6, cy: 720.2}   # reported by the phone; no distortion
+    # wrist: from the tool file's sim.cameras (C_ultrawide of the as-built frame table), unless twin_registration.yaml overrides it
+  renderer: classic                              # classic (MuJoCo's OpenGL renderer) | filament (sim/twin_filament.py)
+  filament:                                      # used only with renderer: filament
+    materials:                                   # physically based: metallic, roughness (estimated, then checked on real frames)
+      cloth: {metallic: 0.0, roughness: 0.45, albedo_scale: 0.55}   # the silver-white cloth (its colour x 0.55 here: tuned)
+      floor: {metallic: 0.0, roughness: 0.9}     # the backdrop paper
+      backdrop: {metallic: 0.0, roughness: 0.9}  # the same paper up the back wall
+      board: {metallic: 0.0, roughness: 0.2}     # glossy whiteboard
+      board_frame: {metallic: 0.8, roughness: 0.4}   # aluminium frame
+      cube: {metallic: 0.0, roughness: 0.6}
+      arm_silver: {metallic: 0.9, roughness: 0.45}   # anodised aluminium
+      arm_black: {metallic: 0.0, roughness: 0.55}
+      arm_plastic: {metallic: 0.0, roughness: 0.6}   # the green PLA
+    lights:
+      strip_cd: 20000                            # each strip spot light (candela; the tone's gain sets the overall level)
+      fill_cd: 9000                              # each fill light (tuned)
+      bulb_radius: 0.15                          # soft shadow edges (PCSS)
+    environment:                                 # image light: what the box bounces, white around, backdrop-coloured below
+      intensity: 9000                            # tuned
+      around: [0.95, 0.95, 0.93]
+      below: [0.93, 0.76, 0.58]
+    flags:                                       # filament.<name> custom flags (MuJoCo docs, "Rendering options")
+      shadows.type: pcss
+      material.base_color_type: linear           # material colours are linear albedos, as the classic tone fit treats them
+      cg.tone_mapping: linear
+      cg.exposure: 0.0
+    camera_tone:                                 # as base.camera_tone, on Filament's sRGB output
+      top: {gain: [1.153, 1.002, 0.982], gamma: 1.61, input: srgb}     # tuned, as base.camera_tone
+      wrist: {gain: [0.592, 0.508, 0.534], gamma: 2.19, input: srgb}
+  camera_tone:                                   # each phone's response, applied by twin.render() to the rendered picture (taken as
+    # linear light): out = (gain * in) ^ (1 / gamma), per channel R, G, B. Tuned to real frames (2026-11-27; 6 frames
+    # of 3 episodes, both days; docs/en/user/simulation-twin.md), together with the lights and the floor and foil colours.
+    # The phones expose and white-balance automatically, so this is a fixed average: the wrist phone sees the same
+    # scene about 25 L* darker than the top phone. render(..., raw=True) skips it.
+    top: {gain: [1.068, 0.934, 0.878], gamma: 2.10}
+    wrist: {gain: [0.486, 0.422, 0.435], gamma: 2.08}
+
+objects:
+  - name: whiteboard
+    type: board
+    white: [0.269, 0.369]                        # from-video: white area, short x long side (twin_registration.yaml overrides)
+    frame: 0.015                                 # from-video: width of the aluminium frame (outline 299 x 399 mm, frame a faint step)
+    thickness: auto                              # table z (the arm touching the board, 19.7 mm) - floor z: not measured on the
+                                                 # board. (A 10 mm guess earlier put the floor 9.7 mm above the base plate's
+                                                 # underside, so the plate sank into the floor.)
+    corner_cap: 0.025                            # estimated: grey corner pieces (drawn only)
+    mass: 0.90                                   # estimated: a small framed whiteboard
+    friction: 0.6                                # estimated: only against other loose objects; on the cloth the floor's counts
+    surface_friction: 0.4                        # estimated: objects sliding on the white surface; not identified
+    pose: {x: 0.30, y: 0.0, yaw_deg: 0.0}        # board frame: origin at the board's centre, x along its short side, tag 1 on
+                                                 # the +y half; a default only, an episode overrides it
+    tags:                                        # where the tags are glued, in the board frame (from-video: twin_registration.yaml
+      size: 0.050                                # overrides these); size: measured (printed 50 mm)
+      1: {pos: [0.098, 0.145], yaw_deg: -88.8}
+      2: {pos: [-0.093, -0.148], yaw_deg: -90.8}
+    line: {width: 0.003, rgba: [0.03, 0.03, 0.03, 1]}   # the hand-drawn line; its points come from each episode (estimated width)
+  - name: cube
+    type: box
+    size: 0.040                                  # measured by the owner (edge, 2026-11-22)
+    mass: 0.010                                  # measured by the owner, approximate (3D printed, 2026-11-22)
+    friction: 0.4                                # estimated; only against other loose objects (see sim/twin.py)
+    rgba: [0.06, 0.06, 0.06, 1]
+    pose: {x: 0.30, y: 0.0, yaw_deg: 0.0}        # default; an episode overrides it
+
