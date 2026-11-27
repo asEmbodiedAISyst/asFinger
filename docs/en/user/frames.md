@@ -103,7 +103,7 @@ F_robot                 the robot flange, as the robot defines it (root)
 | `F_robot` | Origin on the flange face, +Z out of the flange. For the reBot Arm B601-RS it is the `link6` frame of the Seeed URDF (the joint-6 rotor face). |
 | `F_mount` | `adapter_h` above `F_robot` along Z, turned by `mount_rot` about Z. +X points to the side that the rod leans to. Without an adapter, `adapter_h` is 0. |
 | `T_tcp` | The apex of the hemisphere tip. +Z is the rod direction. |
-| `P_phone` | The centre of the screen face. +Y points to the camera end of the phone, +Z out of the screen. |
+| `P_phone` | The `device` frame of [iMuninn](https://imuninn.projects.weijinqi.com/en/parameter-definition/): the centre of the display area, on the outer face of the front glass. +X points to the right edge, +Y to the top (the camera end), +Z out of the screen. |
 | `C_main` | The main camera in the MuJoCo convention: it looks along −Z, +X is image right, +Y is image up. The phone is in landscape. |
 | `C_cv` | The same camera in the OpenCV convention: +Z forward, +Y image down. |
 
@@ -113,7 +113,9 @@ Use `asfinger frames <config>` or `Model.root_to('T_tcp')` to get the numbers. I
 
 ### Known limits of the phone frames
 
-- **`C_front` is an estimate.** Apple gives dimensions only for the Dynamic Island area, not for the front lens. The frame is at the centre of the right round end of that area. Measure your phone before you use this frame.
+- **`C_front` is an estimate.** Apple gives dimensions only for the Dynamic Island area, not for the front lens. The frame is at the centre of the right round end of that area. Its axes follow iMuninn; the image rotation was measured on an iPhone 17 Pro, the axes were not checked against a target. Measure your phone before you use this frame.
+- **The holder sits on the MagSafe circle.** The phone locks onto the holder by MagSafe, so `S_mount` is under the MagSafe centre (`magsafe_x`, `magsafe_y`), not under `P_phone`. On the iPhone 17 Pro the MagSafe centre is 2.735 mm below the display centre.
 - **`S_lidar` and `L_flash`**: the height above the back glass is assumed equal to the lens glass. The drawings do not give it.
 - **`back_to_mount` depends on the phone case.** It is the distance from the back of the phone to the support plate, which is the back thickness of the case. The value 3.25 mm is measured on one iPhone 17 Pro case. Measure your case and change the parameter. A wrong value moves all camera frames along the phone normal.
-- The lens positions come from Apple's dimensional drawings for accessory makers. The camera frames lie on the outer face of the lens, not at the optical centre of the lens.
+- The phone dimensions and the lens positions come from Apple's dimensional drawings for accessory makers, as read into iMuninn's phone data. `bump_h` is the height of the camera glass above the back: the camera plateau plus the lens glass (4.43 mm on the iPhone 17 Pro, checked on a real phone). The camera frames lie on the outer face of the lens, not at the optical centre of the lens.
+- The phone's shape is the one iMuninn's glb draws: the body outline with rounded corners and one cylinder per rear lens window, up to the camera glass. The corner radius (`corner_r`, 0.15 × the short side) is an estimate, because Apple's drawings do not dimension it. The camera plateau, the LiDAR window, the buttons and the MagSafe ring are not drawn.
