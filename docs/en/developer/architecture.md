@@ -74,6 +74,12 @@ The list `PURE` in `sync-core.mjs` names the modules that are copied. A module i
 
 `site/scripts/sync-docs.mjs` copies `docs/en` and `docs/zh` into the content folder of Starlight, rewrites the links between pages, and writes `llms.txt` and `llms-full.txt`. The landing page and the editor are plain Astro pages in `site/src/pages`. See [Build, test and contribute](contributing.md#documentation).
 
+## The Fusion add-in
+
+`hardware/cad/fusion/` holds a third backend. `asFingerAddIn` runs inside Autodesk Fusion with the Python of Fusion. It puts `src/` of the repository on its import path and uses the pure-Python half of the pipeline: `Model.resolve`, `Model.check` and `Model.resolved_json`. `asfinger_fusion.py` turns the resolved trees into Fusion features and tags each feature with an attribute, so that a later run can change the same features in place. The script `asFingerFromJSON` gives a `resolved.json` to the same module and does not import the package.
+
+The command `asfinger send` and the add-in talk over HTTP on 127.0.0.1:47910. The request goes to the main thread of Fusion through a custom event, because the API of Fusion runs on one thread. `tests/test_fusion_addin.py` imports the add-in with stand-ins for the `adsk` modules. See [The Fusion add-in](../user/fusion.md).
+
 ## Names kept from the earlier project name
 
-The project was named iPush before it became asFinger. These names are part of file formats or stored data and did not change: the output files `ipush_tool.xml` and `ipush_print.stl`, the print set name `ipush_print`, the MJCF body `ipush` and the classes `ipush_col` and `ipush_vis`, the local storage keys `ipush.editor.v3` and `ipush.theme`, the name of the exported config file, and the path `/ipush/apply` of the `send` command. The name that people see is defined once in the package (`PRODUCT_NAME`) and once in the site (`PRODUCT` and `EDITOR_NAME` in `site/src/i18n/index.ts`).
+The project was named iPush before it became asFinger. These names are part of file formats or stored data and did not change: the output files `ipush_tool.xml` and `ipush_print.stl`, the print set name `ipush_print`, the MJCF body `ipush` and the classes `ipush_col` and `ipush_vis`, the local storage keys `ipush.editor.v3` and `ipush.theme`, the name of the exported config file, the path `/ipush/apply` of the `send` command with its port 47910, the name `ipush-fusion` in the health reply of the Fusion add-in, and the attribute group `ipush` with its keys in a Fusion design (the add-in finds the features of an existing design through them). The name that people see is defined once in the package (`PRODUCT_NAME`) and once in the site (`PRODUCT` and `EDITOR_NAME` in `site/src/i18n/index.ts`).

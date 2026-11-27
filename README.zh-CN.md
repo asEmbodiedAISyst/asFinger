@@ -34,6 +34,9 @@ print(m.root_to('T_tcp').p)  # TCP position in the robot flange frame, mm
 
 不想安装的话，直接打开[编辑器](https://asembodiedaisyst.github.io/asFinger/zh/editor/)设计推杆。
 
+想在 Autodesk Fusion 里把工具当作参数化设计来改，用 `hardware/cad/fusion/` 里的插件
+（[说明](https://asembodiedaisyst.github.io/asFinger/zh/docs/user/fusion/)）。
+
 ## 文档
 
 网站：<https://asembodiedaisyst.github.io/asFinger/zh/docs/>

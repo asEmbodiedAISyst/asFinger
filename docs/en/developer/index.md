@@ -17,5 +17,6 @@ The repository layout:
 | `tests/` | The tests of the generator and of the documentation. |
 | `hardware/configs/` | The configs of the real tool. |
 | `hardware/assets/` | The meshes that the configs import. |
+| `hardware/cad/fusion/` | The add-in and the script for Autodesk Fusion. |
 | `site/` | The website: landing page, editor and the documentation site. |
 | `docs/en/`, `docs/zh/` | The documentation source, in English and in Chinese. |

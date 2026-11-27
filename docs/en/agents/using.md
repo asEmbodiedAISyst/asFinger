@@ -78,6 +78,6 @@ m.save('hardware/configs/my_variant.json')
 - Write a variant to a new file. Do not overwrite `iphone17pro_default.json` or `rebot_rs_flange.json`.
 - Keep a config in a folder that has `assets/` as its neighbour. Mesh paths in a config are relative to the parent of the config folder.
 - Before you share `resolved.json`, remove the key `base_dir`. It contains a local path.
-- Do not use `asfinger send`. It needs a CAD add-in that is not in this repository.
+- Use `asfinger send` only when the user asks for it and runs the [Fusion add-in](../user/fusion.md). The command changes the design that is open in Fusion, and `--save` rewrites the config file. It does not return the result: ask the user what the palette shows.
 - Tell the user about the limits that apply to their request. The pages [Checks and interference rules](../user/checks.md#what-the-tests-do-not-find) and [Frames](../user/frames.md#known-limits-of-the-phone-frames) list them. `back_to_mount` must match the phone case of the user.
 - If the user has no Python environment, send them to the [web editor](https://asembodiedaisyst.github.io/asFinger/editor/).

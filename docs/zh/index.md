@@ -17,6 +17,7 @@ asFinger 是一根装在机械臂或人手上的推杆，用手机当腕部相�
 | 给自己的机械臂打印一根推杆 | [网页编辑器](user/editor.md) |
 | 在自己电脑上生成 STL 和 MJCF | [安装](user/installation.md)，然后看[快速上手](user/quickstart.md) |
 | 写配置或改配置 | [配置文件](user/config-file.md)和[坐标系](user/frames.md) |
+| 把工具当作 CAD 设计来改 | [Fusion 插件](user/fusion.md) |
 | 了解项目怎么工作 | [开发指南](developer/index.md) |
 | 让 AI agent 来用这个项目 | [Agent 指南](agents/index.md) |
 
