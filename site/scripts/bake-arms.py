@@ -196,12 +196,14 @@ def bake(arm_id, cfg, xml_path, out_dir, gltf_transform=None):
         f'{arm_id}: {total} -> {n_out} triangles, {raw / 1e6:.2f} MB -> {out.stat().st_size / 1e6:.2f} MB, '
         f'flange at {np.round(pos * 1000, 1)} mm, flange Z = {np.round(mat.reshape(3, 3)[:, 2], 3)}'
     )
+    if cfg.get('key'):
+        qpos = {k: round(float(v), 5) for k, v in cfg.get('joints', {}).items()}
+    else:
+        qpos = [round(float(x), 5) for x in d.qpos[: m.njnt]]
     return {
         'file': f'arms/{arm_id}.glb',
         'flange': {'pos': [round(float(x) * 1000, 3) for x in pos], 'quat': [round(float(x), 6) for x in quat]},
-        'qpos': [round(float(x), 5) for x in d.qpos[: m.njnt]] if not cfg.get('key') else {
-            k: round(float(v), 5) for k, v in cfg.get('joints', {}).items()
-        },
+        'qpos': qpos,
         'short': cfg['short'],
         'pose': cfg.get('key') or cfg.get('pose'),
         'source': cfg['source'],
