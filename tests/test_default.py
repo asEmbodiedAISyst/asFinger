@@ -133,7 +133,6 @@ def test_direct_config_is_the_default_plus_listed_changes():
         'hole_d',
         'cbore_depth',
         'relief_h',
-        'beam_x',
     }, changed
     assert b['options']['adapter']['value'] is False
     for k in a:
@@ -271,7 +270,7 @@ def test_interference_rules():
 
     assert ids(rod_tilt=40) == ['phone_vs_body'], 'rod tilted into the phone'
     assert ids(back_to_mount=0) == ['phone_vs_holder']
-    assert 'sight_to_tip' in ids(v_n=0.6)
+    assert 'sight_to_tip' in ids(v_n=0.6, beam_y_in=0)  # the beam started at the rod root before the web
     m = Model.load(CFG).set_options(phone=False)
     assert m.interference() == [], 'rules on switched-off parts are skipped'
 

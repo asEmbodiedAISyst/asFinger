@@ -1301,7 +1301,10 @@
                         ]
                       ]
                     },
-                    "desc": "Web joining the holder beam to the rod root. It passes between the two flange screws on that side, so both stay reachable."
+                    "desc": "Web joining the holder beam to the rod root. It passes between the two flange screws on that side, so both stay reachable.",
+                    "needs": [
+                      "J_foot"
+                    ]
                   },
                   {
                     "name": "spine_mitred",
@@ -2832,6 +2835,7 @@
           "only": [
             "adapter",
             "beam_mitred",
+            "beam_web",
             "spine_mitred"
           ]
         },

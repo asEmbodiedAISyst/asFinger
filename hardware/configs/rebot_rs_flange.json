@@ -1,7 +1,7 @@
 {
   "name": "rebot_rs_flange",
   "version": 0,
-  "description": "iphone17pro_default without the flange adapter: the pusher base is screwed straight onto the reBot B601-RS joint-6 rotor (4 x M3 on PCD 27 at +-30 deg from +-X, official 2-M6-ROTOR.step). mount_rot 90 and beam_x 18 keep all four screws clear of the rod root and the beam. Same file as the default except name, description, options.adapter, mjcf and the parameters listed in tests/test_default.py. Units: mm, deg.",
+  "description": "iphone17pro_default without the flange adapter: the pusher base is screwed straight onto the reBot B601-RS joint-6 rotor (4 x M3 on PCD 27 at +-30 deg from +-X, official 2-M6-ROTOR.step). mount_rot 90 keeps all four screws clear of the rod root; the holder beam starts behind two of them (beam_y_in) and its web passes between them (beam_web_t). Same file as the default except name, description, options.adapter, mjcf and the parameters listed in tests/test_default.py. Units: mm, deg.",
   "root": "F_robot",
   "options": {
     "adapter": {
@@ -87,8 +87,11 @@
     "rod_L": 176.9,
     "rod_embed": "rod_D/2*tand(rod_tilt) + 1",
     "tip_R": "rod_D/2",
-    "beam_w": 10,
-    "beam_y_in": 0,
+    "beam_w": 14,
+    "beam_y_in": -15.5,
+    "beam_web_t": 6,
+    "beam_web_h": 20,
+    "beam_web_to": "rod_D/2",
     "spine_w": 30,
     "plate_t": 10,
     "spine_top": -33.5,
@@ -126,7 +129,7 @@
     "phone_flange_angle": 55.14,
     "v_n": "1 - 2*0.618",
     "distance": 163.3,
-    "beam_x": 18
+    "beam_x": 0
   },
   "cameras": {
     "C_main": {
@@ -635,6 +638,28 @@
                           50
                         ]
                       }
+                    ]
+                  },
+                  {
+                    "name": "beam_web",
+                    "frame": "F_tool",
+                    "box": {
+                      "corners": [
+                        [
+                          "-beam_web_t/2",
+                          "beam_y_in - 1",
+                          0
+                        ],
+                        [
+                          "beam_web_t/2",
+                          "beam_web_to",
+                          "beam_web_h"
+                        ]
+                      ]
+                    },
+                    "desc": "Web joining the holder beam to the rod root. It passes between the two flange screws on that side, so both stay reachable.",
+                    "needs": [
+                      "J_foot"
                     ]
                   },
                   {
@@ -1666,6 +1691,7 @@
           "only": [
             "adapter",
             "beam_mitred",
+            "beam_web",
             "spine_mitred"
           ]
         },
@@ -1927,7 +1953,13 @@
     "lens_x": "Main camera lens window centre in P_phone (lens_x, lens_y; mm), from iMuninn's phone data.",
     "bump_h": "Height of the rear camera cover glass above the back glass (mm): camera plateau + lens glass. 4.43 for the iPhone 17 Pro (iMuninn, from Apple's drawing; confirmed by measurement 2026-11-27). Was 1.88, the glass above the plateau only.",
     "magsafe_x": "MagSafe circle centre in P_phone (magsafe_x, magsafe_y; mm), from iMuninn's phone data. The holder (S_mount) sits on it because the phone locks on by MagSafe.",
-    "corner_r": "Corner radius of the phone body outline seen from the back (mm). Apple's drawings do not dimension it; 0.15 x the short side is iMuninn's estimate (its glb uses the same). Only the look and the phone's volume depend on it."
+    "corner_r": "Corner radius of the phone body outline seen from the back (mm). Apple's drawings do not dimension it; 0.15 x the short side is iMuninn's estimate (its glb uses the same). Only the look and the phone's volume depend on it.",
+    "beam_y_in": "Inner end of the holder beam (F_tool y). -15.5 = just clear of the two flange screws on that side (heads and key reach to y = -14.7); the beam is tied to the rod root by beam_web.",
+    "beam_x": "Mid-plane of the holder beam (F_tool x), where the spine comes down onto it. 0 = on the flange axis as in the adapter version, so the beam is a tall wall under the spine instead of the 5 mm strip it was at beam_x 18 (rebot_rs_flange).",
+    "beam_w": "Thickness of the holder beam. 14 (was 10); it can be this wide because the beam starts behind the flange screws (beam_y_in).",
+    "beam_web_t": "Thickness of the web between the holder beam and the rod root. It passes between the two flange screws at x = +-6.75 (heads and key need x beyond 3.75, so 6 is the most that fits).",
+    "beam_web_h": "Height of that web above the tool face.",
+    "beam_web_to": "F_tool y where the web ends: the rod axis plus its radius, so it runs into the whole rod root."
   },
   "shapes": {
     "connector_b": {

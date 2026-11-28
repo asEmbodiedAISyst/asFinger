@@ -1,7 +1,7 @@
 {
   "name": "square_rod",
   "version": 0,
-  "description": "The earlier pusher with a square rod (Fusion: iPhone17_DataTool, body RobotTool): a 10 x 10 mm square rod with a flat end, at the same place, angle and length as the round rod of iphone17pro_default (rod_x, rod_tilt, rod_L), so the TCP is the centre of the end face. The phone holder and the flange side are those of iphone17pro_default, without the spine_back reinforcement, which that tool did not have. Units: mm, deg.",
+  "description": "The earlier pusher with a square rod (Fusion: iPhone17_DataTool, body RobotTool): a 10 x 10 mm square rod with a flat end, at the same place, angle and length as the round rod of iphone17pro_default (rod_x, rod_tilt, rod_L), so the TCP is the centre of the end face. The phone holder, its support and the flange side are those of iphone17pro_default. Units: mm, deg.",
   "root": "F_robot",
   "options": {
     "adapter": {
@@ -87,13 +87,16 @@
     "rod_L": 176.9,
     "rod_embed": "rod_w/2*tand(rod_tilt) + 1",
     "tip_R": 0,
-    "beam_w": 10,
-    "beam_y_in": 0,
+    "beam_w": 14,
+    "beam_y_in": -15.5,
+    "beam_web_t": 6,
+    "beam_web_h": 20,
+    "beam_web_to": "rod_w/2",
     "spine_w": 30,
     "plate_t": 10,
     "spine_top": -33.5,
     "spine_overlap": 0.5,
-    "spine_back": 0,
+    "spine_back": 1,
     "spine_back_to": 2.25,
     "spine_back_ang": 42.6,
     "spine_back_w": "spine_w",
@@ -611,6 +614,28 @@
                           50
                         ]
                       }
+                    ]
+                  },
+                  {
+                    "name": "beam_web",
+                    "frame": "F_tool",
+                    "box": {
+                      "corners": [
+                        [
+                          "-beam_web_t/2",
+                          "beam_y_in - 1",
+                          0
+                        ],
+                        [
+                          "beam_web_t/2",
+                          "beam_web_to",
+                          "beam_web_h"
+                        ]
+                      ]
+                    },
+                    "desc": "Web joining the holder beam to the rod root. It passes between the two flange screws on that side, so both stay reachable.",
+                    "needs": [
+                      "J_foot"
                     ]
                   },
                   {
@@ -1641,6 +1666,7 @@
           "only": [
             "adapter",
             "beam_mitred",
+            "beam_web",
             "spine_mitred"
           ]
         },
@@ -1903,7 +1929,13 @@
     "bump_h": "Height of the rear camera cover glass above the back glass (mm): camera plateau + lens glass. 4.43 for the iPhone 17 Pro (iMuninn, from Apple's drawing; confirmed by measurement 2026-11-27). Was 1.88, the glass above the plateau only.",
     "magsafe_x": "MagSafe circle centre in P_phone (magsafe_x, magsafe_y; mm), from iMuninn's phone data. The holder (S_mount) sits on it because the phone locks on by MagSafe.",
     "corner_r": "Corner radius of the phone body outline seen from the back (mm). Apple's drawings do not dimension it; 0.15 x the short side is iMuninn's estimate (its glb uses the same). Only the look and the phone's volume depend on it.",
-    "rod_w": "Side of the square rod. Measured on the RobotTool body of iPhone17_DataTool: 10 mm."
+    "rod_w": "Side of the square rod. Measured on the RobotTool body of iPhone17_DataTool: 10 mm.",
+    "beam_y_in": "Inner end of the holder beam (F_tool y). -15.5 = just clear of the two flange screws on that side (heads and key reach to y = -14.7); the beam is tied to the rod root by beam_web.",
+    "beam_x": "Mid-plane of the holder beam (F_tool x), where the spine comes down onto it. 0 = on the flange axis as in the adapter version, so the beam is a tall wall under the spine instead of the 5 mm strip it was at beam_x 18 (rebot_rs_flange).",
+    "beam_w": "Thickness of the holder beam. 14 (was 10); it can be this wide because the beam starts behind the flange screws (beam_y_in).",
+    "beam_web_t": "Thickness of the web between the holder beam and the rod root. It passes between the two flange screws at x = +-6.75 (heads and key need x beyond 3.75, so 6 is the most that fits).",
+    "beam_web_h": "Height of that web above the tool face.",
+    "beam_web_to": "F_tool y where the web ends: the rod axis plus half the rod width, so it runs into the whole rod root."
   },
   "shapes": {
     "connector_b": {

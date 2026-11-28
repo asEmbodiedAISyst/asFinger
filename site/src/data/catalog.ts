@@ -40,8 +40,7 @@ export interface CatalogItem {
   mountRot?: number;
   /** carrier: defaults that differ when the pusher is bolted on directly (adapter "None"), e.g. another mount_rot
    *  because the screws must stay reachable. `joint` = the last joint is drawn turned by this much, so the
-   *  assembly still looks the same. pusher: the same, applied after the carrier's (a pusher whose beam already
-   *  leaves the screws free keeps it where it is). */
+   *  assembly still looks the same. pusher: the same, applied after the carrier's. */
   direct?: { defaults: Record<string, number>; joint?: JointTurn };
   /** carrier: the adapter picked when this carrier is selected */
   defaultAdapter?: string;
@@ -77,7 +76,7 @@ export const GROUPS: Group[] = [
     items: [
       {
         section: 0, id: 'hand', name: { en: 'Human hand', zh: '人手' }, subtitle: { en: 'Handheld grip · demos / data', zh: '手持握把 · 示教 / 采集' }, icon: 'hand',
-        sets: FLANGES.rebot.sets, mountRot: 180, defaultAdapter: 'gripper_ab', direct: { defaults: { mount_rot: 90, beam_x: 18 } },
+        sets: FLANGES.rebot.sets, mountRot: 180, defaultAdapter: 'gripper_ab', direct: { defaults: { mount_rot: 90 } },
         flange: { ...FLANGES.rebot.spec, title: { en: 'Handheld grip interface (same holes as the reBot flange)', zh: '手持握把接口（沿用 reBot 法兰孔位）' } },
         info: [
           { label: { en: 'Use', zh: '用途' }, value: { en: 'Hold the same pusher by hand for teleoperation demos and data collection', zh: '手持同一根推杆做遥操作示教和数据采集' } },
@@ -97,7 +96,7 @@ export const GROUPS: Group[] = [
       {
         section: 1, id: 'rebot_rs', name: 'reBot Arm RS', subtitle: { en: 'Seeed · 6-axis', zh: 'Seeed · 6 轴' }, icon: 'arm6', arm: { reach: 650, dof: 6 },
         sets: FLANGES.rebot.sets, flange: FLANGES.rebot.spec, mountRot: 180, defaultAdapter: 'gripper_ab',
-        direct: { defaults: { mount_rot: 90, beam_x: 18 }, joint: { name: 'joint6', deg: -90, flangeDeg: 90 } },   // the joint-6 axis is −Z of link6
+        direct: { defaults: { mount_rot: 90 }, joint: { name: 'joint6', deg: -90, flangeDeg: 90 } },   // the joint-6 axis is −Z of link6
         info: [
           { label: { en: 'End flange', zh: '末端法兰' }, value: { en: 'The joint-6 rotor face (URDF link6 origin). The official gripper sits on a two-part connector on top of it; see the Flange adapter group.', zh: '第 6 关节的转子端面（URDF link6 原点）。官方夹爪是通过上面的两件式连接件装上去的，见“法兰转接件”一组。' } },
           { label: { en: 'DOF', zh: '自由度' }, value: { en: '6 (plus gripper)', zh: '6（另有夹爪）' } },
@@ -162,8 +161,6 @@ export const GROUPS: Group[] = [
       {
         section: 2, id: 'unitree_g1', name: 'Unitree G1', subtitle: { en: 'Unitree · humanoid', zh: 'Unitree · 人形' }, icon: 'humanoid',
         sets: FLANGES.rebot.sets, mountRot: 180, defaultAdapter: 'g1_wrist',
-        // like the reBot without an adapter: the beam moves aside so that the 4 x M3 into the adapter stay reachable
-        direct: { defaults: { beam_x: 18 } },
         info: [
           { label: { en: 'End interface', zh: '末端接口' }, value: { en: 'The right wrist end (URDF: right_wrist_yaw_link, 41.5 mm out along X). There is no flange: the hand is held by a split clamp ring, so the pusher needs the G1 wrist adapter.', zh: '右手腕末端（URDF：right_wrist_yaw_link 沿 X 向外 41.5 mm）。这里没有法兰，手是靠一个开口夹环夹住的，所以推杆要用 G1 腕部转接件。' } },
           { label: { en: 'Arm DOF', zh: '手臂自由度' }, value: { en: '7 per arm (29-DoF version); the 23-DoF version has no wrist pitch and yaw', zh: '每条手臂 7 个（29 自由度版本）；23 自由度版本没有腕部俯仰和偏航' } },
@@ -189,7 +186,7 @@ export const GROUPS: Group[] = [
         info: [
           { label: { en: 'Interface', zh: '接口' }, value: { en: 'The pusher base takes the hole pattern of the selected carrier (through holes with counterbores, screws from the tool side into the robot flange).', zh: '推杆底座直接用所选载体的法兰孔位（通孔 + 沉孔，螺钉从工具一侧拧进机械臂法兰）。' } },
           { label: { en: 'Good for', zh: '适用' }, value: { en: 'ISO 9409-1-50 flanges (UR, Franka): the screws sit outside the rod and are easy to reach.', zh: 'ISO 9409-1-50 法兰（UR、Franka）：螺钉在杆的外侧，容易够到。' } },
-          { label: { en: 'reBot', zh: 'reBot' }, value: { en: 'Possible, but tight: the 4 × M3 holes lie under the rod root. The defaults turn the pusher 90° on the flange and move the beam so that three screws take a straight driver and the fourth a short hex key.', zh: '可以，但很挤：4 × M3 孔就在杆根下面。默认把推杆在法兰上转 90° 并挪开横梁，这样 3 个螺钉能用直螺丝刀，第 4 个要用短内六角扳手。' } },
+          { label: { en: 'reBot', zh: 'reBot' }, value: { en: 'Possible, but tight: the 4 × M3 holes lie under the rod root. The defaults turn the pusher 90° on the flange. The holder beam starts behind two of the screws and its web passes between them, so the screw checks pass.', zh: '可以，但很挤：4 × M3 孔就在杆根下面。默认把推杆在法兰上转 90°。支架横梁从两颗螺钉后面开始，腹板从它们之间穿过，所以螺钉检查都能通过。' } },
         ],
       },
       {
@@ -243,8 +240,6 @@ export const GROUPS: Group[] = [
       {
         id: 'pad', name: { en: 'Pad', zh: '指腹推杆' }, subtitle: { en: 'Square bar with an arc finger pad · one piece', zh: '方杆 + 弧面指腹 · 一体打印' }, icon: 'rod-pad',
         config: 'configs/pad_finger.json',
-        // its holder beam is tied to the bar root by a web between the screws: bolted on directly it stays on the axis
-        direct: { defaults: { beam_x: 0 } },
         info: [
           { label: { en: 'Rod', zh: '杆' }, value: { en: '22 × 22 square bar, 30° to the flange axis, with a 16 mm neck at the base', zh: '22 × 22 方杆，与法兰轴线成 30°，根部有 16 mm 宽的颈部' } },
           { label: { en: 'Fingertip', zh: '指尖' }, value: { en: 'Quarter cylinder R15 from the side face round to the flat end face: the finger pad. T_tcp is the middle of the arc (45°).', zh: '从侧面到平端面的 R15 四分之一圆柱，就是指腹。T_tcp 在圆弧中点（45°）。' } },
@@ -260,6 +255,7 @@ export const GROUPS: Group[] = [
         info: [
           { label: { en: 'Process', zh: '加工方式' }, value: { en: 'FDM 3D printing (PLA / PETG)', zh: 'FDM 3D 打印（PLA / PETG）' } },
           { label: { en: 'Print orientation', zh: '打印方向' }, value: { en: 'Base face down; the phone plate and snaps need supports', zh: '底座安装面朝下；手机支撑板和卡扣需要支撑' } },
+          { label: { en: 'Holder support', zh: '支架支撑' }, value: { en: 'Beam on the flange axis, 14 wide, tied to the rod root by a web that passes between two flange screws; the spine goes on up the back of the holder into its X ribs. Bolted straight onto the reBot flange this is the support printed on 2026-11-26.', zh: '横梁在法兰轴线上，宽 14，用一道腹板连到杆根，腹板从两颗法兰螺钉之间穿过；支撑条沿支架背面一直延伸到十字加强筋。直接装在 reBot 法兰上时就是 2026-11-26 打印的那版支撑。' } },
           { label: { en: 'Known issue', zh: '已知问题' }, value: { en: 'The snaps are brittle in PLA matte and break easily; print them flat as a separate part or use PETG', zh: '卡扣用 PLA matte 打印很脆，易断；建议卡扣单独平放打印或改用 PETG' } },
         ],
       },
@@ -270,7 +266,7 @@ export const GROUPS: Group[] = [
           { label: { en: 'Rod', zh: '杆' }, value: { en: '10 × 10 mm square, flat end; same place, angle (30°) and length as the round rod', zh: '10 × 10 mm 方杆，平头；位置、角度（30°）和长度都和圆杆相同' } },
           { label: 'TCP', value: { en: 'Centre of the flat end face (T_tcp = T_tip)', zh: '平头端面中心（T_tcp = T_tip）' } },
           { label: { en: 'Source', zh: '来源' }, value: { en: 'Measured on the first printed tool, modelled in Fusion (iPhone17_DataTool); the rod end agrees with that model to 0.02 mm', zh: '按最早打印的那一版测得，Fusion 模型 iPhone17_DataTool；杆端和该模型相差 0.02 mm' } },
-          { label: { en: 'Holder', zh: '手机支架' }, value: { en: 'As on the Round pusher, without the back reinforcement (the first tool did not have it)', zh: '和圆杆推杆相同，但没有背部加强（最早那一版没有）' } },
+          { label: { en: 'Holder', zh: '手机支架' }, value: { en: 'As on the Round pusher, with the same support (beam, web and back reinforcement)', zh: '和圆杆推杆相同，支撑也一样（横梁、腹板和背部加强）' } },
         ],
       },
     ],

@@ -51,7 +51,10 @@ export const PARAMS: Record<string, ParamMeta> = {
   spine_back_w: { label: { en: 'Reinforcement width', zh: '加固宽度' }, unit: 'mm', min: 10, max: 60, step: 0.5, section: 'link', advanced: true },
   holder_back_z: { label: { en: 'Holder plate back face', zh: '支撑板背面位置' }, unit: 'mm', min: -10, max: 0, step: 0.1, section: 'link', advanced: true, hint: { en: 'Depth of the back face of the holder plate below the mount surface (from the holder model)', zh: '支撑板背面在安装面以下的深度（由支架模型决定）' } },
   beam_x: { label: { en: 'Beam X position', zh: '横梁 X 位置' }, unit: 'mm', min: -15, max: 25, step: 0.5, section: 'link', advanced: true },
-  beam_y_in: { label: { en: 'Beam start Y', zh: '横梁起点 Y' }, unit: 'mm', min: -10, max: 20, step: 0.5, section: 'link', advanced: true },
+  beam_y_in: { label: { en: 'Beam start Y', zh: '横梁起点 Y' }, unit: 'mm', min: -25, max: 20, step: 0.5, section: 'link', advanced: true, hint: { en: 'F_tool y where the beam starts; −15.5 = just behind the two flange screws on that side', zh: '横梁起点在 F_tool 里的 y；−15.5 = 刚好在那一侧两颗法兰螺钉后面' } },
+  beam_web_t: { label: { en: 'Web thickness', zh: '腹板厚度' }, unit: 'mm', min: 0, max: 7.5, step: 0.5, section: 'link', advanced: true, hint: { en: 'Web between the beam and the rod root; it passes between two flange screws, so 6 is about the most that fits', zh: '横梁和杆根之间的腹板；它从两颗法兰螺钉之间穿过，6 差不多是能放下的最大值' } },
+  beam_web_h: { label: { en: 'Web height', zh: '腹板高度' }, unit: 'mm', min: 0, max: 40, step: 0.5, section: 'link', advanced: true },
+  beam_web_to: { label: { en: 'Web end Y', zh: '腹板终点 Y' }, unit: 'mm', min: -20, max: 20, step: 0.5, section: 'link', advanced: true },
 
   back_to_mount: { label: { en: 'Phone back to mount plate', zh: '手机背面到支撑板' }, unit: 'mm', min: 0, max: 10, step: 0.1, section: 'mount', hint: { en: 'Case thickness + clearance', zh: '手机壳厚度 + 间隙' } },
 

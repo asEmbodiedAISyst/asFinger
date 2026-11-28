@@ -99,6 +99,7 @@ Each node can also have these keys:
 | `pos`, `rot` | The pose of the node in the frame of its parent node. `rot` uses the forms in [Frames](frames.md#rotation-forms). |
 | `frame` | Put this node in a named frame instead of the frame of its parent node. |
 | `enabled` | An expression. The node is left out when it is 0. |
+| `needs` | A list of frame names. The node is left out when an option drops one of them, for example a web that only makes sense with the holder beam. |
 | `sim` | For a leaf: `"collide"` (default) makes it a MuJoCo collision shape, `"none"` does not. |
 | `color` | A colour for this node. |
 
@@ -130,7 +131,7 @@ An option switches a group of frames off, together with all that depends on them
 Each frame can name a `module`. When an option is off, the generator drops:
 
 - the frames of its modules, and each frame that depends on a dropped frame;
-- the shapes that refer to a dropped frame;
+- the shapes that refer to a dropped frame or name one in `needs`;
 - parts that become empty, and the cameras, checks, references and print-set members on dropped frames.
 
 The solver of a dropped frame does not run. The config file keeps all its content. Switch an option with `--option phone=0` or `m.set_options(phone=False)`.
