@@ -32,7 +32,7 @@ The tool is made of five groups.
 | --- | --- | --- |
 | Carrier | Human hand, custom flange · reBot Arm RS, Franka FR3, UR5e · Unitree G1 | Sets the flange hole pattern and the default mounting angle. |
 | Mount adapter | None · Connector A + B, fused connector (reBot) · G1 wrist adapter | Sets the hole pattern, the height and the screw direction of the pusher base. |
-| Pusher | Pad, Round, Square | The rod and the phone holder. Pad: a 22 × 22 square bar whose end is an R15 finger pad (the tactile finger without its sensor), printed in one piece. Round: the Ø15 rod with the reinforced holder, the one in use. Square: the earlier 10 × 10 rod with a flat end. |
+| Pusher | Pad, Round, Square | The rod and the phone holder. Pad: a 22 × 22 square bar whose end is an R15 finger pad (the tactile finger without its sensor), printed in one piece. Round: the Ø15 rod, the one in use. Square: the earlier 10 × 10 rod with a flat end. All three have the same holder support: a 14 mm beam on the flange axis, tied to the rod root by a web between two flange screws, and the spine continued up the back of the holder. |
 | Tip | Standard tip · Soft TPU tip | Standard: the pusher's own end (a hemisphere on Round, the flat end on Square, the finger pad on Pad). Soft TPU tip (Pad only): the fingertip as a second body for TPU, with a switch under the card for the sensor: none or the 48 × 48 e-skin (pad recess, FPC groove, readout PCB pocket and cover). The TCP is defined here. |
 | Camera | None · iPhone 18 Pro, iPhone 17 Pro, iPhone 17, iPhone 16 Pro, iPhone 15 Pro, iPhone 14 Pro · RealSense D435i | Sets the phone dimensions and the lens positions. "None" builds the pusher without the phone, its holder and the camera solve. |
 

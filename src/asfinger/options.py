@@ -9,8 +9,9 @@ and `Model.set_options(phone=False)` (or the config value) turns it off. `effect
 
   * frames of those modules are dropped, then (repeatedly) every frame whose parent, `pos_from`, `z_from`,
     `x_hint` or `solve` refers to a dropped frame, so solvers of dropped frames never run;
-  * CSG leaves that refer to a dropped frame (own `frame` or a point {"frame": ...}) are dropped; a union keeps what
-    is left, a difference whose base is gone is dropped, a cut that is gone is simply not subtracted;
+  * CSG leaves that refer to a dropped frame (own `frame` or a point {"frame": ...}) are dropped, and so is any node
+    whose `needs` lists a dropped frame; a union keeps what is left, a difference whose base is gone is dropped, a cut
+    that is gone is simply not subtracted;
   * parts left empty, cameras, checks and references on dropped frames, and print-set members that are gone
     are dropped too.
 
@@ -63,6 +64,8 @@ def dropped_frames(cfg):
 
 def _prune(node, gone, shapes=None):
     """The CSG node without anything that refers to a dropped frame; None if nothing is left."""
+    if set(node.get('needs', ())) & gone:  # it only makes sense together with those frames' geometry
+        return None
     if any(k in node for k in LEAVES):
         return None if _frame_refs(node) & gone else node
     if node.get('frame') in gone:

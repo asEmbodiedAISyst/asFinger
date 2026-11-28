@@ -13,6 +13,7 @@ Operations:
 Shared shapes: a config may hold named sub-trees under "shapes"; {"use": "name"} places one (with its own
 "name", "pos", "rot", "frame", "enabled" applied on top), so the same solid can appear in several parts.
 Common keys on every node: "name", "pos", "rot", "frame" (evaluate this node in another frame), "enabled" (expr),
+"needs" (frame names: the node is left out when an option drops one of them, see options.py),
 "sim": "collide" | "none" (leaf only; whether it becomes a MuJoCo collision primitive), "color".
 PT is [x, y, z] in the node's frame, or {"frame": "S_mount", "pos": [x, y, z]} anywhere in the tree.
 
